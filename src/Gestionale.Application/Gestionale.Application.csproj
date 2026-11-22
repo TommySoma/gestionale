@@ -2,4 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Gestionale.Domain\Gestionale.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Gestionale.Tests.Unit" />
+  </ItemGroup>
 </Project>

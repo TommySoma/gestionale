@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TitoloRichiestaNonValida" xml:space="preserve">
+    <value>Richiesta non valida</value>
+  </data>
+  <data name="TitoloAccessoNegato" xml:space="preserve">
+    <value>Accesso non riuscito</value>
+  </data>
+  <data name="TitoloVietato" xml:space="preserve">
+    <value>Operazione non consentita</value>
+  </data>
+  <data name="TitoloConflitto" xml:space="preserve">
+    <value>Operazione in conflitto con i dati esistenti</value>
+  </data>
+  <data name="TitoloTroppeRichieste" xml:space="preserve">
+    <value>Troppe richieste</value>
+  </data>
+  <data name="CredenzialiNonValide" xml:space="preserve">
+    <value>Email o password non corretti, oppure account temporaneamente bloccato. Controlla i dati e riprova tra qualche minuto; se il problema continua, rivolgiti all'amministratore.</value>
+  </data>
+  <data name="CodiceMfaNonValido" xml:space="preserve">
+    <value>Il codice non è valido o è già stato usato. Inserisci il codice a 6 cifre mostrato ora dall'app di autenticazione oppure uno dei codici di recupero.</value>
+  </data>
+  <data name="CodiceAttivazioneNonValido" xml:space="preserve">
+    <value>Il codice non è valido. Controlla che l'orario del telefono sia corretto e inserisci il codice a 6 cifre mostrato ora dall'app di autenticazione.</value>
+  </data>
+  <data name="MfaGiaAttivo" xml:space="preserve">
+    <value>Il secondo fattore è già attivo per questo account.</value>
+  </data>
+  <data name="SessioneNonValida" xml:space="preserve">
+    <value>La sessione è scaduta o è stata chiusa. Accedi di nuovo.</value>
+  </data>
+  <data name="InstallazioneGiaInizializzata" xml:space="preserve">
+    <value>L'installazione è già stata configurata. Per creare altri utenti accedi come Titolare o Amministratore di sistema.</value>
+  </data>
+  <data name="TokenInstallazioneNonValido" xml:space="preserve">
+    <value>Token di installazione mancante o non valido. Lo trovi nella configurazione del server, alla voce Autenticazione:TokenInstallazione.</value>
+  </data>
+  <data name="CampiMancanti" xml:space="preserve">
+    <value>Compila questi campi: {0}.</value>
+  </data>
+  <data name="EmailNonValida" xml:space="preserve">
+    <value>L'email «{0}» non è valida: deve avere la forma nome@dominio.</value>
+  </data>
+  <data name="RegioneNonGestita" xml:space="preserve">
+    <value>La regione «{0}» non è gestita. Valori ammessi: toscana, lombardia.</value>
+  </data>
+  <data name="PartitaIvaNonValida" xml:space="preserve">
+    <value>La partita IVA deve essere composta da 11 cifre.</value>
+  </data>
+  <data name="PasswordNonValida" xml:space="preserve">
+    <value>La password per {0} non è accettata: {1}</value>
+  </data>
+  <data name="PasswordTroppoCorta" xml:space="preserve">
+    <value>deve avere almeno 12 caratteri</value>
+  </data>
+  <data name="PasswordTroppoLunga" xml:space="preserve">
+    <value>può avere al massimo 128 caratteri</value>
+  </data>
+  <data name="PasswordUgualeAllEmail" xml:space="preserve">
+    <value>non può essere uguale all'email</value>
+  </data>
+  <data name="PasswordNota" xml:space="preserve">
+    <value>è troppo comune, scegline una meno prevedibile</value>
+  </data>
+  <data name="SenzaRuoli" xml:space="preserve">
+    <value>Indica almeno un ruolo per il nuovo utente.</value>
+  </data>
+  <data name="RuoloSconosciuto" xml:space="preserve">
+    <value>Il ruolo «{0}» non esiste.</value>
+  </data>
+  <data name="RuoloNonAssegnabile" xml:space="preserve">
+    <value>Non puoi assegnare il ruolo «{0}»: solo il Titolare assegna ruoli che non ha.</value>
+  </data>
+  <data name="EmailInUso" xml:space="preserve">
+    <value>Esiste già un utente con questa email.</value>
+  </data>
+  <data name="TroppeRichieste" xml:space="preserve">
+    <value>Troppi tentativi in poco tempo. Attendi un minuto e riprova.</value>
+  </data>
+  <data name="ConfigurazioneMancante" xml:space="preserve">
+    <value>Configurazione del server incompleta: {0}</value>
+  </data>
+</root>
