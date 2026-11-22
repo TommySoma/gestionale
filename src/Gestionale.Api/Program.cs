@@ -19,6 +19,7 @@ app.MapHealthChecks("/salute").AllowAnonymous();
 var api = app.MapGroup("/api");
 EndpointAutenticazione.Mappa(api);
 EndpointUtenti.Mappa(api);
+EndpointClienti.Mappa(api);
 
 app.Run();
 

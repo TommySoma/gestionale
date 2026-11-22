@@ -97,6 +97,18 @@ tests/
 
 Il token di accesso dura 15 minuti, la sessione al massimo 12 ore. Dopo 5 errori l'account si blocca per 1, 2, 4 minuti e così via, fino a un'ora.
 
+## Anagrafiche
+
+| Cosa | Endpoint |
+| --- | --- |
+| Elenco e ricerca (nome, codice fiscale, partita IVA, tipo; a pagine) | `GET /api/clienti?cerca=&tipo=&pagina=&dimensione=` |
+| Scheda con sedi, contatti e consensi correnti | `GET /api/clienti/{id}` |
+| Nuovo, modifica, eliminazione logica | `POST /api/clienti`, `PUT /api/clienti/{id}`, `DELETE /api/clienti/{id}?versione=` |
+| Sedi e contatti | `/api/clienti/{id}/sedi` e `/api/clienti/{id}/contatti` |
+| Consensi privacy (storico, vale l'ultimo) | `GET` e `POST /api/clienti/{id}/consensi`, `GET /api/finalita-privacy` |
+
+Ogni modifica e cancellazione richiede la `versione` letta: se nel frattempo un collega ha cambiato il dato, l'API risponde 409 invece di sovrascriverlo. Codice fiscale (anche con omocodia) e partita IVA sono controllati con la cifra di controllo. Il Tecnico vede solo i clienti dei propri interventi, che arrivano con M2: fino ad allora il suo elenco è vuoto.
+
 ## Build e test
 
 ```

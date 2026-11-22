@@ -212,7 +212,7 @@ Lo stack è deciso (19 novembre 2026): desktop in Avalonia 12, backend ASP.NET C
 | --- | --- | --- |
 | Desktop | Avalonia 12, MVVM con CommunityToolkit.Mvvm | Windows e macOS; framework con licenza MIT |
 | Backend | ASP.NET Core su .NET 10 LTS, minimal API REST | .NET 10 è supportato fino al 14 novembre 2028 |
-| Accesso ai dati | Npgsql, Dapper per funzioni e report, EF Core per il CRUD semplice | Logica critica nelle funzioni SQL |
+| Accesso ai dati | Npgsql e Dapper, anche per il CRUD semplice | Logica critica nelle funzioni SQL; niente EF Core (ADR 0003, 22 novembre 2026) |
 | Database | PostgreSQL 18, pgvector | Row-Level Security, ricerca semantica nello stesso DB |
 | Migrazioni | DbUp, script SQL versionati | Nessuna generazione automatica dello schema |
 | Autenticazione | Su misura sullo schema sec: Argon2id (Konscious), TOTP (Otp.NET), JWT a vita breve con rinnovo a rotazione | Come da sezione Login; niente ASP.NET Core Identity (ADR 0002, 22 novembre 2026) |

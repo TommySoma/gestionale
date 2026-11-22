@@ -4,6 +4,7 @@ using System.Text;
 using Gestionale.Api.Autenticazione;
 using Gestionale.Api.Risorse;
 using Gestionale.Application.Autenticazione;
+using Gestionale.Domain.Anagrafica;
 using Gestionale.Domain.Sicurezza;
 
 namespace Gestionale.Api.Endpoint;
@@ -99,9 +100,9 @@ internal static class EndpointAutenticazione
         }
 
         var partitaIva = string.IsNullOrWhiteSpace(richiesta.PartitaIva) ? null : richiesta.PartitaIva.Trim();
-        if (partitaIva is not null && (partitaIva.Length != 11 || !partitaIva.All(char.IsAsciiDigit)))
+        if (partitaIva is not null && !PartitaIva.Valida(partitaIva))
         {
-            return Problemi.RichiestaNonValida(Messaggi.PartitaIvaNonValida);
+            return Problemi.RichiestaNonValida(Problemi.Formatta(Messaggi.DatiAnagraficiNonValidi, Messaggi.PartitaIvaNonValida + "."));
         }
 
         var dati = new DatiInstallazione(

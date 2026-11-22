@@ -6,13 +6,13 @@ Il piano completo è in `docs/piano-di-sviluppo.md`: leggilo prima di lavorare s
 
 ## Stato
 
-M0 completata e unita il 22/11/2026. M1 in corso: autenticazione lato server fatta (ADR 0002, branch `m1/autenticazione`); restano schema e API delle anagrafiche e, dopo i wireframe, login e schermate nel client desktop. Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
+M0 completata e unita il 22/11/2026. M1 in corso: autenticazione (ADR 0002, PR 2) e anagrafiche lato server (ADR 0003, branch `m1/anagrafiche`) fatte; restano, dopo i wireframe, login e schermate nel client desktop, più l'anonimizzazione GDPR dei clienti. Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
 
 ## Decisioni già prese (non riaprirle senza un motivo)
 
 - **Settore:** manutenzione e installazione di impianti termici e climatizzazione. La manutenzione è il motore; installazione, interventi e preventivi lo alimentano.
 - **Regioni:** Toscana per prima (catasto SIERT), Lombardia seconda (CURIT). Un'interfaccia comune e un adattatore per regione.
-- **Stack:** Avalonia 12 con MVVM (CommunityToolkit.Mvvm); ASP.NET Core su .NET 10 LTS con minimal API; Npgsql + Dapper per funzioni e report, EF Core solo per CRUD semplice; PostgreSQL 18 con pgvector; migrazioni DbUp (script SQL numerati); xUnit, Testcontainers, pgTAP; Docker Compose con Caddy; Ollama per l'AI locale; Velopack per installer; Serilog e OpenTelemetry.
+- **Stack:** Avalonia 12 con MVVM (CommunityToolkit.Mvvm); ASP.NET Core su .NET 10 LTS con minimal API; Npgsql + Dapper per tutto l'accesso ai dati, CRUD compreso (ADR 0003); PostgreSQL 18 con pgvector; migrazioni DbUp (script SQL numerati); xUnit, Testcontainers, pgTAP; Docker Compose con Caddy; Ollama per l'AI locale; Velopack per installer; Serilog e OpenTelemetry.
 - **Il client desktop non parla mai direttamente con il database:** passa sempre dall'API.
 - **Logica transazionale in funzioni SQL**, non in procedure (le procedure solo se serve un COMMIT interno). Validazioni e orchestrazione stanno nell'API.
 - **Licenza MIT.** Se un giorno si vende, si ristruttura: non preoccuparti di questo ora.
