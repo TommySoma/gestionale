@@ -1,9 +1,27 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:v="using:Gestionale.Desktop.Views"
              x:Class="Gestionale.Desktop.App"
-             RequestedThemeVariant="Default">
-  <!-- "Default" segue il tema chiaro o scuro del sistema. -->
+             RequestedThemeVariant="Light">
+  <!-- Tema chiaro per ora: il tema scuro arriva con il design system completo. -->
+  <Application.DataTemplates>
+    <DataTemplate DataType="vm:AccessoViewModel"><v:AccessoView /></DataTemplate>
+    <DataTemplate DataType="vm:VerificaMfaViewModel"><v:VerificaMfaView /></DataTemplate>
+    <DataTemplate DataType="vm:ConfiguraMfaViewModel"><v:ConfiguraMfaView /></DataTemplate>
+    <DataTemplate DataType="vm:CodiciRecuperoViewModel"><v:CodiciRecuperoView /></DataTemplate>
+    <DataTemplate DataType="vm:ShellViewModel"><v:ShellView /></DataTemplate>
+    <DataTemplate DataType="vm:ClientiViewModel"><v:ClientiView /></DataTemplate>
+    <DataTemplate DataType="vm:SchedaClienteViewModel"><v:SchedaClienteView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorClienteViewModel"><v:EditorClienteView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorSedeViewModel"><v:EditorSedeView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorContattoViewModel"><v:EditorContattoView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorConsensoViewModel"><v:EditorConsensoView /></DataTemplate>
+    <DataTemplate DataType="vm:ConfermaViewModel"><v:ConfermaView /></DataTemplate>
+  </Application.DataTemplates>
+
   <Application.Styles>
     <FluentTheme />
+    <StyleInclude Source="avares://Gestionale.Desktop/Tema/Stili.axaml" />
   </Application.Styles>
 </Application>

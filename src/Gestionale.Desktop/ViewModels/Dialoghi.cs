@@ -1,0 +1,287 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Gestionale.Desktop.Risorse;
+using Gestionale.Desktop.Servizi;
+
+namespace Gestionale.Desktop.ViewModels;
+
+public sealed record Opzione(string Codice, string Nome)
+{
+    public override string ToString() => Nome;
+}
+
+/// <summary>
+/// Base dei dialoghi che salvano qualcosa: messaggio d'errore dell'API, stato di
+/// invio e chiusura. La validazione vera la fa il server, che spiega cosa correggere.
+/// </summary>
+public abstract partial class DialogoViewModel(ShellViewModel shell) : ViewModelBase
+{
+    protected ShellViewModel Shell { get; } = shell;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HaErrore))]
+    public partial string? Errore { get; set; }
+
+    [ObservableProperty]
+    public partial bool InCorso { get; set; }
+
+    public bool HaErrore => !string.IsNullOrEmpty(Errore);
+
+    [RelayCommand]
+    private void Annulla() => Shell.ChiudiDialogo();
+
+    [RelayCommand]
+    private async Task SalvaAsync()
+    {
+        if (InCorso)
+        {
+            return;
+        }
+
+        InCorso = true;
+        Errore = null;
+        try
+        {
+            Errore = await EseguiAsync();
+            if (Errore is null)
+            {
+                Shell.ChiudiDialogo();
+                DopoIlSalvataggio();
+            }
+        }
+        finally
+        {
+            InCorso = false;
+        }
+    }
+
+    /// <summary>Salva e restituisce null se è andata bene, altrimenti il messaggio da mostrare.</summary>
+    protected abstract Task<string?> EseguiAsync();
+
+    protected virtual void DopoIlSalvataggio()
+    {
+    }
+
+    protected static string? Vuoto(string? valore) => string.IsNullOrWhiteSpace(valore) ? null : valore.Trim();
+}
+
+public partial class EditorClienteViewModel : DialogoViewModel
+{
+    private readonly Cliente? _esistente;
+    private readonly Action<Guid> _salvato;
+    private Guid _id;
+
+    public EditorClienteViewModel(ShellViewModel shell, Cliente? esistente, Action<Guid> salvato) : base(shell)
+    {
+        _esistente = esistente;
+        _salvato = salvato;
+        Tipo = Tipi.First(t => t.Codice == (esistente?.Tipo ?? "privato"));
+        Denominazione = esistente?.Denominazione ?? "";
+        Nome = esistente?.Nome ?? "";
+        Cognome = esistente?.Cognome ?? "";
+        CodiceFiscale = esistente?.CodiceFiscale ?? "";
+        PartitaIva = esistente?.PartitaIva ?? "";
+        Pec = esistente?.Pec ?? "";
+        Note = esistente?.Note ?? "";
+    }
+
+    public IReadOnlyList<Opzione> Tipi { get; } =
+    [
+        new("privato", Testi.TipoPrivato),
+        new("condominio", Testi.TipoCondominio),
+        new("azienda", Testi.TipoAzienda),
+    ];
+
+    public string Titolo => _esistente is null ? Testi.TitoloNuovoCliente : Testi.TitoloModificaCliente;
+
+    public bool Nuovo => _esistente is null;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Privato), nameof(ConDenominazione))]
+    public partial Opzione Tipo { get; set; }
+
+    public bool Privato => Tipo.Codice == "privato";
+
+    public bool ConDenominazione => !Privato;
+
+    [ObservableProperty]
+    public partial string Denominazione { get; set; }
+
+    [ObservableProperty]
+    public partial string Nome { get; set; }
+
+    [ObservableProperty]
+    public partial string Cognome { get; set; }
+
+    [ObservableProperty]
+    public partial string CodiceFiscale { get; set; }
+
+    [ObservableProperty]
+    public partial string PartitaIva { get; set; }
+
+    [ObservableProperty]
+    public partial string Pec { get; set; }
+
+    [ObservableProperty]
+    public partial string Note { get; set; }
+
+    protected override async Task<string?> EseguiAsync()
+    {
+        var dati = new DatiCliente(
+            Tipo.Codice,
+            Privato ? null : Vuoto(Denominazione),
+            Privato ? Vuoto(Nome) : null,
+            Privato ? Vuoto(Cognome) : null,
+            Vuoto(CodiceFiscale),
+            Vuoto(PartitaIva),
+            Vuoto(Pec),
+            Vuoto(Note),
+            _esistente?.Versione);
+
+        var risposta = _esistente is null
+            ? await Shell.Api.CreaClienteAsync(dati)
+            : await Shell.Api.AggiornaClienteAsync(_esistente.ClienteId, dati);
+
+        _id = risposta.Valore?.Id ?? Guid.Empty;
+        return risposta.Riuscita ? null : risposta.Messaggio;
+    }
+
+    protected override void DopoIlSalvataggio() => _salvato(_id);
+}
+
+public partial class EditorSedeViewModel(ShellViewModel shell, Guid clienteId, Action salvata) : DialogoViewModel(shell)
+{
+    [ObservableProperty]
+    public partial string Descrizione { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string Indirizzo { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string Civico { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string Cap { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string Comune { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string Provincia { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string NoteAccesso { get; set; } = "";
+
+    protected override async Task<string?> EseguiAsync()
+    {
+        var risposta = await Shell.Api.CreaSedeAsync(clienteId, new DatiSede(
+            Vuoto(Descrizione), Indirizzo.Trim(), Vuoto(Civico), Cap.Trim(), Comune.Trim(), Provincia.Trim(), Vuoto(NoteAccesso), null));
+        return risposta.Riuscita ? null : risposta.Messaggio;
+    }
+
+    protected override void DopoIlSalvataggio() => salvata();
+}
+
+public partial class EditorContattoViewModel : DialogoViewModel
+{
+    private readonly Guid _clienteId;
+    private readonly Action _salvato;
+
+    public EditorContattoViewModel(ShellViewModel shell, Guid clienteId, Action salvato) : base(shell)
+    {
+        _clienteId = clienteId;
+        _salvato = salvato;
+        Tipo = Tipi[1];
+    }
+
+    public IReadOnlyList<Opzione> Tipi { get; } =
+    [
+        new("telefono", Testi.Telefono),
+        new("cellulare", Testi.Cellulare),
+        new("email", Testi.EmailContatto),
+    ];
+
+    [ObservableProperty]
+    public partial Opzione Tipo { get; set; }
+
+    [ObservableProperty]
+    public partial string Valore { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string Etichetta { get; set; } = "";
+
+    [ObservableProperty]
+    public partial bool Principale { get; set; }
+
+    protected override async Task<string?> EseguiAsync()
+    {
+        var risposta = await Shell.Api.CreaContattoAsync(_clienteId, new DatiContatto(Tipo.Codice, Valore.Trim(), Vuoto(Etichetta), Principale, null));
+        return risposta.Riuscita ? null : risposta.Messaggio;
+    }
+
+    protected override void DopoIlSalvataggio() => _salvato();
+}
+
+public partial class EditorConsensoViewModel : DialogoViewModel
+{
+    private readonly Guid _clienteId;
+    private readonly Action _salvato;
+
+    public EditorConsensoViewModel(ShellViewModel shell, Guid clienteId, IReadOnlyList<FinalitaPrivacy> finalita, Action salvato) : base(shell)
+    {
+        _clienteId = clienteId;
+        _salvato = salvato;
+        Finalita = [.. finalita.Select(f => new Opzione(f.Codice, f.Nome))];
+        FinalitaScelta = Finalita.FirstOrDefault();
+        Fonte = Fonti[0];
+    }
+
+    public IReadOnlyList<Opzione> Finalita { get; }
+
+    public IReadOnlyList<Opzione> Fonti { get; } =
+    [
+        new("modulo_firmato", Testi.FonteModulo),
+        new("email", Testi.FonteEmail),
+        new("telefono", Testi.FonteTelefono),
+        new("di_persona", Testi.FonteDiPersona),
+        new("altro", Testi.FonteAltro),
+    ];
+
+    [ObservableProperty]
+    public partial Opzione? FinalitaScelta { get; set; }
+
+    [ObservableProperty]
+    public partial bool Concesso { get; set; } = true;
+
+    [ObservableProperty]
+    public partial Opzione Fonte { get; set; }
+
+    [ObservableProperty]
+    public partial string Note { get; set; } = "";
+
+    protected override async Task<string?> EseguiAsync()
+    {
+        if (FinalitaScelta is not { } finalita)
+        {
+            return Testi.ErroreInatteso;
+        }
+
+        var risposta = await Shell.Api.RegistraConsensoAsync(_clienteId, new DatiConsenso(finalita.Codice, Concesso, Fonte.Codice, Vuoto(Note)));
+        return risposta.Riuscita ? null : risposta.Messaggio;
+    }
+
+    protected override void DopoIlSalvataggio() => _salvato();
+}
+
+/// <summary>Conferma di un'azione che non si annulla con un clic.</summary>
+public partial class ConfermaViewModel(ShellViewModel shell, string titolo, string messaggio, string azione, Func<Task<string?>> esegui)
+    : DialogoViewModel(shell)
+{
+    public string Titolo { get; } = titolo;
+
+    public string Messaggio { get; } = messaggio;
+
+    public string Azione { get; } = azione;
+
+    protected override Task<string?> EseguiAsync() => esegui();
+}

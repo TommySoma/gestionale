@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Gestionale.Api\Gestionale.Api.csproj" />
     <ProjectReference Include="..\..\src\Gestionale.Migrator\Gestionale.Migrator.csproj" />
+    <ProjectReference Include="..\..\src\Gestionale.Desktop\Gestionale.Desktop.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />

@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.CodiciRecuperoView"
+             x:DataType="vm:CodiciRecuperoViewModel">
+  <ScrollViewer>
+    <StackPanel Width="640" Margin="32,48" Spacing="24" HorizontalAlignment="Center">
+      <Border Classes="avvisoSuccesso">
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <Path Classes="icona" Data="{StaticResource IconaOk}" />
+          <TextBlock Text="{x:Static r:Testi.MfaAttivo}" FontSize="15" VerticalAlignment="Center" />
+        </StackPanel>
+      </Border>
+
+      <StackPanel Spacing="8">
+        <TextBlock Classes="titolo1" Text="{x:Static r:Testi.CodiciTitolo}" />
+        <TextBlock Classes="secondario" FontSize="15" Text="{x:Static r:Testi.CodiciTesto}" />
+      </StackPanel>
+
+      <Border Classes="scheda" Padding="24">
+        <StackPanel Spacing="20">
+          <ItemsControl ItemsSource="{Binding Codici}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <UniformGrid Columns="2" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <Border Background="{StaticResource Sfondo}" CornerRadius="6" Padding="12,8" Margin="0,0,16,12">
+                  <SelectableTextBlock Classes="codice" Text="{Binding}" FontSize="18" LetterSpacing="1.5" />
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <StackPanel Orientation="Horizontal" Spacing="12">
+            <Button Classes="secondario" Content="{x:Static r:Testi.Copia}" Click="Copia_Click" />
+            <TextBlock Classes="secondario" FontSize="14" VerticalAlignment="Center" Text="{Binding Conferma}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <CheckBox IsChecked="{Binding Salvati}" FontSize="15" Content="{x:Static r:Testi.CodiciSalvati}" />
+
+      <Button Classes="primario" HorizontalAlignment="Stretch" MinHeight="48" FontSize="16"
+              Content="{x:Static r:Testi.Continua}" Command="{Binding ContinuaCommand}" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
