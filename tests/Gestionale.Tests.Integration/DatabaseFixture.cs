@@ -22,7 +22,10 @@ public sealed class DatabaseFixture : IAsyncLifetime
     /// <summary>Cartella del container in cui vengono copiati i test pgTAP.</summary>
     public const string CartellaPgTap = "/pgtap";
 
-    private IFutureDockerImage? _immagine;
+    // Un'immagine per processo, condivisa dalle classi di test che girano in parallelo.
+    // Non viene cancellata a fine test: se una classe la cancellasse, le altre fallirebbero.
+    private static readonly Lazy<Task<IFutureDockerImage>> s_immagine = new(CostruisciImmagineAsync);
+
     private PostgreSqlContainer? _container;
 
     public PostgreSqlContainer Container =>
@@ -34,16 +37,9 @@ public sealed class DatabaseFixture : IAsyncLifetime
 
     public async ValueTask InitializeAsync()
     {
-        _immagine = new ImageFromDockerfileBuilder()
-            .WithDockerfileDirectory(PercorsiRepository.Combina("db", "tests"))
-            .WithDockerfile("Dockerfile")
-            .WithName("gestionale-postgres-pgtap:test")
-            .WithCleanUp(false)
-            .Build();
+        var immagine = await s_immagine.Value;
 
-        await _immagine.CreateAsync();
-
-        _container = new PostgreSqlBuilder(_immagine)
+        _container = new PostgreSqlBuilder(immagine)
             .WithDatabase(NomeDatabase)
             .WithUsername("postgres")
             .WithPassword(PasswordSuperutente)
@@ -73,11 +69,19 @@ public sealed class DatabaseFixture : IAsyncLifetime
         {
             await _container.DisposeAsync();
         }
+    }
 
-        if (_immagine is not null)
-        {
-            await _immagine.DisposeAsync();
-        }
+    private static async Task<IFutureDockerImage> CostruisciImmagineAsync()
+    {
+        var immagine = new ImageFromDockerfileBuilder()
+            .WithDockerfileDirectory(PercorsiRepository.Combina("db", "tests"))
+            .WithDockerfile("Dockerfile")
+            .WithName("gestionale-postgres-pgtap:test")
+            .WithCleanUp(false)
+            .Build();
+
+        await immagine.CreateAsync();
+        return immagine;
     }
 
     private string ConUtente(string utente, string password) =>

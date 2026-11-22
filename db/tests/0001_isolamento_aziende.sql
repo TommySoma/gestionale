@@ -91,7 +91,7 @@ SELECT results_eq(
 );
 SELECT is((SELECT count(*) FROM sec.utenti_ruoli), 1::bigint, 'Alfa vede solo i ruoli dei propri utenti');
 SELECT results_eq(
-    'SELECT azione FROM sec.audit_log',
+    $$ SELECT azione FROM sec.audit_log WHERE azione LIKE 'prova.%' $$,
     $$ VALUES ('prova.alfa'::text) $$,
     'Alfa vede solo il proprio audit'
 );

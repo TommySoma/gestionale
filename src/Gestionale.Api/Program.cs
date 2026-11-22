@@ -1,10 +1,24 @@
+using Gestionale.Api.Autenticazione;
+using Gestionale.Api.Endpoint;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AggiungiGestionale();
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-app.MapHealthChecks("/salute");
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseRateLimiter();
+
+app.MapHealthChecks("/salute").AllowAnonymous();
+
+var api = app.MapGroup("/api");
+EndpointAutenticazione.Mappa(api);
+EndpointUtenti.Mappa(api);
 
 app.Run();
 

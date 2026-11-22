@@ -1,9 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>gestionale-api</UserSecretsId>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gestionale.Application\Gestionale.Application.csproj" />
     <ProjectReference Include="..\Gestionale.Infrastructure\Gestionale.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Messaggi di errore dell'API: file di traduzione, mai stringhe nel codice. -->
+    <EmbeddedResource Update="Risorse\Messaggi.resx"
+                      StronglyTypedLanguage="C#"
+                      StronglyTypedNamespace="Gestionale.Api.Risorse"
+                      StronglyTypedClassName="Messaggi"
+                      StronglyTypedFileName="$(IntermediateOutputPath)Messaggi.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <InternalsVisibleTo Include="Gestionale.Tests.Unit" />
+    <InternalsVisibleTo Include="Gestionale.Tests.Integration" />
   </ItemGroup>
 </Project>

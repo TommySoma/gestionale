@@ -2,4 +2,16 @@
   <ItemGroup>
     <ProjectReference Include="..\Gestionale.Application\Gestionale.Application.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="Konscious.Security.Cryptography.Argon2" />
+    <PackageReference Include="Otp.NET" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Gestionale.Tests.Unit" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sicurezza/password-note.txt" LogicalName="Gestionale.Infrastructure.Sicurezza.password-note.txt" />
+  </ItemGroup>
 </Project>

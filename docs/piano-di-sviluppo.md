@@ -215,7 +215,7 @@ Lo stack è deciso (19 novembre 2026): desktop in Avalonia 12, backend ASP.NET C
 | Accesso ai dati | Npgsql, Dapper per funzioni e report, EF Core per il CRUD semplice | Logica critica nelle funzioni SQL |
 | Database | PostgreSQL 18, pgvector | Row-Level Security, ricerca semantica nello stesso DB |
 | Migrazioni | DbUp, script SQL versionati | Nessuna generazione automatica dello schema |
-| Autenticazione | ASP.NET Core Identity, hasher Argon2id, JWT a vita breve con rinnovo, TOTP | Come da sezione Login |
+| Autenticazione | Su misura sullo schema sec: Argon2id (Konscious), TOTP (Otp.NET), JWT a vita breve con rinnovo a rotazione | Come da sezione Login; niente ASP.NET Core Identity (ADR 0002, 22 novembre 2026) |
 | Documenti e import | QuestPDF, CsvHelper, ClosedXML, MailKit | Verificare la licenza di QuestPDF prima dell'uso |
 | AI locale | Ollama, Microsoft.Extensions.AI, embeddings multilingue (bge-m3) | Opzionale e disattivabile |
 | Lavoro sul campo (Fase 2) | PWA offline: Blazor WebAssembly oppure React con TypeScript | Decisione aperta, ADR a M7 dopo una prova pratica |
@@ -277,7 +277,7 @@ flowchart TD
 | Tabella | Contenuto principale | Vincoli e note |
 | --- | --- | --- |
 | `aziende` | Ragione sociale, partita IVA, codice fiscale, sede, regione di riferimento (sceglie l'adattatore regionale) | È il tenant: ogni tabella di business la referenzia |
-| `utenti` | Email, nome, hash Argon2id, stato, MFA (segreto cifrato, attivo), tentativi falliti, blocco fino a | Email unica per azienda; il segreto MFA non è mai in chiaro |
+| `utenti` | Email, nome, hash Argon2id, stato, MFA (segreto cifrato, attivo), tentativi falliti, blocco fino a | Email unica su tutto il database, perché si accede senza codice azienda (ADR 0002); il segreto MFA non è mai in chiaro |
 | `ruoli`, `permessi`, `ruoli_permessi` | I sei ruoli come dati, permessi granulari, assegnazioni | Ruoli e permessi di sistema non cancellabili; in Fase 3 ruoli personalizzabili |
 | `utenti_ruoli` | Ruoli di ciascun utente | Un utente può averne più di uno |
 | `sessioni_rinnovo` | Hash del token di rinnovo, scadenza, revoca, dispositivo, indirizzo | Token mai in chiaro; rotazione a ogni uso |
