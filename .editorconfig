@@ -1,0 +1,69 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml,xml,csproj,props,targets,slnx,axaml,resx}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.sql]
+indent_size = 4
+
+[*.cs]
+# Organizzazione
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+csharp_style_namespace_declarations = file_scoped:warning
+
+# Stile
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+csharp_prefer_braces = true:warning
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+dotnet_style_readonly_field = true:warning
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
+
+# Nomi: costanti in PascalCase, campi statici con s_, altri campi privati con _
+dotnet_naming_rule.costanti.symbols = costanti
+dotnet_naming_rule.costanti.style = pascal
+dotnet_naming_rule.costanti.severity = warning
+dotnet_naming_symbols.costanti.applicable_kinds = field
+dotnet_naming_symbols.costanti.required_modifiers = const
+dotnet_naming_style.pascal.capitalization = pascal_case
+
+dotnet_naming_rule.campi_statici.symbols = campi_statici
+dotnet_naming_rule.campi_statici.style = s_camel
+dotnet_naming_rule.campi_statici.severity = warning
+dotnet_naming_symbols.campi_statici.applicable_kinds = field
+dotnet_naming_symbols.campi_statici.applicable_accessibilities = private
+dotnet_naming_symbols.campi_statici.required_modifiers = static
+dotnet_naming_style.s_camel.capitalization = camel_case
+dotnet_naming_style.s_camel.required_prefix = s_
+
+dotnet_naming_rule.campi_privati.symbols = campi_privati
+dotnet_naming_rule.campi_privati.style = underscore_camel
+dotnet_naming_rule.campi_privati.severity = warning
+dotnet_naming_symbols.campi_privati.applicable_kinds = field
+dotnet_naming_symbols.campi_privati.applicable_accessibilities = private
+dotnet_naming_style.underscore_camel.capitalization = camel_case
+dotnet_naming_style.underscore_camel.required_prefix = _
+
+# Analisi
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.CA2007.severity = none
+
+[tests/**.cs]
+# Nei test i nomi descrittivi con underscore sono ammessi
+dotnet_diagnostic.CA1707.severity = none

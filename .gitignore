@@ -1,0 +1,33 @@
+# Build .NET
+bin/
+obj/
+artifacts/
+*.user
+*.suo
+*.rsuser
+.vs/
+.idea/
+*.DotSettings.user
+
+# Test
+TestResults/
+coverage*/
+*.trx
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Segreti e configurazione locale: mai nel repository
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+*.pfx
+*.key
+
+# Docker e dati locali
+deploy/dati/
+
+# Claude Code (impostazioni locali)
+.claude/settings.local.json
