@@ -64,6 +64,39 @@ tests/
 
    In alternativa imposta la variabile d'ambiente `GESTIONALE_DB_MIGRAZIONI`.
 
+4. Configura l'API. I segreti non vanno mai in `appsettings.json`: in sviluppo usa i *user secrets* di .NET, in produzione le variabili d'ambiente (`Autenticazione__ChiaveFirma` e così via). Per generare una chiave casuale di 32 byte in PowerShell:
+
+   ```
+   [Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+   ```
+
+   | Impostazione | Contenuto |
+   | --- | --- |
+   | `ConnectionStrings:Database` | Stringa di connessione come `app_api` |
+   | `Autenticazione:ChiaveFirma` | Chiave dei token, Base64, almeno 32 byte |
+   | `Autenticazione:ChiaveCifraturaMfa` | Chiave AES dei segreti TOTP, Base64, esattamente 32 byte |
+   | `Autenticazione:TokenInstallazione` | Token per il primo avvio; lascialo vuoto dopo l'installazione |
+
+   ```
+   dotnet user-secrets --project src/Gestionale.Api set "Autenticazione:ChiaveFirma" "<chiave>"
+   ```
+
+5. Avvia l'API con `dotnet run --project src/Gestionale.Api` e completa il primo avvio con `POST /api/installazione` (intestazione `X-Token-Installazione`): crea l'azienda, il Titolare e l'Amministratore di sistema. Al primo accesso entrambi devono configurare il secondo fattore con un'app TOTP.
+
+## Accesso
+
+| Passo | Endpoint |
+| --- | --- |
+| Email e password | `POST /api/accesso`: esito `completato`, `mfa_richiesto` o `mfa_da_configurare` |
+| Codice TOTP o di recupero | `POST /api/accesso/mfa` con il token di passaggio |
+| Configurazione del secondo fattore | `POST /api/mfa/configurazione`, poi `POST /api/mfa/attivazione` |
+| Rinnovo (token a rotazione) | `POST /api/sessione/rinnovo` |
+| Uscita | `POST /api/sessione/uscita` |
+| Profilo e permessi | `GET /api/io` |
+| Utenti | `GET` e `POST /api/utenti` |
+
+Il token di accesso dura 15 minuti, la sessione al massimo 12 ore. Dopo 5 errori l'account si blocca per 1, 2, 4 minuti e così via, fino a un'ora.
+
 ## Build e test
 
 ```
@@ -71,10 +104,10 @@ dotnet build
 dotnet test
 ```
 
-I test di integrazione avviano un PostgreSQL usa e getta con Testcontainers, applicano le migrazioni ed eseguono i test pgTAP di `db/tests`. Richiedono Docker con container Linux; senza Docker escludili:
+I test di integrazione avviano un PostgreSQL usa e getta con Testcontainers, applicano le migrazioni, eseguono i test pgTAP di `db/tests` e provano l'API dall'accesso al database. Richiedono Docker con container Linux; senza Docker escludili:
 
 ```
-dotnet test --filter "Category!=Integration"
+dotnet test --filter-not-trait "Category=Integration"
 ```
 
 ## Sicurezza del database

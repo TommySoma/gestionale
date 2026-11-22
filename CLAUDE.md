@@ -6,7 +6,7 @@ Il piano completo è in `docs/piano-di-sviluppo.md`: leggilo prima di lavorare s
 
 ## Stato
 
-Scheletro M0 creato il 22/11/2026 (vedi "Primo compito" e `docs/adr/0001-fondamenta-m0.md`); da verificare la CI su GitHub, poi M1. Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
+M0 completata e unita il 22/11/2026. M1 in corso: autenticazione lato server fatta (ADR 0002, branch `m1/autenticazione`); restano schema e API delle anagrafiche e, dopo i wireframe, login e schermate nel client desktop. Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
 
 ## Decisioni già prese (non riaprirle senza un motivo)
 
