@@ -1,0 +1,6 @@
+# Falsi positivi verificati a mano. Ogni riga è l'impronta di una singola segnalazione
+# (commit:file:regola:riga): non ignora il file né la regola per il futuro.
+
+# Token JWT finto, firmato con una stringa senza valore, in un test che verificava il
+# rifiuto delle firme estranee. Sostituito nel commit successivo da un token generato a runtime.
+3c92ca7e7493606b9703259d1fc8260b249072c5:tests/Gestionale.Tests.Unit/TestApi.cs:jwt:52

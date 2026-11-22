@@ -2,6 +2,8 @@ using System.Net;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Gestionale.Tests.Unit;
 
@@ -47,9 +49,17 @@ public sealed class TestApi(FabbricaApiSenzaDatabase fabbrica) : IClassFixture<F
     public async Task Un_token_firmato_con_un_altra_chiave_è_rifiutato()
     {
         using var client = fabbrica.CreateClient();
-        // Token HS256 valido nella forma ma firmato con una chiave diversa.
-        const string tokenEstraneo =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMTkwMDAwMC0wMDAwLTcwMDAtODAwMC0wMDAwMDAwMDAwYTEiLCJhdWQiOiJnZXN0aW9uYWxlLWFwaSIsImlzcyI6Imdlc3Rpb25hbGUiLCJleHAiOjQxMDI0NDQ4MDB9.c2Vuem8tZmlybWEtdmFsaWRhLXF1ZXN0YS1lLWZpbnRh";
+        // Token corretto nella forma, con emittente e destinatario giusti, ma firmato
+        // con una chiave casuale diversa da quella dell'API. Generato qui, così nel
+        // repository non resta nessuna stringa che somigli a un token.
+        var tokenEstraneo = new JsonWebTokenHandler().CreateToken(new SecurityTokenDescriptor
+        {
+            Issuer = "gestionale",
+            Audience = "gestionale-api",
+            Expires = DateTime.UtcNow.AddMinutes(5),
+            Claims = new Dictionary<string, object> { ["sub"] = Guid.NewGuid().ToString(), ["azienda"] = Guid.NewGuid().ToString() },
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(RandomNumberGenerator.GetBytes(32)), SecurityAlgorithms.HmacSha256),
+        });
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenEstraneo);
 
         var risposta = await client.GetAsync(new Uri("/api/io", UriKind.Relative), TestContext.Current.CancellationToken);
