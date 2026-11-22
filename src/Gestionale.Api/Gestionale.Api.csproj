@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\Gestionale.Application\Gestionale.Application.csproj" />
+    <ProjectReference Include="..\Gestionale.Infrastructure\Gestionale.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Gestionale.Tests.Unit" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build-test:
+    name: Build e test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore Gestionale.slnx
+
+      - name: Build
+        run: dotnet build Gestionale.slnx --configuration Release --no-restore
+
+      # Solo Linux ha Docker con container Linux: lì girano anche Testcontainers e pgTAP.
+      - name: Test (unitari e di integrazione)
+        if: runner.os == 'Linux'
+        run: dotnet test --solution Gestionale.slnx --configuration Release --no-build
+
+      # Su Windows e macOS i test di integrazione sono esclusi; il codice di uscita 8
+      # ("nessun test eseguito") riguarda il progetto di integrazione rimasto vuoto.
+      - name: Test (unitari)
+        if: runner.os != 'Linux'
+        run: dotnet test --solution Gestionale.slnx --configuration Release --no-build --filter-not-trait "Category=Integration" --ignore-exit-code 8
+
+  formato:
+    name: Formattazione
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      # Lo stile del codice è già verificato in compilazione (EnforceCodeStyleInBuild).
+      - name: Spazi e fine riga
+        run: dotnet format whitespace Gestionale.slnx --verify-no-changes
+
+  segreti:
+    name: Scansione dei segreti
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

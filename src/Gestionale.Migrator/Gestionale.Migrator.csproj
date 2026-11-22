@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="dbup-postgresql" />
+    <PackageReference Include="Npgsql" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Gli script stanno in /db/migrations e vengono incorporati nell'eseguibile. -->
+    <EmbeddedResource Include="..\..\db\migrations\*.sql" LinkBase="migrations" />
+  </ItemGroup>
+</Project>

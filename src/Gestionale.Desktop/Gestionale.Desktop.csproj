@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Testi dell'interfaccia: file di traduzione, mai stringhe nel codice. -->
+    <EmbeddedResource Update="Risorse\Testi.resx"
+                      StronglyTypedLanguage="C#"
+                      StronglyTypedNamespace="Gestionale.Desktop.Risorse"
+                      StronglyTypedClassName="Testi"
+                      StronglyTypedFileName="$(IntermediateOutputPath)Testi.Designer.cs"
+                      PublicClass="true" />
+  </ItemGroup>
+</Project>

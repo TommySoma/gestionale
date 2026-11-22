@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Gestionale.Domain\Gestionale.Domain.csproj" />
+  </ItemGroup>
+</Project>
