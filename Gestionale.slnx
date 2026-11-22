@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/Gestionale.Api/Gestionale.Api.csproj" />
     <Project Path="src/Gestionale.Application/Gestionale.Application.csproj" />
+    <Project Path="src/Gestionale.Desktop/Gestionale.Desktop.csproj" />
     <Project Path="src/Gestionale.Domain/Gestionale.Domain.csproj" />
     <Project Path="src/Gestionale.Infrastructure/Gestionale.Infrastructure.csproj" />
     <Project Path="src/Gestionale.Migrator/Gestionale.Migrator.csproj" />
