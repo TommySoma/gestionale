@@ -1,7 +1,9 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
+using Gestionale.Api.Endpoint;
 using Microsoft.AspNetCore.Mvc.Testing;
+using OtpNet;
 
 namespace Gestionale.Tests.Integration;
 
@@ -18,6 +20,8 @@ public sealed class ApiFixture : IAsyncLifetime
     public const string PasswordAmministratore = "server-nello-sgabuzzino";
 
     private readonly DatabaseFixture _database = new();
+    private readonly Dictionary<string, string> _token = new(StringComparer.OrdinalIgnoreCase);
+    private readonly SemaphoreSlim _accessi = new(1, 1);
     private WebApplicationFactory<Program>? _fabbrica;
 
     public async ValueTask InitializeAsync()
@@ -42,7 +46,7 @@ public sealed class ApiFixture : IAsyncLifetime
             Content = JsonContent.Create(new
             {
                 ragioneSociale = "Termoidraulica Alfa Srl (fittizia)",
-                partitaIva = "00000000001",
+                partitaIva = "01234567897",
                 regione = "toscana",
                 titolare = new { email = EmailTitolare, nome = "Mario", cognome = "Rossi", password = PasswordTitolare },
                 amministratore = new { email = EmailAmministratore, nome = "Ivo", cognome = "Server", password = PasswordAmministratore },
@@ -68,6 +72,62 @@ public sealed class ApiFixture : IAsyncLifetime
         return client;
     }
 
+    /// <summary>
+    /// Token di accesso di un utente, ottenuto una volta e riusato (vale 15 minuti).
+    /// Se il ruolo richiede il secondo fattore, lo configura al primo accesso.
+    /// </summary>
+    public async Task<string> TokenAsync(string email, string password)
+    {
+        await _accessi.WaitAsync();
+        try
+        {
+            if (_token.TryGetValue(email, out var salvato))
+            {
+                return salvato;
+            }
+
+            using var client = Client();
+            var risposta = await client.PostAsJsonAsync("/api/accesso", new { email, password });
+            risposta.EnsureSuccessStatusCode();
+            var accesso = (await risposta.Content.ReadFromJsonAsync<RispostaAccesso>())!;
+
+            var token = accesso.Esito switch
+            {
+                "completato" => accesso.Token!.TokenAccesso,
+                "mfa_da_configurare" => await ConfiguraSecondoFattoreAsync(accesso.TokenPassaggio!),
+                _ => throw new InvalidOperationException($"Esito inatteso per {email}: {accesso.Esito}. Usa un utente senza secondo fattore già attivo."),
+            };
+
+            _token[email] = token;
+            return token;
+        }
+        finally
+        {
+            _accessi.Release();
+        }
+    }
+
+    public Task<string> TokenTitolareAsync() => TokenAsync(EmailTitolare, PasswordTitolare);
+
+    /// <summary>Crea un utente come Titolare; restituisce l'email.</summary>
+    public async Task<string> CreaUtenteAsync(string email, string password, params string[] ruoli)
+    {
+        using var titolare = Client(await TokenTitolareAsync());
+        var risposta = await titolare.PostAsJsonAsync("/api/utenti", new { email, nome = "Prova", cognome = "Fittizia", password, ruoli });
+        risposta.EnsureSuccessStatusCode();
+        return email;
+    }
+
+    private async Task<string> ConfiguraSecondoFattoreAsync(string tokenPassaggio)
+    {
+        using var passaggio = Client(tokenPassaggio);
+        var configurazione = (await (await passaggio.PostAsync("/api/mfa/configurazione", null)).Content.ReadFromJsonAsync<RispostaConfigurazioneMfa>())!;
+        var codice = new Totp(Base32Encoding.ToBytes(configurazione.Segreto)).ComputeTotp(DateTime.UtcNow);
+        var attivazione = await passaggio.PostAsJsonAsync("/api/mfa/attivazione", new { codice });
+        attivazione.EnsureSuccessStatusCode();
+        return (await attivazione.Content.ReadFromJsonAsync<RispostaAttivazioneMfa>())!.Token!.TokenAccesso;
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (_fabbrica is not null)
@@ -76,5 +136,6 @@ public sealed class ApiFixture : IAsyncLifetime
         }
 
         await _database.DisposeAsync();
+        _accessi.Dispose();
     }
 }
