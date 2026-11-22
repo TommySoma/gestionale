@@ -109,6 +109,19 @@ Il token di accesso dura 15 minuti, la sessione al massimo 12 ore. Dopo 5 errori
 
 Ogni modifica e cancellazione richiede la `versione` letta: se nel frattempo un collega ha cambiato il dato, l'API risponde 409 invece di sovrascriverlo. Codice fiscale (anche con omocodia) e partita IVA sono controllati con la cifra di controllo. Il Tecnico vede solo i clienti dei propri interventi, che arrivano con M2: fino ad allora il suo elenco è vuoto.
 
+## Client desktop
+
+```
+dotnet run --project src/Gestionale.Desktop
+```
+
+Alla prima apertura indica l'indirizzo del server (ad esempio `http://localhost:5225` in sviluppo) con "Cambia server". Il client parla solo con l'API, mai con il database.
+
+- **Accesso:** email e password, poi il codice dell'app di autenticazione. Titolare e Amministratore di sistema configurano il secondo fattore al primo accesso (codice QR, chiave manuale, codici di recupero).
+- **Sessione:** il token di accesso resta in memoria e si rinnova da solo; il token di rinnovo sta solo nel portachiavi del sistema (Windows Credential Manager, portachiavi di macOS), così riaprendo l'app nella stessa giornata non serve accedere di nuovo. Le preferenze non segrete (server, ultima email) sono in `impostazioni.json` nella cartella dei dati dell'utente.
+- **Anagrafiche:** elenco con ricerca, filtri e pagine; scheda con sedi, contatti e consensi; creazione e modifica con i messaggi d'errore dell'API.
+- **Testi:** tutti in `src/Gestionale.Desktop/Risorse/Testi.resx`.
+
 ## Build e test
 
 ```
