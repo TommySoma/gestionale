@@ -1,0 +1,251 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Design system minimo del piano: palette neutra, un solo accento (blu petrolio),
+       colori di stato sempre accompagnati da icona e testo, griglia a 8 px. -->
+  <Styles.Resources>
+    <Color x:Key="ColoreAccento">#0B5C6B</Color>
+    <Color x:Key="SystemAccentColor">#0B5C6B</Color>
+    <Color x:Key="SystemAccentColorDark1">#084652</Color>
+    <Color x:Key="SystemAccentColorLight1">#2C7887</Color>
+    <SolidColorBrush x:Key="Accento" Color="#0B5C6B" />
+    <SolidColorBrush x:Key="AccentoScuro" Color="#084652" />
+    <SolidColorBrush x:Key="AccentoTenue" Color="#E6F0F2" />
+    <SolidColorBrush x:Key="AccentoSuScuro" Color="#D7E7EA" />
+    <SolidColorBrush x:Key="Sfondo" Color="#F4F6F7" />
+    <SolidColorBrush x:Key="Superficie" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Bordo" Color="#DCE1E4" />
+    <SolidColorBrush x:Key="BordoCampo" Color="#C9D0D4" />
+    <SolidColorBrush x:Key="Divisore" Color="#EEF1F3" />
+    <SolidColorBrush x:Key="Testo" Color="#172026" />
+    <SolidColorBrush x:Key="TestoSecondario" Color="#55626B" />
+    <SolidColorBrush x:Key="TestoTenue" Color="#66727A" />
+    <SolidColorBrush x:Key="Errore" Color="#B42318" />
+    <SolidColorBrush x:Key="ErroreTenue" Color="#FEF3F2" />
+    <SolidColorBrush x:Key="ErroreBordo" Color="#FECDCA" />
+    <SolidColorBrush x:Key="Successo" Color="#067647" />
+    <SolidColorBrush x:Key="SuccessoTenue" Color="#ECFDF3" />
+    <SolidColorBrush x:Key="SuccessoBordo" Color="#ABEFC6" />
+    <SolidColorBrush x:Key="Velo" Color="#7A172026" />
+
+    <!-- Icone a tratto, 24×24. -->
+    <StreamGeometry x:Key="IconaGoccia">M12 3c-3 4-5 6.5-5 9.5a5 5 0 0 0 10 0C17 9.5 15 7 12 3z M12 14v4</StreamGeometry>
+    <StreamGeometry x:Key="IconaCerca">M11 4a7 7 0 1 1 0 14a7 7 0 1 1 0-14z M20 20l-3.5-3.5</StreamGeometry>
+    <StreamGeometry x:Key="IconaOk">M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18z M8 12l3 3 5-6</StreamGeometry>
+    <StreamGeometry x:Key="IconaNo">M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18z M9 9l6 6 M15 9l-6 6</StreamGeometry>
+    <StreamGeometry x:Key="IconaAvviso">M12 3l9.5 17h-19z M12 10v4 M12 17v.01</StreamGeometry>
+    <StreamGeometry x:Key="IconaInfo">M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18z M12 8v5 M12 16v.01</StreamGeometry>
+    <StreamGeometry x:Key="IconaLuogo">M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z M12 7a2.5 2.5 0 1 1 0 5a2.5 2.5 0 1 1 0-5z</StreamGeometry>
+    <StreamGeometry x:Key="IconaPiu">M12 5v14 M5 12h14</StreamGeometry>
+    <StreamGeometry x:Key="IconaChiudi">M6 6l12 12 M18 6L6 18</StreamGeometry>
+    <StreamGeometry x:Key="IconaStella">M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z</StreamGeometry>
+  </Styles.Resources>
+
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{StaticResource Sfondo}" />
+    <Setter Property="Foreground" Value="{StaticResource Testo}" />
+  </Style>
+
+  <!-- Icona a tratto: Path con Data da una StreamGeometry. -->
+  <Style Selector="Path.icona">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+    <Setter Property="Stretch" Value="Uniform" />
+    <Setter Property="StrokeThickness" Value="1.75" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+    <Setter Property="StrokeJoin" Value="Round" />
+    <Setter Property="Stroke" Value="{StaticResource TestoSecondario}" />
+  </Style>
+
+  <!-- Testi -->
+  <Style Selector="TextBlock.titolo1">
+    <Setter Property="FontSize" Value="28" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="LetterSpacing" Value="-0.5" />
+  </Style>
+  <Style Selector="TextBlock.titolo2">
+    <Setter Property="FontSize" Value="24" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="TextBlock.titoloSezione">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="TextBlock.secondario">
+    <Setter Property="Foreground" Value="{StaticResource TestoSecondario}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="TextBlock.etichetta">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Margin" Value="0,0,0,6" />
+  </Style>
+  <Style Selector="TextBlock.codice">
+    <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, Menlo, monospace" />
+  </Style>
+
+  <!-- Campi -->
+  <Style Selector="TextBox">
+    <Setter Property="MinHeight" Value="44" />
+    <Setter Property="FontSize" Value="15" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ComboBox">
+    <Setter Property="MinHeight" Value="44" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+  </Style>
+
+  <!-- Pulsanti: primario (accento), secondario (bordo), testo (link) -->
+  <Style Selector="Button">
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="Padding" Value="16,0" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.primario">
+    <Setter Property="Background" Value="{StaticResource Accento}" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="Button.primario:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentoScuro}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Button.primario:disabled /template/ ContentPresenter">
+    <Setter Property="Background" Value="#9BB9BF" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Button.secondario">
+    <Setter Property="Background" Value="{StaticResource Superficie}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BordoCampo}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Foreground" Value="{StaticResource Testo}" />
+  </Style>
+  <Style Selector="Button.pericolo">
+    <Setter Property="Background" Value="{StaticResource Errore}" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="Button.collegamento">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource Accento}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Padding" Value="8,0" />
+    <Setter Property="MinHeight" Value="32" />
+  </Style>
+  <Style Selector="Button.collegamento:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource AccentoTenue}" />
+    <Setter Property="Foreground" Value="{StaticResource AccentoScuro}" />
+  </Style>
+
+  <!-- Contenitori -->
+  <Style Selector="Border.scheda">
+    <Setter Property="Background" Value="{StaticResource Superficie}" />
+    <Setter Property="BorderBrush" Value="{StaticResource Bordo}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+  </Style>
+  <Style Selector="Border.distintivo">
+    <Setter Property="Background" Value="{StaticResource Divisore}" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="Padding" Value="8,3" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.distintivo > TextBlock">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="#3D4950" />
+  </Style>
+  <Style Selector="Border.avvisoErrore">
+    <Setter Property="Background" Value="{StaticResource ErroreTenue}" />
+    <Setter Property="BorderBrush" Value="{StaticResource ErroreBordo}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="16,12" />
+  </Style>
+  <Style Selector="Border.avvisoErrore TextBlock">
+    <Setter Property="Foreground" Value="{StaticResource Errore}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="Border.avvisoErrore Path.icona">
+    <Setter Property="Stroke" Value="{StaticResource Errore}" />
+  </Style>
+  <Style Selector="Border.avvisoSuccesso">
+    <Setter Property="Background" Value="{StaticResource SuccessoTenue}" />
+    <Setter Property="BorderBrush" Value="{StaticResource SuccessoBordo}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="16,12" />
+  </Style>
+  <Style Selector="Border.avvisoSuccesso TextBlock">
+    <Setter Property="Foreground" Value="{StaticResource Successo}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="Border.avvisoSuccesso Path.icona">
+    <Setter Property="Stroke" Value="{StaticResource Successo}" />
+  </Style>
+
+  <!-- Voci della barra laterale -->
+  <Style Selector="Button.voceMenu">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource Testo}" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="Padding" Value="12,0" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector="Button.voceMenu.attiva">
+    <Setter Property="Background" Value="{StaticResource AccentoTenue}" />
+    <Setter Property="Foreground" Value="{StaticResource Accento}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <!-- Aree delle prossime milestone: visibili, non cliccabili, con l'etichetta della milestone. -->
+  <Style Selector="DockPanel.voceFutura">
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Margin" Value="12,0" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="DockPanel.voceFutura > TextBlock">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="{StaticResource TestoTenue}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.milestone">
+    <Setter Property="DockPanel.Dock" Value="Right" />
+    <Setter Property="Background" Value="{StaticResource Divisore}" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Padding" Value="6,2" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Border.milestone > TextBlock">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{StaticResource TestoSecondario}" />
+  </Style>
+
+  <!-- La ricerca globale arriva con M3: si vede, ma con lo sfondo chiaro del progetto. -->
+  <Style Selector="TextBox.ricercaGlobale:disabled /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{StaticResource Sfondo}" />
+    <Setter Property="BorderBrush" Value="{StaticResource Bordo}" />
+  </Style>
+
+  <!-- Filtri a pillola -->
+  <Style Selector="ToggleButton.filtro">
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="Padding" Value="14,0" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Background" Value="{StaticResource Superficie}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BordoCampo}" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="ToggleButton.filtro:checked /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource Accento}" />
+    <Setter Property="BorderBrush" Value="{StaticResource Accento}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+</Styles>

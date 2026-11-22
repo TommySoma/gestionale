@@ -18,4 +18,451 @@
   <data name="MessaggioBenvenuto" xml:space="preserve">
     <value>Benvenuto. Le funzioni arriveranno con le prossime milestone.</value>
   </data>
+  <data name="NomeProdotto" xml:space="preserve">
+    <value>Gestionale impianti</value>
+  </data>
+  <data name="NomeBreve" xml:space="preserve">
+    <value>Gestionale</value>
+  </data>
+  <data name="Slogan" xml:space="preserve">
+    <value>Scadenze e documenti degli impianti, sempre in ordine.</value>
+  </data>
+  <data name="SottoSlogan" xml:space="preserve">
+    <value>Caldaie, climatizzatori e pompe di calore dei tuoi clienti, con i controlli in scadenza sempre in primo piano.</value>
+  </data>
+  <data name="Disclaimer" xml:space="preserve">
+    <value>Supporto alla compilazione: la verifica normativa e la firma dei documenti restano a carico dell'utente.</value>
+  </data>
+  <data name="SessioneScaduta" xml:space="preserve">
+    <value>La sessione è scaduta o è stata chiusa. Accedi di nuovo.</value>
+  </data>
+  <data name="ServerNonConfigurato" xml:space="preserve">
+    <value>Indica l'indirizzo del server prima di accedere.</value>
+  </data>
+  <data name="ServerNonRaggiungibile" xml:space="preserve">
+    <value>Il server non risponde. Controlla l'indirizzo e la connessione alla rete dell'ufficio, poi riprova.</value>
+  </data>
+  <data name="IndirizzoServerNonValido" xml:space="preserve">
+    <value>L'indirizzo del server non è valido: scrivilo per intero, ad esempio https://gestionale.locale</value>
+  </data>
+  <data name="OperazioneNonConsentita" xml:space="preserve">
+    <value>Il tuo ruolo non permette questa operazione.</value>
+  </data>
+  <data name="TroppeRichieste" xml:space="preserve">
+    <value>Troppi tentativi in poco tempo. Attendi un minuto e riprova.</value>
+  </data>
+  <data name="ErroreInatteso" xml:space="preserve">
+    <value>Qualcosa non ha funzionato sul server. Riprova; se il problema continua, avvisa l'amministratore.</value>
+  </data>
+  <data name="AccessoTitolo" xml:space="preserve">
+    <value>Accedi</value>
+  </data>
+  <data name="AccessoSottotitolo" xml:space="preserve">
+    <value>Usa l'email e la password del tuo account personale.</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordRegola" xml:space="preserve">
+    <value>Almeno 12 caratteri.</value>
+  </data>
+  <data name="Accedi" xml:space="preserve">
+    <value>Accedi</value>
+  </data>
+  <data name="AccessoInCorso" xml:space="preserve">
+    <value>Accesso in corso…</value>
+  </data>
+  <data name="PasswordDimenticata" xml:space="preserve">
+    <value>Password dimenticata? Chiedi all'Amministratore di sistema di reimpostarla.</value>
+  </data>
+  <data name="Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="CambiaServer" xml:space="preserve">
+    <value>Cambia server</value>
+  </data>
+  <data name="IndirizzoServer" xml:space="preserve">
+    <value>Indirizzo del server</value>
+  </data>
+  <data name="CompilaEmailPassword" xml:space="preserve">
+    <value>Scrivi email e password.</value>
+  </data>
+  <data name="MfaSlogan" xml:space="preserve">
+    <value>Un secondo controllo, per i dati dei tuoi clienti.</value>
+  </data>
+  <data name="MfaSottoSlogan" xml:space="preserve">
+    <value>Il codice cambia ogni 30 secondi e vale una volta sola.</value>
+  </data>
+  <data name="MfaTitolo" xml:space="preserve">
+    <value>Inserisci il codice</value>
+  </data>
+  <data name="MfaIstruzioni" xml:space="preserve">
+    <value>Apri l'app di autenticazione sul telefono e scrivi il codice a 6 cifre di Gestionale impianti.</value>
+  </data>
+  <data name="MfaCodice" xml:space="preserve">
+    <value>Codice a 6 cifre o codice di recupero</value>
+  </data>
+  <data name="Verifica" xml:space="preserve">
+    <value>Verifica</value>
+  </data>
+  <data name="MfaRecupero" xml:space="preserve">
+    <value>Non hai il telefono con te? Scrivi uno dei codici di recupero che hai salvato, ad esempio ABCDE-FGHJK. Ogni codice vale una volta.</value>
+  </data>
+  <data name="AltroAccount" xml:space="preserve">
+    <value>← Accedi con un altro account</value>
+  </data>
+  <data name="ScriviCodice" xml:space="preserve">
+    <value>Scrivi il codice.</value>
+  </data>
+  <data name="ConfiguraTitolo" xml:space="preserve">
+    <value>Attiva il secondo fattore</value>
+  </data>
+  <data name="ConfiguraSottotitolo" xml:space="preserve">
+    <value>Il tuo ruolo lo rende obbligatorio. Serve solo la prima volta e richiede circa due minuti.</value>
+  </data>
+  <data name="Passo1Titolo" xml:space="preserve">
+    <value>Installa un'app</value>
+  </data>
+  <data name="Passo1Testo" xml:space="preserve">
+    <value>Una qualsiasi app di autenticazione con codici a 6 cifre (TOTP), sul tuo telefono personale.</value>
+  </data>
+  <data name="Passo2Titolo" xml:space="preserve">
+    <value>Inquadra il codice QR</value>
+  </data>
+  <data name="Passo2Chiave" xml:space="preserve">
+    <value>Oppure inserisci a mano la chiave:</value>
+  </data>
+  <data name="Copia" xml:space="preserve">
+    <value>Copia</value>
+  </data>
+  <data name="Passo3Titolo" xml:space="preserve">
+    <value>Conferma con un codice</value>
+  </data>
+  <data name="Passo3Testo" xml:space="preserve">
+    <value>Scrivi il codice che mostra ora l'app.</value>
+  </data>
+  <data name="Attiva" xml:space="preserve">
+    <value>Attiva</value>
+  </data>
+  <data name="ConsiglioOrario" xml:space="preserve">
+    <value>Se il codice risulta sbagliato, controlla che l'ora del telefono sia impostata in automatico.</value>
+  </data>
+  <data name="MfaAttivo" xml:space="preserve">
+    <value>Secondo fattore attivo</value>
+  </data>
+  <data name="CodiciTitolo" xml:space="preserve">
+    <value>Salva i codici di recupero</value>
+  </data>
+  <data name="CodiciTesto" xml:space="preserve">
+    <value>Servono se perdi il telefono. Ogni codice vale una volta sola. Li vedi solo adesso: copiali nel tuo gestore di password o stampali.</value>
+  </data>
+  <data name="CodiciSalvati" xml:space="preserve">
+    <value>Ho salvato i codici in un posto sicuro</value>
+  </data>
+  <data name="Continua" xml:space="preserve">
+    <value>Continua</value>
+  </data>
+  <data name="Copiato" xml:space="preserve">
+    <value>Copiato negli appunti.</value>
+  </data>
+  <data name="NavOggi" xml:space="preserve">
+    <value>Oggi</value>
+  </data>
+  <data name="NavClienti" xml:space="preserve">
+    <value>Clienti</value>
+  </data>
+  <data name="NavImpianti" xml:space="preserve">
+    <value>Impianti</value>
+  </data>
+  <data name="NavInterventi" xml:space="preserve">
+    <value>Interventi</value>
+  </data>
+  <data name="NavScadenze" xml:space="preserve">
+    <value>Scadenze</value>
+  </data>
+  <data name="NavPreventivi" xml:space="preserve">
+    <value>Preventivi</value>
+  </data>
+  <data name="NavUtenti" xml:space="preserve">
+    <value>Utenti e ruoli</value>
+  </data>
+  <data name="InArrivo" xml:space="preserve">
+    <value>Arriva con {0}</value>
+  </data>
+  <data name="CercaGlobale" xml:space="preserve">
+    <value>Cerca clienti, impianti, documenti…</value>
+  </data>
+  <data name="Esci" xml:space="preserve">
+    <value>Esci</value>
+  </data>
+  <data name="MenuUtente" xml:space="preserve">
+    <value>Menu utente</value>
+  </data>
+  <data name="ClientiTitolo" xml:space="preserve">
+    <value>Clienti</value>
+  </data>
+  <data name="NuovoCliente" xml:space="preserve">
+    <value>Nuovo cliente</value>
+  </data>
+  <data name="FiltroTutti" xml:space="preserve">
+    <value>Tutti</value>
+  </data>
+  <data name="FiltroPrivati" xml:space="preserve">
+    <value>Privati</value>
+  </data>
+  <data name="FiltroCondomini" xml:space="preserve">
+    <value>Condomini</value>
+  </data>
+  <data name="FiltroAziende" xml:space="preserve">
+    <value>Aziende</value>
+  </data>
+  <data name="CercaClienti" xml:space="preserve">
+    <value>Cerca per nome, codice fiscale o partita IVA</value>
+  </data>
+  <data name="ColCliente" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="ColTipo" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="ColCodice" xml:space="preserve">
+    <value>Codice fiscale / P. IVA</value>
+  </data>
+  <data name="ColComune" xml:space="preserve">
+    <value>Comune</value>
+  </data>
+  <data name="Precedente" xml:space="preserve">
+    <value>Precedente</value>
+  </data>
+  <data name="Successiva" xml:space="preserve">
+    <value>Successiva</value>
+  </data>
+  <data name="ConteggioClienti" xml:space="preserve">
+    <value>{0} clienti</value>
+  </data>
+  <data name="ConteggioUnCliente" xml:space="preserve">
+    <value>1 cliente</value>
+  </data>
+  <data name="IntervalloPagina" xml:space="preserve">
+    <value>{0}–{1} di {2}</value>
+  </data>
+  <data name="NessunCliente" xml:space="preserve">
+    <value>Nessun cliente trovato. Prova a cambiare la ricerca o il filtro.</value>
+  </data>
+  <data name="NessunClienteTecnico" xml:space="preserve">
+    <value>Vedrai i clienti dei tuoi interventi quando saranno disponibili (M2).</value>
+  </data>
+  <data name="Caricamento" xml:space="preserve">
+    <value>Caricamento…</value>
+  </data>
+  <data name="TipoPrivato" xml:space="preserve">
+    <value>Privato</value>
+  </data>
+  <data name="TipoCondominio" xml:space="preserve">
+    <value>Condominio</value>
+  </data>
+  <data name="TipoAzienda" xml:space="preserve">
+    <value>Azienda</value>
+  </data>
+  <data name="TornaAiClienti" xml:space="preserve">
+    <value>← Clienti</value>
+  </data>
+  <data name="Modifica" xml:space="preserve">
+    <value>Modifica</value>
+  </data>
+  <data name="Elimina" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="Sedi" xml:space="preserve">
+    <value>Sedi</value>
+  </data>
+  <data name="AggiungiSede" xml:space="preserve">
+    <value>+ Aggiungi sede</value>
+  </data>
+  <data name="Contatti" xml:space="preserve">
+    <value>Contatti</value>
+  </data>
+  <data name="AggiungiContatto" xml:space="preserve">
+    <value>+ Aggiungi contatto</value>
+  </data>
+  <data name="DatiFiscali" xml:space="preserve">
+    <value>Dati fiscali</value>
+  </data>
+  <data name="CodiceFiscale" xml:space="preserve">
+    <value>Codice fiscale</value>
+  </data>
+  <data name="PartitaIva" xml:space="preserve">
+    <value>Partita IVA</value>
+  </data>
+  <data name="Pec" xml:space="preserve">
+    <value>PEC</value>
+  </data>
+  <data name="NonIndicato" xml:space="preserve">
+    <value>Non indicato</value>
+  </data>
+  <data name="ConsensiPrivacy" xml:space="preserve">
+    <value>Consensi privacy</value>
+  </data>
+  <data name="RegistraConsenso" xml:space="preserve">
+    <value>Registra consenso</value>
+  </data>
+  <data name="Concesso" xml:space="preserve">
+    <value>Concesso</value>
+  </data>
+  <data name="NonConcesso" xml:space="preserve">
+    <value>Non concesso</value>
+  </data>
+  <data name="NessunConsenso" xml:space="preserve">
+    <value>Nessun consenso registrato.</value>
+  </data>
+  <data name="Principale" xml:space="preserve">
+    <value>Principale</value>
+  </data>
+  <data name="NoteAccesso" xml:space="preserve">
+    <value>Note di accesso: {0}</value>
+  </data>
+  <data name="ImpiantiInArrivo" xml:space="preserve">
+    <value>Impianti di questa sede: arrivano con M2.</value>
+  </data>
+  <data name="NessunaSede" xml:space="preserve">
+    <value>Nessuna sede. Aggiungi l'indirizzo dove si trovano gli impianti.</value>
+  </data>
+  <data name="NessunContatto" xml:space="preserve">
+    <value>Nessun contatto.</value>
+  </data>
+  <data name="ConfermaEliminaTitolo" xml:space="preserve">
+    <value>Eliminare il cliente?</value>
+  </data>
+  <data name="ConfermaElimina" xml:space="preserve">
+    <value>{0} sparirà dagli elenchi insieme alle sue sedi. I dati restano nel database per lo storico.</value>
+  </data>
+  <data name="EliminaCliente" xml:space="preserve">
+    <value>Elimina cliente</value>
+  </data>
+  <data name="Annulla" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="Chiudi" xml:space="preserve">
+    <value>Chiudi</value>
+  </data>
+  <data name="TitoloNuovoCliente" xml:space="preserve">
+    <value>Nuovo cliente</value>
+  </data>
+  <data name="TitoloModificaCliente" xml:space="preserve">
+    <value>Modifica cliente</value>
+  </data>
+  <data name="TipoCliente" xml:space="preserve">
+    <value>Tipo di cliente</value>
+  </data>
+  <data name="Nome" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Cognome" xml:space="preserve">
+    <value>Cognome</value>
+  </data>
+  <data name="Denominazione" xml:space="preserve">
+    <value>Denominazione</value>
+  </data>
+  <data name="Facoltativo" xml:space="preserve">
+    <value>(se presente)</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="SalvaCliente" xml:space="preserve">
+    <value>Salva cliente</value>
+  </data>
+  <data name="Salva" xml:space="preserve">
+    <value>Salva</value>
+  </data>
+  <data name="DopoSalvataggio" xml:space="preserve">
+    <value>Sedi, contatti e consensi si aggiungono dalla scheda, dopo il salvataggio.</value>
+  </data>
+  <data name="TitoloNuovaSede" xml:space="preserve">
+    <value>Nuova sede</value>
+  </data>
+  <data name="Descrizione" xml:space="preserve">
+    <value>Descrizione</value>
+  </data>
+  <data name="Indirizzo" xml:space="preserve">
+    <value>Indirizzo</value>
+  </data>
+  <data name="Civico" xml:space="preserve">
+    <value>Civico</value>
+  </data>
+  <data name="Cap" xml:space="preserve">
+    <value>CAP</value>
+  </data>
+  <data name="Comune" xml:space="preserve">
+    <value>Comune</value>
+  </data>
+  <data name="Provincia" xml:space="preserve">
+    <value>Provincia</value>
+  </data>
+  <data name="SalvaSede" xml:space="preserve">
+    <value>Salva sede</value>
+  </data>
+  <data name="TitoloNuovoContatto" xml:space="preserve">
+    <value>Nuovo contatto</value>
+  </data>
+  <data name="TipoContatto" xml:space="preserve">
+    <value>Tipo di contatto</value>
+  </data>
+  <data name="Telefono" xml:space="preserve">
+    <value>Telefono</value>
+  </data>
+  <data name="Cellulare" xml:space="preserve">
+    <value>Cellulare</value>
+  </data>
+  <data name="EmailContatto" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Valore" xml:space="preserve">
+    <value>Numero o indirizzo</value>
+  </data>
+  <data name="Etichetta" xml:space="preserve">
+    <value>Etichetta</value>
+  </data>
+  <data name="EtichettaEsempio" xml:space="preserve">
+    <value>Ad esempio: amministratore, portineria</value>
+  </data>
+  <data name="ContattoPrincipale" xml:space="preserve">
+    <value>Contatto principale per questo tipo</value>
+  </data>
+  <data name="SalvaContatto" xml:space="preserve">
+    <value>Salva contatto</value>
+  </data>
+  <data name="TitoloRegistraConsenso" xml:space="preserve">
+    <value>Registra consenso</value>
+  </data>
+  <data name="Finalita" xml:space="preserve">
+    <value>Finalità</value>
+  </data>
+  <data name="ConsensoConcesso" xml:space="preserve">
+    <value>Il cliente concede il consenso</value>
+  </data>
+  <data name="Fonte" xml:space="preserve">
+    <value>Fonte</value>
+  </data>
+  <data name="FonteModulo" xml:space="preserve">
+    <value>Modulo firmato</value>
+  </data>
+  <data name="FonteEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="FonteTelefono" xml:space="preserve">
+    <value>Telefono</value>
+  </data>
+  <data name="FonteDiPersona" xml:space="preserve">
+    <value>Di persona</value>
+  </data>
+  <data name="FonteAltro" xml:space="preserve">
+    <value>Altro</value>
+  </data>
+  <data name="SalvaConsenso" xml:space="preserve">
+    <value>Salva consenso</value>
+  </data>
 </root>

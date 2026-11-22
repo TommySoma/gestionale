@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:v="using:Gestionale.Desktop.Views"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.VerificaMfaView"
+             x:DataType="vm:VerificaMfaViewModel">
+  <DockPanel>
+    <v:PannelloMarca DockPanel.Dock="Left" Titolo="{x:Static r:Testi.MfaSlogan}" Sottotitolo="{x:Static r:Testi.MfaSottoSlogan}" />
+    <ScrollViewer>
+      <StackPanel Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,64" Spacing="24">
+        <StackPanel Spacing="8">
+          <TextBlock Classes="secondario" FontSize="14" Text="{Binding Email}" />
+          <TextBlock Classes="titolo1" Text="{x:Static r:Testi.MfaTitolo}" />
+          <TextBlock Classes="secondario" FontSize="15" Text="{x:Static r:Testi.MfaIstruzioni}" />
+        </StackPanel>
+
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaAvviso}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding Errore}" />
+          </DockPanel>
+        </Border>
+
+        <StackPanel>
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.MfaCodice}" />
+          <TextBox x:Name="CampoCodice" Text="{Binding Codice}" MaxLength="11" MinHeight="56" FontSize="26" FontWeight="SemiBold"
+                   LetterSpacing="6" AutomationProperties.Name="{x:Static r:Testi.MfaCodice}" />
+        </StackPanel>
+
+        <Button Classes="primario" HorizontalAlignment="Stretch" MinHeight="48" FontSize="16" IsDefault="True"
+                Content="{x:Static r:Testi.Verifica}" Command="{Binding VerificaCommand}" IsEnabled="{Binding !InCorso}" />
+
+        <TextBlock Classes="secondario" FontSize="14" Text="{x:Static r:Testi.MfaRecupero}" />
+
+        <Button Classes="collegamento" HorizontalAlignment="Left" Content="{x:Static r:Testi.AltroAccount}" Command="{Binding AltroAccountCommand}" />
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

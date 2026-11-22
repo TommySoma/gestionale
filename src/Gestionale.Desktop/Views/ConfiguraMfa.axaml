@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:c="using:Gestionale.Desktop.Controlli"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.ConfiguraMfaView"
+             x:DataType="vm:ConfiguraMfaViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" Height="64" Background="{StaticResource Superficie}" BorderBrush="{StaticResource Bordo}" BorderThickness="0,0,0,1" Padding="32,0">
+      <DockPanel>
+        <TextBlock DockPanel.Dock="Right" Classes="secondario" FontSize="14" VerticalAlignment="Center" Text="{Binding Email}" />
+        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+          <Path Classes="icona" Data="{StaticResource IconaGoccia}" Stroke="{StaticResource Accento}" Width="24" Height="24" />
+          <TextBlock Text="{x:Static r:Testi.NomeProdotto}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+        </StackPanel>
+      </DockPanel>
+    </Border>
+    <ScrollViewer>
+      <StackPanel Width="880" Margin="32,48" Spacing="32">
+        <StackPanel Spacing="8">
+          <TextBlock Classes="titolo1" Text="{x:Static r:Testi.ConfiguraTitolo}" />
+          <TextBlock Classes="secondario" FontSize="15" Text="{x:Static r:Testi.ConfiguraSottotitolo}" />
+        </StackPanel>
+
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaAvviso}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding Errore}" />
+          </DockPanel>
+        </Border>
+
+        <Grid ColumnDefinitions="*,24,*,24,*">
+          <Border Grid.Column="0" Classes="scheda" Padding="24">
+            <StackPanel Spacing="12">
+              <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource AccentoTenue}" HorizontalAlignment="Left">
+                <TextBlock Text="1" FontWeight="Bold" Foreground="{StaticResource Accento}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+              <TextBlock Text="{x:Static r:Testi.Passo1Titolo}" FontSize="17" FontWeight="SemiBold" />
+              <TextBlock Classes="secondario" FontSize="14" Text="{x:Static r:Testi.Passo1Testo}" />
+            </StackPanel>
+          </Border>
+
+          <Border Grid.Column="2" Classes="scheda" Padding="24" BorderBrush="{StaticResource Accento}" BorderThickness="2">
+            <StackPanel Spacing="12">
+              <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource Accento}" HorizontalAlignment="Left">
+                <TextBlock Text="2" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+              <TextBlock Text="{x:Static r:Testi.Passo2Titolo}" FontSize="17" FontWeight="SemiBold" />
+              <c:CodiceQr Testo="{Binding UriConfigurazione}" Width="176" Height="176" HorizontalAlignment="Center"
+                          AutomationProperties.Name="{x:Static r:Testi.Passo2Titolo}" />
+              <TextBlock Classes="secondario" FontSize="13" Text="{x:Static r:Testi.Passo2Chiave}" />
+              <Border Background="{StaticResource Sfondo}" CornerRadius="8" Padding="12,8,8,8">
+                <DockPanel>
+                  <Button x:Name="CopiaChiave" DockPanel.Dock="Right" Classes="secondario" MinHeight="32" Padding="12,0"
+                          Content="{x:Static r:Testi.Copia}" Click="CopiaChiave_Click" />
+                  <SelectableTextBlock Classes="codice" Text="{Binding Chiave}" FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap" />
+                </DockPanel>
+              </Border>
+            </StackPanel>
+          </Border>
+
+          <Border Grid.Column="4" Classes="scheda" Padding="24">
+            <DockPanel>
+              <Button DockPanel.Dock="Bottom" Classes="primario" HorizontalAlignment="Stretch" MinHeight="44" IsDefault="True"
+                      Content="{x:Static r:Testi.Attiva}" Command="{Binding AttivaCommand}" IsEnabled="{Binding !InCorso}" />
+              <StackPanel Spacing="12" Margin="0,0,0,16">
+                <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource AccentoTenue}" HorizontalAlignment="Left">
+                  <TextBlock Text="3" FontWeight="Bold" Foreground="{StaticResource Accento}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <TextBlock Text="{x:Static r:Testi.Passo3Titolo}" FontSize="17" FontWeight="SemiBold" />
+                <TextBlock Classes="secondario" FontSize="14" Text="{x:Static r:Testi.Passo3Testo}" />
+                <TextBox Text="{Binding Codice}" MaxLength="7" MinHeight="48" FontSize="22" FontWeight="SemiBold" LetterSpacing="4"
+                         PlaceholderText="000000" AutomationProperties.Name="{x:Static r:Testi.Passo3Testo}" />
+              </StackPanel>
+            </DockPanel>
+          </Border>
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Path Classes="icona" Data="{StaticResource IconaInfo}" Width="18" Height="18" />
+          <TextBlock Classes="secondario" FontSize="14" Text="{x:Static r:Testi.ConsiglioOrario}" />
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

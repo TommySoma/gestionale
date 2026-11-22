@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:v="using:Gestionale.Desktop.Views"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.AccessoView"
+             x:DataType="vm:AccessoViewModel">
+  <DockPanel>
+    <v:PannelloMarca DockPanel.Dock="Left" Titolo="{x:Static r:Testi.Slogan}" Sottotitolo="{x:Static r:Testi.SottoSlogan}" />
+    <ScrollViewer>
+      <StackPanel Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,64" Spacing="24">
+        <StackPanel Spacing="8">
+          <TextBlock Classes="titolo1" Text="{x:Static r:Testi.AccessoTitolo}" />
+          <TextBlock Classes="secondario" FontSize="15" Text="{x:Static r:Testi.AccessoSottotitolo}" />
+        </StackPanel>
+
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaAvviso}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding Errore}" />
+          </DockPanel>
+        </Border>
+
+        <StackPanel>
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Email}" />
+          <TextBox Text="{Binding Email}" AutomationProperties.Name="{x:Static r:Testi.Email}" />
+        </StackPanel>
+
+        <StackPanel>
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Password}" />
+          <TextBox Text="{Binding Password}" PasswordChar="•" Classes="revealPasswordButton"
+                   AutomationProperties.Name="{x:Static r:Testi.Password}" />
+          <TextBlock Classes="secondario" FontSize="13" Margin="0,6,0,0" Text="{x:Static r:Testi.PasswordRegola}" />
+        </StackPanel>
+
+        <Button Classes="primario" HorizontalAlignment="Stretch" MinHeight="48" FontSize="16" IsDefault="True"
+                Content="{Binding TestoPulsante}" Command="{Binding AccediCommand}" IsEnabled="{Binding !InCorso}" />
+
+        <TextBlock Classes="secondario" FontSize="14" Text="{x:Static r:Testi.PasswordDimenticata}" />
+
+        <Border BorderBrush="{StaticResource Bordo}" BorderThickness="0,1,0,0" Padding="0,16,0,0">
+          <StackPanel Spacing="8">
+            <DockPanel>
+              <Button Classes="collegamento" DockPanel.Dock="Right" Content="{x:Static r:Testi.CambiaServer}" Command="{Binding CambiaServerCommand}" />
+              <TextBlock Classes="secondario" FontSize="13" VerticalAlignment="Center">
+                <Run Text="{x:Static r:Testi.Server}" />
+                <Run Text="{Binding IndirizzoServer}" FontWeight="SemiBold" Foreground="{StaticResource Testo}" />
+              </TextBlock>
+            </DockPanel>
+            <StackPanel IsVisible="{Binding ModificaServer}">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.IndirizzoServer}" />
+              <TextBox Text="{Binding IndirizzoServer}" AutomationProperties.Name="{x:Static r:Testi.IndirizzoServer}" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

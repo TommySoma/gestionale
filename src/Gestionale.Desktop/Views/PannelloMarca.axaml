@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.PannelloMarca"
+             x:Name="Pannello">
+  <!-- Colonna di sinistra delle schermate di accesso: marchio, messaggio, avvertenza. -->
+  <Border Width="512" Background="{StaticResource Accento}" Padding="56,64">
+    <DockPanel>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12">
+        <Path Classes="icona" Data="{StaticResource IconaGoccia}" Stroke="White" Width="32" Height="32" />
+        <TextBlock Text="{x:Static r:Testi.NomeProdotto}" Foreground="White" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" />
+      </StackPanel>
+      <TextBlock DockPanel.Dock="Bottom" Text="{x:Static r:Testi.Disclaimer}" Foreground="{StaticResource AccentoSuScuro}" FontSize="13" TextWrapping="Wrap" />
+      <StackPanel VerticalAlignment="Center" Spacing="16">
+        <TextBlock Text="{Binding #Pannello.Titolo}" Foreground="White" FontSize="36" FontWeight="Bold" TextWrapping="Wrap" LineHeight="44" />
+        <TextBlock Text="{Binding #Pannello.Sottotitolo}" Foreground="{StaticResource AccentoSuScuro}" FontSize="16" TextWrapping="Wrap" LineHeight="26" />
+      </StackPanel>
+    </DockPanel>
+  </Border>
+</UserControl>

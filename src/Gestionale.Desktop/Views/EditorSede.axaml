@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.EditorSedeView"
+             x:DataType="vm:EditorSedeViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{StaticResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <TextBlock Text="{x:Static r:Testi.TitoloNuovaSede}" FontSize="20" FontWeight="Bold" />
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{StaticResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+        <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+        <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.SalvaSede}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+      </StackPanel>
+    </Border>
+    <ScrollViewer>
+      <StackPanel Margin="24" Spacing="20">
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <TextBlock Text="{Binding Errore}" />
+        </Border>
+        <StackPanel>
+          <TextBlock Classes="etichetta">
+            <Run Text="{x:Static r:Testi.Descrizione}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{StaticResource TestoSecondario}" />
+          </TextBlock>
+          <TextBox Text="{Binding Descrizione}" AutomationProperties.Name="{x:Static r:Testi.Descrizione}" />
+        </StackPanel>
+        <Grid ColumnDefinitions="3*,16,*">
+          <StackPanel Grid.Column="0">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Indirizzo}" />
+            <TextBox Text="{Binding Indirizzo}" AutomationProperties.Name="{x:Static r:Testi.Indirizzo}" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Civico}" />
+            <TextBox Text="{Binding Civico}" AutomationProperties.Name="{x:Static r:Testi.Civico}" />
+          </StackPanel>
+        </Grid>
+        <Grid ColumnDefinitions="*,16,2*,16,*">
+          <StackPanel Grid.Column="0">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Cap}" />
+            <TextBox Text="{Binding Cap}" MaxLength="5" AutomationProperties.Name="{x:Static r:Testi.Cap}" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Comune}" />
+            <TextBox Text="{Binding Comune}" AutomationProperties.Name="{x:Static r:Testi.Comune}" />
+          </StackPanel>
+          <StackPanel Grid.Column="4">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Provincia}" />
+            <TextBox Text="{Binding Provincia}" MaxLength="2" AutomationProperties.Name="{x:Static r:Testi.Provincia}" />
+          </StackPanel>
+        </Grid>
+        <StackPanel>
+          <TextBlock Classes="etichetta">
+            <Run Text="{x:Static r:Testi.Note}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{StaticResource TestoSecondario}" />
+          </TextBlock>
+          <TextBox Text="{Binding NoteAccesso}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72" AutomationProperties.Name="{x:Static r:Testi.Note}" />
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

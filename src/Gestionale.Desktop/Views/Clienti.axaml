@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.ClientiView"
+             x:DataType="vm:ClientiViewModel">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="16" Margin="0,0,0,16">
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Classes="primario" VerticalAlignment="Bottom" IsVisible="{Binding PuoCreare}" Command="{Binding NuovoCommand}">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Path Classes="icona" Data="{StaticResource IconaPiu}" Stroke="White" Width="16" Height="16" StrokeThickness="2" />
+            <TextBlock Text="{x:Static r:Testi.NuovoCliente}" />
+          </StackPanel>
+        </Button>
+        <StackPanel>
+          <TextBlock Classes="titolo2" Text="{x:Static r:Testi.ClientiTitolo}" />
+          <TextBlock Classes="secondario" FontSize="14" Margin="0,4,0,0" Text="{Binding Conteggio}" />
+        </StackPanel>
+      </DockPanel>
+
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <ToggleButton Classes="filtro" Content="{x:Static r:Testi.FiltroTutti}" IsChecked="{Binding FiltroTutti}" />
+          <ToggleButton Classes="filtro" Content="{x:Static r:Testi.FiltroPrivati}" IsChecked="{Binding FiltroPrivati}" />
+          <ToggleButton Classes="filtro" Content="{x:Static r:Testi.FiltroCondomini}" IsChecked="{Binding FiltroCondomini}" />
+          <ToggleButton Classes="filtro" Content="{x:Static r:Testi.FiltroAziende}" IsChecked="{Binding FiltroAziende}" />
+        </StackPanel>
+        <TextBox Text="{Binding Testo}" MaxWidth="420" HorizontalAlignment="Left" Margin="0,0,16,0"
+                 PlaceholderText="{x:Static r:Testi.CercaClienti}" AutomationProperties.Name="{x:Static r:Testi.CercaClienti}" />
+      </DockPanel>
+
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" />
+      </Border>
+    </StackPanel>
+
+    <DockPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+        <Button Classes="secondario" Content="{x:Static r:Testi.Precedente}" IsEnabled="{Binding PuoPrecedente}" Command="{Binding PrecedenteCommand}" />
+        <Button Classes="secondario" Content="{x:Static r:Testi.Successiva}" IsEnabled="{Binding PuoSuccessiva}" Command="{Binding SuccessivaCommand}" />
+      </StackPanel>
+      <TextBlock Classes="secondario" FontSize="14" VerticalAlignment="Center" Text="{Binding Intervallo}" />
+    </DockPanel>
+
+    <Border Classes="scheda">
+      <DockPanel>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="3*,1.2*,2*,1.5*" Margin="16,12">
+          <TextBlock Grid.Column="0" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColCliente}" />
+          <TextBlock Grid.Column="1" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColTipo}" />
+          <TextBlock Grid.Column="2" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColCodice}" />
+          <TextBlock Grid.Column="3" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColComune}" />
+        </Grid>
+        <Border DockPanel.Dock="Top" Height="1" Background="{StaticResource Bordo}" />
+        <Panel>
+          <TextBlock Classes="secondario" FontSize="14" Margin="16,24" HorizontalAlignment="Center" IsVisible="{Binding Vuoto}" Text="{Binding MessaggioVuoto}" />
+          <ListBox ItemsSource="{Binding Righe}" Background="Transparent" AutomationProperties.Name="{x:Static r:Testi.ClientiTitolo}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:RigaCliente">
+                <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MinHeight="44"
+                        Command="{Binding $parent[UserControl].((vm:ClientiViewModel)DataContext).ApriCommand}" CommandParameter="{Binding}">
+                  <Grid ColumnDefinitions="3*,1.2*,2*,1.5*" Margin="4,0">
+                    <TextBlock Grid.Column="0" Text="{Binding Nome}" FontWeight="SemiBold" Foreground="{StaticResource Accento}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    <Border Grid.Column="1" Classes="distintivo" HorizontalAlignment="Left">
+                      <TextBlock Text="{Binding Tipo}" />
+                    </Border>
+                    <TextBlock Grid.Column="2" Classes="codice" Text="{Binding Codice}" FontSize="13" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="3" Text="{Binding Comune}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                  </Grid>
+                </Button>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Panel>
+      </DockPanel>
+    </Border>
+  </DockPanel>
+</UserControl>
