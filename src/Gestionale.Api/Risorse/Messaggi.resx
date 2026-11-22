@@ -57,9 +57,6 @@
   <data name="RegioneNonGestita" xml:space="preserve">
     <value>La regione «{0}» non è gestita. Valori ammessi: toscana, lombardia.</value>
   </data>
-  <data name="PartitaIvaNonValida" xml:space="preserve">
-    <value>La partita IVA deve essere composta da 11 cifre.</value>
-  </data>
   <data name="PasswordNonValida" xml:space="preserve">
     <value>La password per {0} non è accettata: {1}</value>
   </data>
@@ -92,5 +89,71 @@
   </data>
   <data name="ConfigurazioneMancante" xml:space="preserve">
     <value>Configurazione del server incompleta: {0}</value>
+  </data>
+  <data name="TitoloNonTrovato" xml:space="preserve">
+    <value>Non trovato</value>
+  </data>
+  <data name="ClienteNonTrovato" xml:space="preserve">
+    <value>Il cliente, la sede o il contatto richiesto non esiste o è stato eliminato.</value>
+  </data>
+  <data name="VersioneSuperata" xml:space="preserve">
+    <value>Il dato è stato modificato da qualcun altro nel frattempo. Ricarica la scheda e ripeti la modifica.</value>
+  </data>
+  <data name="VersioneMancante" xml:space="preserve">
+    <value>Indica la versione del dato che stai modificando (campo versione).</value>
+  </data>
+  <data name="DatiAnagraficiNonValidi" xml:space="preserve">
+    <value>Correggi questi dati: {0}</value>
+  </data>
+  <data name="TipoClienteNonValido" xml:space="preserve">
+    <value>il tipo deve essere privato, condominio o azienda</value>
+  </data>
+  <data name="NomeCognomeMancanti" xml:space="preserve">
+    <value>per un privato servono nome e cognome</value>
+  </data>
+  <data name="DenominazioneMancante" xml:space="preserve">
+    <value>per un condominio o un'azienda serve la denominazione</value>
+  </data>
+  <data name="CodiceFiscaleNonValido" xml:space="preserve">
+    <value>il codice fiscale non è valido: controlla di averlo copiato per intero (16 caratteri, oppure 11 cifre per società e condomini)</value>
+  </data>
+  <data name="PartitaIvaNonValida" xml:space="preserve">
+    <value>la partita IVA non è valida: deve avere 11 cifre e l'ultima non corrisponde</value>
+  </data>
+  <data name="PecNonValida" xml:space="preserve">
+    <value>la PEC deve avere la forma nome@dominio</value>
+  </data>
+  <data name="IndirizzoMancante" xml:space="preserve">
+    <value>manca l'indirizzo</value>
+  </data>
+  <data name="ComuneMancante" xml:space="preserve">
+    <value>manca il comune</value>
+  </data>
+  <data name="CapNonValido" xml:space="preserve">
+    <value>il CAP deve avere 5 cifre</value>
+  </data>
+  <data name="ProvinciaNonValida" xml:space="preserve">
+    <value>la provincia va indicata con la sigla di 2 lettere, ad esempio FI</value>
+  </data>
+  <data name="CoordinateNonValide" xml:space="preserve">
+    <value>indica sia la latitudine (da -90 a 90) sia la longitudine (da -180 a 180), oppure nessuna delle due</value>
+  </data>
+  <data name="TipoContattoNonValido" xml:space="preserve">
+    <value>il tipo di contatto deve essere telefono, cellulare o email</value>
+  </data>
+  <data name="ValoreContattoNonValido" xml:space="preserve">
+    <value>il contatto non ha un formato valido: un numero di telefono (cifre, spazi, + iniziale) oppure un'email</value>
+  </data>
+  <data name="FinalitaSconosciuta" xml:space="preserve">
+    <value>la finalità indicata non esiste o non è attiva</value>
+  </data>
+  <data name="FonteConsensoNonValida" xml:space="preserve">
+    <value>la fonte del consenso deve essere modulo_firmato, email, telefono, di_persona o altro</value>
+  </data>
+  <data name="PartitaIvaInUso" xml:space="preserve">
+    <value>Esiste già un cliente con questa partita IVA. Cercalo nell'elenco prima di crearne uno nuovo.</value>
+  </data>
+  <data name="ContattoPrincipaleGiaPresente" xml:space="preserve">
+    <value>Il cliente ha già un contatto principale di questo tipo. Togli la spunta di principale a quello attuale e riprova.</value>
   </data>
 </root>

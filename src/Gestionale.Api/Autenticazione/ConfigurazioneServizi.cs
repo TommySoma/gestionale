@@ -1,7 +1,9 @@
 using System.Threading.RateLimiting;
 using Gestionale.Api.Risorse;
+using Gestionale.Application.Anagrafica;
 using Gestionale.Application.Autenticazione;
 using Gestionale.Infrastructure.Accessi;
+using Gestionale.Infrastructure.Anagrafica;
 using Gestionale.Infrastructure.Database;
 using Gestionale.Infrastructure.Sicurezza;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -42,6 +44,8 @@ internal static class ConfigurazioneServizi
         servizi.AddSingleton<ICifratoreSegreti>(new CifratoreAesGcm(chiavi.CifraturaMfa));
         servizi.AddSingleton<IEmettitoreToken, EmettitoreJwt>();
         servizi.AddSingleton<ServizioAutenticazione>();
+        servizi.AddSingleton<IRepositoryClienti, RepositoryClienti>();
+        servizi.AddSingleton<ServizioClienti>();
 
         servizi.AddProblemDetails();
 
