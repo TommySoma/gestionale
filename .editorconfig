@@ -67,3 +67,7 @@ dotnet_diagnostic.CA2007.severity = none
 [tests/**.cs]
 # Nei test i nomi descrittivi con underscore sono ammessi
 dotnet_diagnostic.CA1707.severity = none
+
+[*.ps1]
+# Windows PowerShell 5.1 legge come ANSI i file UTF-8 senza BOM: le lettere accentate si rovinerebbero.
+charset = utf-8-bom

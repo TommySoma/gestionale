@@ -49,6 +49,15 @@ tests/
 
 ## Avvio in sviluppo
 
+**Percorso rapido su Windows.** Lo script prepara tutto la prima volta (password e chiavi casuali in `deploy/.env` e nei user secrets, database, migrazioni) e avvia l'API; il secondo crea l'azienda e il Titolare, chiedendo i dati nel terminale:
+
+```
+powershell -ExecutionPolicy Bypass -File .\scripts\sviluppo\avvia.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\sviluppo\primo-avvio.ps1
+```
+
+Poi `dotnet run --project src/Gestionale.Desktop` e accedi con il Titolare. I passi a mano, per capire cosa fanno gli script:
+
 1. Copia `deploy/.env.example` in `deploy/.env` e scegli password robuste (il file `.env` non va mai nel repository).
 2. Avvia il database:
 
@@ -59,7 +68,7 @@ tests/
 3. Applica le migrazioni come `app_owner` (porta e password come in `deploy/.env`):
 
    ```
-   dotnet run --project src/Gestionale.Migrator -- "Host=localhost;Port=5432;Database=gestionale;Username=app_owner;Password=<password>"
+   dotnet run --project src/Gestionale.Migrator -- "Host=localhost;Port=55432;Database=gestionale;Username=app_owner;Password=<password>"
    ```
 
    In alternativa imposta la variabile d'ambiente `GESTIONALE_DB_MIGRAZIONI`.
