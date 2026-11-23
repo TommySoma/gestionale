@@ -55,5 +55,104 @@ public sealed record DatiConsenso(string Finalita, bool Concesso, string Fonte, 
 
 public sealed record EsitoScrittura(Guid Id, int Versione);
 
+public sealed record RiepilogoImpianto(
+    Guid ImpiantoId,
+    string TipoImpianto,
+    string Stato,
+    Guid SedeId,
+    Guid ClienteId,
+    string Cliente,
+    string Indirizzo,
+    string? Civico,
+    string Comune,
+    string Provincia,
+    string? Pdr,
+    string? CodiceCatasto,
+    int NumeroGeneratori,
+    int Versione);
+
+public sealed record Generatore(
+    Guid GeneratoreId,
+    Guid TipoGeneratoreId,
+    string TipoGeneratore,
+    string? Marca,
+    string? Modello,
+    string? Matricola,
+    decimal? PotenzaKw,
+    Guid? CombustibileId,
+    string? Combustibile,
+    DateOnly? InstallatoIl,
+    DateOnly? DismessoIl,
+    string? Note,
+    int Versione,
+    bool MatricolaDuplicata);
+
+public sealed record RiferimentoCatasto(Guid RiferimentoCatastoId, string Regione, string Sistema, string Codice, DateOnly? RegistratoIl, int Versione);
+
+public sealed record Impianto(
+    Guid ImpiantoId,
+    Guid SedeId,
+    Guid ClienteId,
+    string Cliente,
+    string Indirizzo,
+    string? Civico,
+    string Cap,
+    string Comune,
+    string Provincia,
+    Guid TipoImpiantoId,
+    string TipoImpianto,
+    bool TipoDaVerificare,
+    string Stato,
+    int? AnnoInstallazione,
+    decimal? PotenzaUtileKw,
+    Guid? CombustibileId,
+    string? Combustibile,
+    string? Pdr,
+    Guid? ProprietarioClienteId,
+    string? Proprietario,
+    Guid? ResponsabileClienteId,
+    string? Responsabile,
+    string? Note,
+    DateOnly? DismessoIl,
+    int Versione,
+    bool IndirizzoDuplicato,
+    IReadOnlyList<Generatore> Generatori,
+    IReadOnlyList<RiferimentoCatasto> RiferimentiCatasto);
+
+public sealed record VoceLookup(Guid Id, string Codice, string Nome, bool DaVerificare);
+
+public sealed record VociImpianti(IReadOnlyList<VoceLookup> TipiImpianto, IReadOnlyList<VoceLookup> TipiGeneratore, IReadOnlyList<VoceLookup> Combustibili);
+
+public sealed record DatiImpianto(
+    Guid SedeId,
+    Guid TipoImpiantoId,
+    string Stato,
+    int? AnnoInstallazione,
+    decimal? PotenzaUtileKw,
+    Guid? CombustibileId,
+    string? Pdr,
+    Guid? ProprietarioClienteId,
+    Guid? ResponsabileClienteId,
+    string? Note,
+    DateOnly? DismessoIl,
+    int? Versione);
+
+public sealed record DatiGeneratore(
+    Guid TipoGeneratoreId,
+    string? Marca,
+    string? Modello,
+    string? Matricola,
+    decimal? PotenzaKw,
+    Guid? CombustibileId,
+    DateOnly? InstallatoIl,
+    DateOnly? DismessoIl,
+    string? Note,
+    int? Versione);
+
+public sealed record DatiRiferimentoCatasto(string Regione, string Codice, DateOnly? RegistratoIl, int? Versione);
+
+/// <summary>Le scritture sugli impianti possono riuscire con avvisi: doppioni sospetti da controllare.</summary>
+public sealed record EsitoScritturaImpianto(Guid Id, int Versione, IReadOnlyList<string> Avvisi);
+
 /// <summary>Risposta di errore dell'API (RFC 9457): il campo detail è già un messaggio per l'utente.</summary>
 internal sealed record ProblemaApi(string? Title, string? Detail, int? Status);

@@ -19,10 +19,8 @@
           </DockPanel>
           <Button Classes="voceMenu" Classes.attiva="{Binding ClientiAttivo}" IsVisible="{Binding VedeClienti}"
                   Content="{x:Static r:Testi.NavClienti}" Command="{Binding ApriClientiCommand}" />
-          <DockPanel Classes="voceFutura" ToolTip.Tip="{Binding EtichettaM2}">
-            <Border Classes="milestone"><TextBlock Text="M2" /></Border>
-            <TextBlock Text="{x:Static r:Testi.NavImpianti}" />
-          </DockPanel>
+          <Button Classes="voceMenu" Classes.attiva="{Binding ImpiantiAttivo}" IsVisible="{Binding VedeImpianti}"
+                  Content="{x:Static r:Testi.NavImpianti}" Command="{Binding ApriImpiantiCommand}" />
           <DockPanel Classes="voceFutura" ToolTip.Tip="{Binding EtichettaM2}">
             <Border Classes="milestone"><TextBlock Text="M2" /></Border>
             <TextBlock Text="{x:Static r:Testi.NavInterventi}" />

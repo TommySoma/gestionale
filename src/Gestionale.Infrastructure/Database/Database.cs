@@ -18,6 +18,7 @@ public sealed class Database(NpgsqlDataSource sorgente)
     {
         DefaultTypeMap.MatchNamesWithUnderscores = true;
         SqlMapper.AddTypeHandler(new GestoreIndirizzoIp());
+        SqlMapper.AddTypeHandler(new GestoreData());
     }
 
     public async Task<T> EseguiAsync<T>(
@@ -55,5 +56,25 @@ public sealed class Database(NpgsqlDataSource sorgente)
         }
 
         public override IPAddress? Parse(object value) => value as IPAddress;
+    }
+
+    /// <summary>Date senza ora (tipo date di PostgreSQL) come DateOnly.</summary>
+    private sealed class GestoreData : SqlMapper.TypeHandler<DateOnly>
+    {
+        public override void SetValue(IDbDataParameter parameter, DateOnly value)
+        {
+            parameter.Value = value;
+            if (parameter is NpgsqlParameter npgsql)
+            {
+                npgsql.NpgsqlDbType = NpgsqlDbType.Date;
+            }
+        }
+
+        public override DateOnly Parse(object value) => value switch
+        {
+            DateOnly data => data,
+            DateTime momento => DateOnly.FromDateTime(momento),
+            _ => throw new InvalidCastException("Valore non convertibile in DateOnly: " + value.GetType()),
+        };
     }
 }

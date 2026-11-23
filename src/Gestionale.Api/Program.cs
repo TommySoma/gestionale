@@ -20,6 +20,7 @@ var api = app.MapGroup("/api");
 EndpointAutenticazione.Mappa(api);
 EndpointUtenti.Mappa(api);
 EndpointClienti.Mappa(api);
+EndpointImpianti.Mappa(api);
 
 app.Run();
 

@@ -324,8 +324,227 @@
   <data name="NoteAccesso" xml:space="preserve">
     <value>Note di accesso: {0}</value>
   </data>
-  <data name="ImpiantiInArrivo" xml:space="preserve">
-    <value>Impianti di questa sede: arrivano con M2.</value>
+  <data name="NessunImpiantoSede" xml:space="preserve">
+    <value>Nessun impianto in questa sede.</value>
+  </data>
+  <data name="AggiungiImpianto" xml:space="preserve">
+    <value>+ Aggiungi impianto</value>
+  </data>
+  <data name="UnGeneratore" xml:space="preserve">
+    <value>1 generatore</value>
+  </data>
+  <data name="NumeroGeneratori" xml:space="preserve">
+    <value>{0} generatori</value>
+  </data>
+  <data name="ImpiantiTitolo" xml:space="preserve">
+    <value>Impianti</value>
+  </data>
+  <data name="ConteggioImpianti" xml:space="preserve">
+    <value>{0} impianti</value>
+  </data>
+  <data name="ConteggioUnImpianto" xml:space="preserve">
+    <value>1 impianto</value>
+  </data>
+  <data name="NessunImpianto" xml:space="preserve">
+    <value>Nessun impianto trovato. Per crearne uno, apri la scheda del cliente e aggiungilo a una sua sede.</value>
+  </data>
+  <data name="NessunImpiantoTecnico" xml:space="preserve">
+    <value>Qui vedrai gli impianti dei tuoi interventi, quando te ne verranno assegnati.</value>
+  </data>
+  <data name="CercaImpianti" xml:space="preserve">
+    <value>Cerca per cliente, indirizzo, PDR, matricola o codice catasto</value>
+  </data>
+  <data name="FiltroAttivi" xml:space="preserve">
+    <value>Attivi</value>
+  </data>
+  <data name="FiltroDismessi" xml:space="preserve">
+    <value>Dismessi</value>
+  </data>
+  <data name="ColCodiceImpianto" xml:space="preserve">
+    <value>Catasto o PDR</value>
+  </data>
+  <data name="ColStato" xml:space="preserve">
+    <value>Stato</value>
+  </data>
+  <data name="StatoAttivo" xml:space="preserve">
+    <value>Attivo</value>
+  </data>
+  <data name="StatoDismesso" xml:space="preserve">
+    <value>Dismesso</value>
+  </data>
+  <data name="TornaAgliImpianti" xml:space="preserve">
+    <value>← Impianti</value>
+  </data>
+  <data name="AvvisoIndirizzoDuplicato" xml:space="preserve">
+    <value>C'è un altro impianto attivo dello stesso tipo a questo indirizzo: controlla che non sia un doppione.</value>
+  </data>
+  <data name="AvvisoVociDaVerificare" xml:space="preserve">
+    <value>Tipi di impianto, di generatore e combustibili sono ancora voci di prova: l'elenco ufficiale arriverà con un aggiornamento.</value>
+  </data>
+  <data name="AvvisoMatricolaDuplicata" xml:space="preserve">
+    <value>Un altro generatore ha la stessa matricola: controlla che non sia un doppione.</value>
+  </data>
+  <data name="Generatori" xml:space="preserve">
+    <value>Generatori</value>
+  </data>
+  <data name="AggiungiGeneratore" xml:space="preserve">
+    <value>+ Aggiungi generatore</value>
+  </data>
+  <data name="NessunGeneratore" xml:space="preserve">
+    <value>Nessun generatore registrato.</value>
+  </data>
+  <data name="NessunDettaglio" xml:space="preserve">
+    <value>Nessun dettaglio</value>
+  </data>
+  <data name="MatricolaValore" xml:space="preserve">
+    <value>Matricola {0}</value>
+  </data>
+  <data name="InstallatoIlValore" xml:space="preserve">
+    <value>installato il {0}</value>
+  </data>
+  <data name="DismessoIlValore" xml:space="preserve">
+    <value>Dismesso il {0}</value>
+  </data>
+  <data name="RegistratoIlValore" xml:space="preserve">
+    <value>Registrato il {0}</value>
+  </data>
+  <data name="StoricoInterventi" xml:space="preserve">
+    <value>Interventi</value>
+  </data>
+  <data name="ParteInterventi" xml:space="preserve">
+    <value>la prossima parte di M2</value>
+  </data>
+  <data name="ProssimaAzione" xml:space="preserve">
+    <value>Prossima azione</value>
+  </data>
+  <data name="DatiTecnici" xml:space="preserve">
+    <value>Dati tecnici</value>
+  </data>
+  <data name="CatastoRegionale" xml:space="preserve">
+    <value>Catasto regionale</value>
+  </data>
+  <data name="AggiungiRiferimento" xml:space="preserve">
+    <value>+ Aggiungi</value>
+  </data>
+  <data name="NessunRiferimento" xml:space="preserve">
+    <value>Nessun codice catasto o targa registrato.</value>
+  </data>
+  <data name="CatastoToscana" xml:space="preserve">
+    <value>Toscana · SIERT</value>
+  </data>
+  <data name="CatastoLombardia" xml:space="preserve">
+    <value>Lombardia · CURIT</value>
+  </data>
+  <data name="AnnoInstallazione" xml:space="preserve">
+    <value>Anno di installazione</value>
+  </data>
+  <data name="PotenzaUtile" xml:space="preserve">
+    <value>Potenza utile</value>
+  </data>
+  <data name="PotenzaUtileKw" xml:space="preserve">
+    <value>Potenza utile (kW)</value>
+  </data>
+  <data name="PotenzaGeneratoreKw" xml:space="preserve">
+    <value>Potenza (kW)</value>
+  </data>
+  <data name="PotenzaKw" xml:space="preserve">
+    <value>{0} kW</value>
+  </data>
+  <data name="Combustibile" xml:space="preserve">
+    <value>Combustibile</value>
+  </data>
+  <data name="Pdr" xml:space="preserve">
+    <value>PDR</value>
+  </data>
+  <data name="Proprietario" xml:space="preserve">
+    <value>Proprietario</value>
+  </data>
+  <data name="Responsabile" xml:space="preserve">
+    <value>Responsabile dell'impianto</value>
+  </data>
+  <data name="DismessoIl" xml:space="preserve">
+    <value>Data di dismissione</value>
+  </data>
+  <data name="InstallatoIl" xml:space="preserve">
+    <value>Data di installazione</value>
+  </data>
+  <data name="ConfermaEliminaImpiantoTitolo" xml:space="preserve">
+    <value>Eliminare l'impianto?</value>
+  </data>
+  <data name="ConfermaEliminaImpianto" xml:space="preserve">
+    <value>{0} in {1} sparirà dagli elenchi insieme ai suoi generatori. Se l'impianto è stato sostituito o spento, segnalo invece come dismesso. I dati restano nel database per lo storico.</value>
+  </data>
+  <data name="EliminaImpianto" xml:space="preserve">
+    <value>Elimina impianto</value>
+  </data>
+  <data name="TitoloNuovoImpianto" xml:space="preserve">
+    <value>Nuovo impianto</value>
+  </data>
+  <data name="TitoloModificaImpianto" xml:space="preserve">
+    <value>Modifica impianto</value>
+  </data>
+  <data name="TipoImpianto" xml:space="preserve">
+    <value>Tipo di impianto</value>
+  </data>
+  <data name="SalvaImpianto" xml:space="preserve">
+    <value>Salva impianto</value>
+  </data>
+  <data name="ScegliTipoImpianto" xml:space="preserve">
+    <value>Scegli il tipo di impianto.</value>
+  </data>
+  <data name="AnnoNonNumerico" xml:space="preserve">
+    <value>L'anno di installazione va scritto con 4 cifre, ad esempio 2015.</value>
+  </data>
+  <data name="PotenzaNonNumerica" xml:space="preserve">
+    <value>La potenza va scritta come numero, ad esempio 24 oppure 24,5.</value>
+  </data>
+  <data name="Cerca" xml:space="preserve">
+    <value>Cerca</value>
+  </data>
+  <data name="CercaAltroCliente" xml:space="preserve">
+    <value>Proprietario o responsabile diverso? Cerca il cliente</value>
+  </data>
+  <data name="NessunClienteTrovato" xml:space="preserve">
+    <value>Nessun cliente trovato con questa ricerca.</value>
+  </data>
+  <data name="TitoloNuovoGeneratore" xml:space="preserve">
+    <value>Nuovo generatore</value>
+  </data>
+  <data name="TitoloModificaGeneratore" xml:space="preserve">
+    <value>Modifica generatore</value>
+  </data>
+  <data name="TipoGeneratore" xml:space="preserve">
+    <value>Tipo di generatore</value>
+  </data>
+  <data name="ScegliTipoGeneratore" xml:space="preserve">
+    <value>Scegli il tipo di generatore.</value>
+  </data>
+  <data name="Marca" xml:space="preserve">
+    <value>Marca</value>
+  </data>
+  <data name="Modello" xml:space="preserve">
+    <value>Modello</value>
+  </data>
+  <data name="Matricola" xml:space="preserve">
+    <value>Matricola</value>
+  </data>
+  <data name="SalvaGeneratore" xml:space="preserve">
+    <value>Salva generatore</value>
+  </data>
+  <data name="TitoloNuovoRiferimento" xml:space="preserve">
+    <value>Nuovo riferimento al catasto</value>
+  </data>
+  <data name="TitoloModificaRiferimento" xml:space="preserve">
+    <value>Modifica riferimento al catasto</value>
+  </data>
+  <data name="Regione" xml:space="preserve">
+    <value>Regione e catasto</value>
+  </data>
+  <data name="CodiceCatasto" xml:space="preserve">
+    <value>Codice catasto o targa</value>
+  </data>
+  <data name="RegistratoIl" xml:space="preserve">
+    <value>Data di registrazione</value>
   </data>
   <data name="NessunaSede" xml:space="preserve">
     <value>Nessuna sede. Aggiungi l'indirizzo dove si trovano gli impianti.</value>

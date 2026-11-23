@@ -42,6 +42,9 @@
           <SolidColorBrush x:Key="Successo" Color="#067647" />
           <SolidColorBrush x:Key="SuccessoTenue" Color="#ECFDF3" />
           <SolidColorBrush x:Key="SuccessoBordo" Color="#ABEFC6" />
+          <SolidColorBrush x:Key="Attenzione" Color="#B54708" />
+          <SolidColorBrush x:Key="AttenzioneTenue" Color="#FFFAEB" />
+          <SolidColorBrush x:Key="AttenzioneBordo" Color="#FEDF89" />
           <SolidColorBrush x:Key="Velo" Color="#7A172026" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
@@ -66,6 +69,9 @@
           <SolidColorBrush x:Key="Successo" Color="#47CD89" />
           <SolidColorBrush x:Key="SuccessoTenue" Color="#0E2E1F" />
           <SolidColorBrush x:Key="SuccessoBordo" Color="#1B5E3B" />
+          <SolidColorBrush x:Key="Attenzione" Color="#FDB022" />
+          <SolidColorBrush x:Key="AttenzioneTenue" Color="#33260C" />
+          <SolidColorBrush x:Key="AttenzioneBordo" Color="#7A4E0E" />
           <SolidColorBrush x:Key="Velo" Color="#B3000000" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
@@ -98,6 +104,26 @@
     <Setter Property="StrokeLineCap" Value="Round" />
     <Setter Property="StrokeJoin" Value="Round" />
     <Setter Property="Stroke" Value="{DynamicResource TestoSecondario}" />
+  </Style>
+  <!-- Il colore di un'icona si cambia con una classe: lo Stroke scritto sull'elemento non prevale sullo stile. -->
+  <Style Selector="Path.icona.attenzione">
+    <Setter Property="Stroke" Value="{DynamicResource Attenzione}" />
+  </Style>
+  <Style Selector="Path.icona.successo">
+    <Setter Property="Stroke" Value="{DynamicResource Successo}" />
+  </Style>
+  <Style Selector="Path.icona.errore">
+    <Setter Property="Stroke" Value="{DynamicResource Errore}" />
+  </Style>
+  <Style Selector="Path.icona.accento">
+    <Setter Property="Stroke" Value="{DynamicResource Accento}" />
+  </Style>
+
+  <!-- Date sempre all'italiana, qualunque sia la lingua del sistema. -->
+  <Style Selector="CalendarDatePicker">
+    <Setter Property="SelectedDateFormat" Value="Custom" />
+    <Setter Property="CustomDateFormatString" Value="dd/MM/yyyy" />
+    <Setter Property="PlaceholderText" Value="gg/mm/aaaa" />
   </Style>
 
   <!-- Testi -->
@@ -216,6 +242,20 @@
   </Style>
   <Style Selector="Border.avvisoErrore Path.icona">
     <Setter Property="Stroke" Value="{DynamicResource Errore}" />
+  </Style>
+  <Style Selector="Border.avvisoAttenzione">
+    <Setter Property="Background" Value="{DynamicResource AttenzioneTenue}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AttenzioneBordo}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="16,12" />
+  </Style>
+  <Style Selector="Border.avvisoAttenzione TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Attenzione}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style Selector="Border.avvisoAttenzione Path.icona">
+    <Setter Property="Stroke" Value="{DynamicResource Attenzione}" />
   </Style>
   <Style Selector="Border.avvisoSuccesso">
     <Setter Property="Background" Value="{DynamicResource SuccessoTenue}" />

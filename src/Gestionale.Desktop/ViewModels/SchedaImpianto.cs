@@ -1,0 +1,227 @@
+using System.Collections.ObjectModel;
+using System.Globalization;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Gestionale.Desktop.Risorse;
+using Gestionale.Desktop.Servizi;
+
+namespace Gestionale.Desktop.ViewModels;
+
+public sealed record CampoScheda(string Etichetta, string Valore);
+
+public sealed record RigaGeneratore(Generatore Dati, string Titolo, string Dettaglio, bool Dismesso, string? Dismissione, bool MatricolaDuplicata);
+
+public sealed record RigaRiferimento(RiferimentoCatasto Dati, string Sistema, string Codice, string? Registrazione);
+
+/// <summary>
+/// Scheda di un impianto: dati tecnici, generatori e riferimenti al catasto. Gli
+/// interventi e la prossima azione arrivano con le parti successive del piano.
+/// </summary>
+public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impiantoId) : ViewModelBase
+{
+    private Impianto? _impianto;
+
+    public ObservableCollection<CampoScheda> DatiTecnici { get; } = [];
+
+    public ObservableCollection<RigaGeneratore> Generatori { get; } = [];
+
+    public ObservableCollection<RigaRiferimento> Riferimenti { get; } = [];
+
+    public bool PuoModificare => shell.ModificaImpianti;
+
+    public bool PuoAprireCliente => shell.VedeClienti;
+
+    public string EtichettaInterventi => string.Format(CultureInfo.CurrentCulture, Testi.InArrivo, Testi.ParteInterventi);
+
+    public string EtichettaProssimaAzione => string.Format(CultureInfo.CurrentCulture, Testi.InArrivo, "M3");
+
+    [ObservableProperty]
+    public partial string Titolo { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string Stato { get; set; } = "";
+
+    [ObservableProperty]
+    public partial bool Dismesso { get; set; }
+
+    [ObservableProperty]
+    public partial string Indirizzo { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string Cliente { get; set; } = "";
+
+    [ObservableProperty]
+    public partial bool VociDaVerificare { get; set; }
+
+    [ObservableProperty]
+    public partial bool IndirizzoDuplicato { get; set; }
+
+    [ObservableProperty]
+    public partial bool Caricato { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HaErrore))]
+    public partial string? Errore { get; set; }
+
+    public bool HaErrore => !string.IsNullOrEmpty(Errore);
+
+    public bool SenzaGeneratori => Caricato && Generatori.Count == 0;
+
+    public bool SenzaRiferimenti => Caricato && Riferimenti.Count == 0;
+
+    public async Task CaricaAsync()
+    {
+        var risposta = await shell.Api.ImpiantoAsync(impiantoId);
+        if (risposta.Valore is not { } impianto)
+        {
+            Errore = risposta.Messaggio;
+            return;
+        }
+
+        _impianto = impianto;
+        Titolo = impianto.TipoImpianto;
+        Stato = FormatoImpianti.Stato(impianto.Stato);
+        Dismesso = impianto.Stato == "dismesso";
+        Indirizzo = FormatoImpianti.Indirizzo(impianto.Indirizzo, impianto.Civico, impianto.Cap, impianto.Comune, impianto.Provincia);
+        Cliente = impianto.Cliente;
+        IndirizzoDuplicato = impianto.IndirizzoDuplicato;
+        VociDaVerificare = impianto.TipoDaVerificare;
+
+        DatiTecnici.Clear();
+        DatiTecnici.Add(new(Testi.AnnoInstallazione, impianto.AnnoInstallazione?.ToString(CultureInfo.InvariantCulture) ?? Testi.NonIndicato));
+        DatiTecnici.Add(new(Testi.PotenzaUtile, FormatoImpianti.Potenza(impianto.PotenzaUtileKw)));
+        DatiTecnici.Add(new(Testi.Combustibile, impianto.Combustibile ?? Testi.NonIndicato));
+        DatiTecnici.Add(new(Testi.Pdr, impianto.Pdr ?? Testi.NonIndicato));
+        DatiTecnici.Add(new(Testi.Proprietario, impianto.Proprietario ?? Testi.NonIndicato));
+        DatiTecnici.Add(new(Testi.Responsabile, impianto.Responsabile ?? Testi.NonIndicato));
+        if (impianto.DismessoIl is { } dismesso)
+        {
+            DatiTecnici.Add(new(Testi.DismessoIl, FormatoImpianti.Data(dismesso)));
+        }
+
+        if (impianto.Note is { } note)
+        {
+            DatiTecnici.Add(new(Testi.Note, note));
+        }
+
+        Generatori.Clear();
+        foreach (var g in impianto.Generatori)
+        {
+            var titolo = string.Join(" · ", new[] { g.TipoGeneratore, string.Join(" ", new[] { g.Marca, g.Modello }.Where(v => v is not null)) }
+                .Where(v => !string.IsNullOrEmpty(v)));
+            var dettaglio = string.Join(" · ", new[]
+            {
+                g.Matricola is null ? null : string.Format(CultureInfo.CurrentCulture, Testi.MatricolaValore, g.Matricola),
+                g.PotenzaKw is null ? null : FormatoImpianti.Potenza(g.PotenzaKw),
+                g.Combustibile,
+                g.InstallatoIl is null ? null : string.Format(CultureInfo.CurrentCulture, Testi.InstallatoIlValore, FormatoImpianti.Data(g.InstallatoIl)),
+            }.Where(v => v is not null));
+            var dismissione = g.DismessoIl is null ? null : string.Format(CultureInfo.CurrentCulture, Testi.DismessoIlValore, FormatoImpianti.Data(g.DismessoIl));
+            // Il dettaglio può cominciare da "installato il": l'iniziale va maiuscola.
+            dettaglio = dettaglio.Length == 0 ? Testi.NessunDettaglio : char.ToUpper(dettaglio[0], CultureInfo.CurrentCulture) + dettaglio[1..];
+            Generatori.Add(new RigaGeneratore(g, titolo, dettaglio, g.DismessoIl is not null, dismissione, g.MatricolaDuplicata));
+        }
+
+        Riferimenti.Clear();
+        foreach (var r in impianto.RiferimentiCatasto)
+        {
+            var registrazione = r.RegistratoIl is null ? null : string.Format(CultureInfo.CurrentCulture, Testi.RegistratoIlValore, FormatoImpianti.Data(r.RegistratoIl));
+            Riferimenti.Add(new RigaRiferimento(r, FormatoImpianti.Regione(r.Regione), r.Codice, registrazione));
+        }
+
+        Caricato = true;
+        OnPropertyChanged(nameof(SenzaGeneratori));
+        OnPropertyChanged(nameof(SenzaRiferimenti));
+    }
+
+    [RelayCommand]
+    private Task IndietroAsync() => shell.ApriImpiantiAsync();
+
+    [RelayCommand]
+    private async Task ApriClienteAsync()
+    {
+        if (_impianto is { } impianto && shell.VedeClienti)
+        {
+            await shell.ApriClienteAsync(impianto.ClienteId);
+        }
+    }
+
+    [RelayCommand]
+    private async Task ModificaAsync()
+    {
+        if (_impianto is not { } impianto || await VociAsync() is not { } voci)
+        {
+            return;
+        }
+
+        shell.MostraDialogo(new EditorImpiantoViewModel(
+            shell, voci, impianto.SedeId, new OpzioneCliente(impianto.ClienteId, impianto.Cliente), impianto, id => { _ = CaricaAsync(); }));
+    }
+
+    [RelayCommand]
+    private void Elimina()
+    {
+        if (_impianto is not { } impianto)
+        {
+            return;
+        }
+
+        shell.MostraDialogo(new ConfermaViewModel(
+            shell,
+            Testi.ConfermaEliminaImpiantoTitolo,
+            string.Format(CultureInfo.CurrentCulture, Testi.ConfermaEliminaImpianto, Titolo, Indirizzo),
+            Testi.EliminaImpianto,
+            async () =>
+            {
+                var risposta = await shell.Api.EliminaImpiantoAsync(impianto.ImpiantoId, impianto.Versione);
+                if (!risposta.Riuscita)
+                {
+                    return risposta.Messaggio;
+                }
+
+                await shell.ApriImpiantiAsync();
+                return null;
+            }));
+    }
+
+    [RelayCommand]
+    private async Task AggiungiGeneratoreAsync()
+    {
+        if (await VociAsync() is { } voci)
+        {
+            shell.MostraDialogo(new EditorGeneratoreViewModel(shell, voci, impiantoId, null, () => _ = CaricaAsync()));
+        }
+    }
+
+    [RelayCommand]
+    private async Task ModificaGeneratoreAsync(RigaGeneratore riga)
+    {
+        if (await VociAsync() is { } voci)
+        {
+            shell.MostraDialogo(new EditorGeneratoreViewModel(shell, voci, impiantoId, riga.Dati, () => _ = CaricaAsync()));
+        }
+    }
+
+    [RelayCommand]
+    private void AggiungiRiferimento() =>
+        shell.MostraDialogo(new EditorRiferimentoCatastoViewModel(shell, impiantoId, null, () => _ = CaricaAsync()));
+
+    [RelayCommand]
+    private void ModificaRiferimento(RigaRiferimento riga) =>
+        shell.MostraDialogo(new EditorRiferimentoCatastoViewModel(shell, impiantoId, riga.Dati, () => _ = CaricaAsync()));
+
+    [RelayCommand]
+    private async Task EliminaRiferimentoAsync(RigaRiferimento riga)
+    {
+        var risposta = await shell.Api.EliminaRiferimentoCatastoAsync(impiantoId, riga.Dati.RiferimentoCatastoId, riga.Dati.Versione);
+        Errore = risposta.Riuscita ? null : risposta.Messaggio;
+        await CaricaAsync();
+    }
+
+    private async Task<VociImpianti?> VociAsync()
+    {
+        var risposta = await shell.VociImpiantiAsync();
+        Errore = risposta.Valore is null ? risposta.Messaggio : null;
+        return risposta.Valore;
+    }
+}

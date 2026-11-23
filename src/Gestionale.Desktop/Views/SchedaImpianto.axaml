@@ -1,0 +1,161 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.SchedaImpiantoView"
+             x:DataType="vm:SchedaImpiantoViewModel">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="20">
+      <StackPanel Spacing="12">
+        <Button Classes="collegamento" HorizontalAlignment="Left" Content="{x:Static r:Testi.TornaAgliImpianti}" Command="{Binding IndietroCommand}" />
+        <DockPanel>
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Top">
+            <Button Classes="secondario" Content="{x:Static r:Testi.Modifica}" Command="{Binding ModificaCommand}" IsVisible="{Binding PuoModificare}" />
+            <Button Classes="secondario" Content="{x:Static r:Testi.Elimina}" Foreground="{DynamicResource Errore}" Command="{Binding EliminaCommand}" IsVisible="{Binding PuoModificare}" />
+          </StackPanel>
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Classes="titolo2" Text="{Binding Titolo}" />
+              <Border Classes="distintivo">
+                <TextBlock Text="{Binding Stato}" />
+              </Border>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Path Classes="icona" Data="{StaticResource IconaLuogo}" Width="16" Height="16" VerticalAlignment="Center" />
+              <SelectableTextBlock FontSize="14" Text="{Binding Indirizzo}" VerticalAlignment="Center" />
+              <TextBlock Classes="secondario" FontSize="14" Text="·" VerticalAlignment="Center" />
+              <Button Classes="collegamento" Padding="0" Content="{Binding Cliente}" Command="{Binding ApriClienteCommand}" IsVisible="{Binding PuoAprireCliente}" />
+              <TextBlock FontSize="14" Text="{Binding Cliente}" IsVisible="{Binding !PuoAprireCliente}" VerticalAlignment="Center" />
+            </StackPanel>
+          </StackPanel>
+        </DockPanel>
+
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <TextBlock Text="{Binding Errore}" />
+        </Border>
+        <!-- Avvisi: sempre icona e testo, mai solo colore. -->
+        <Border Classes="avvisoAttenzione" IsVisible="{Binding IndirizzoDuplicato}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaAvviso}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{x:Static r:Testi.AvvisoIndirizzoDuplicato}" />
+          </DockPanel>
+        </Border>
+        <Border Classes="avvisoAttenzione" IsVisible="{Binding VociDaVerificare}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaInfo}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{x:Static r:Testi.AvvisoVociDaVerificare}" />
+          </DockPanel>
+        </Border>
+      </StackPanel>
+
+      <Grid ColumnDefinitions="2*,20,*">
+        <StackPanel Grid.Column="0" Spacing="20">
+          <!-- Generatori -->
+          <Border Classes="scheda">
+            <StackPanel>
+              <DockPanel Margin="20,12">
+                <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.AggiungiGeneratore}" IsVisible="{Binding PuoModificare}" Command="{Binding AggiungiGeneratoreCommand}" />
+                <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.Generatori}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Border Height="1" Background="{DynamicResource Divisore}" />
+              <TextBlock Classes="secondario" FontSize="14" Margin="20,16" IsVisible="{Binding SenzaGeneratori}" Text="{x:Static r:Testi.NessunGeneratore}" />
+              <ItemsControl ItemsSource="{Binding Generatori}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:RigaGeneratore">
+                    <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="20,14">
+                      <DockPanel>
+                        <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.Modifica}" VerticalAlignment="Top"
+                                IsVisible="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).PuoModificare}"
+                                Command="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).ModificaGeneratoreCommand}" CommandParameter="{Binding}" />
+                        <StackPanel Spacing="4">
+                          <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{Binding Titolo}" FontSize="14" FontWeight="SemiBold" />
+                            <Border Classes="distintivo" IsVisible="{Binding Dismesso}">
+                              <TextBlock Text="{x:Static r:Testi.StatoDismesso}" />
+                            </Border>
+                          </StackPanel>
+                          <SelectableTextBlock Classes="secondario" FontSize="14" Text="{Binding Dettaglio}" />
+                          <TextBlock Classes="secondario" FontSize="14" Text="{Binding Dismissione}" IsVisible="{Binding Dismesso}" />
+                          <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding MatricolaDuplicata}">
+                            <Path Classes="icona attenzione" Data="{StaticResource IconaAvviso}" Width="14" Height="14" />
+                            <TextBlock Text="{x:Static r:Testi.AvvisoMatricolaDuplicata}" FontSize="13" Foreground="{DynamicResource Attenzione}" TextWrapping="Wrap" />
+                          </StackPanel>
+                        </StackPanel>
+                      </DockPanel>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
+          <!-- Interventi: arrivano con la prossima parte di M2. -->
+          <Border Classes="scheda" Padding="20,16">
+            <StackPanel Spacing="8">
+              <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.StoricoInterventi}" />
+              <TextBlock Classes="secondario" FontSize="14" Text="{Binding EtichettaInterventi}" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Spacing="20">
+          <!-- Prossima azione: arriva con le scadenze (M3). -->
+          <Border Classes="scheda" Padding="20,16">
+            <StackPanel Spacing="8">
+              <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.ProssimaAzione}" />
+              <TextBlock Classes="secondario" FontSize="14" Text="{Binding EtichettaProssimaAzione}" />
+            </StackPanel>
+          </Border>
+
+          <!-- Dati tecnici -->
+          <Border Classes="scheda" Padding="20,16">
+            <StackPanel Spacing="12">
+              <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.DatiTecnici}" />
+              <ItemsControl ItemsSource="{Binding DatiTecnici}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:CampoScheda">
+                    <StackPanel Margin="0,0,0,12">
+                      <TextBlock Classes="secondario" FontSize="12" Text="{Binding Etichetta}" />
+                      <SelectableTextBlock FontSize="14" Text="{Binding Valore}" TextWrapping="Wrap" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
+          <!-- Catasto regionale -->
+          <Border Classes="scheda" Padding="20,16">
+            <StackPanel Spacing="12">
+              <DockPanel>
+                <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.AggiungiRiferimento}" IsVisible="{Binding PuoModificare}" Command="{Binding AggiungiRiferimentoCommand}" />
+                <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.CatastoRegionale}" VerticalAlignment="Center" />
+              </DockPanel>
+              <TextBlock Classes="secondario" FontSize="14" IsVisible="{Binding SenzaRiferimenti}" Text="{x:Static r:Testi.NessunRiferimento}" TextWrapping="Wrap" />
+              <ItemsControl ItemsSource="{Binding Riferimenti}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:RigaRiferimento">
+                    <DockPanel Margin="0,0,0,12">
+                      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Top"
+                                  IsVisible="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).PuoModificare}">
+                        <Button Classes="collegamento" Content="{x:Static r:Testi.Modifica}"
+                                Command="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).ModificaRiferimentoCommand}" CommandParameter="{Binding}" />
+                        <Button Classes="collegamento" Foreground="{DynamicResource Errore}" Content="{x:Static r:Testi.Elimina}"
+                                Command="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).EliminaRiferimentoCommand}" CommandParameter="{Binding}" />
+                      </StackPanel>
+                      <StackPanel>
+                        <TextBlock Classes="secondario" FontSize="12" Text="{Binding Sistema}" />
+                        <SelectableTextBlock Classes="codice" FontSize="14" Text="{Binding Codice}" />
+                        <TextBlock Classes="secondario" FontSize="13" Text="{Binding Registrazione}" IsVisible="{Binding Registrazione, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                      </StackPanel>
+                    </DockPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

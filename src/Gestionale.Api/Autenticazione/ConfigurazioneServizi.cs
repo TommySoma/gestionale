@@ -2,9 +2,11 @@ using System.Threading.RateLimiting;
 using Gestionale.Api.Risorse;
 using Gestionale.Application.Anagrafica;
 using Gestionale.Application.Autenticazione;
+using Gestionale.Application.Impianti;
 using Gestionale.Infrastructure.Accessi;
 using Gestionale.Infrastructure.Anagrafica;
 using Gestionale.Infrastructure.Database;
+using Gestionale.Infrastructure.Impianti;
 using Gestionale.Infrastructure.Sicurezza;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +48,8 @@ internal static class ConfigurazioneServizi
         servizi.AddSingleton<ServizioAutenticazione>();
         servizi.AddSingleton<IRepositoryClienti, RepositoryClienti>();
         servizi.AddSingleton<ServizioClienti>();
+        servizi.AddSingleton<IRepositoryImpianti, RepositoryImpianti>();
+        servizi.AddSingleton<ServizioImpianti>();
 
         servizi.AddProblemDetails();
 

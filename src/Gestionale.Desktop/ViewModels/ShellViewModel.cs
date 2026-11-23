@@ -38,6 +38,11 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
 
     public bool AnonimizzaClienti => Profilo.Ha("clienti.anonimizzazione");
 
+    public bool VedeImpianti => Profilo.Ha("impianti.lettura");
+
+    // Con l'ambito "propri" (il Tecnico) non si creano impianti nuovi.
+    public bool ModificaImpianti => Profilo.Permessi.Any(p => p.Codice == "impianti.scrittura" && p.Ambito == "tutti");
+
     public string EtichettaM2 => string.Format(System.Globalization.CultureInfo.CurrentCulture, Testi.InArrivo, "M2");
 
     public string EtichettaM3 => string.Format(System.Globalization.CultureInfo.CurrentCulture, Testi.InArrivo, "M3");
@@ -54,10 +59,15 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [ObservableProperty]
     public partial bool ClientiAttivo { get; set; }
 
+    [ObservableProperty]
+    public partial bool ImpiantiAttivo { get; set; }
+
+    private VociImpianti? _vociImpianti;
+
     [RelayCommand]
     public async Task ApriClientiAsync()
     {
-        ClientiAttivo = true;
+        (ClientiAttivo, ImpiantiAttivo) = (true, false);
         var clienti = new ClientiViewModel(this);
         Contenuto = clienti;
         await clienti.CaricaAsync();
@@ -65,9 +75,40 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
 
     public async Task ApriClienteAsync(Guid clienteId)
     {
+        (ClientiAttivo, ImpiantiAttivo) = (true, false);
         var scheda = new SchedaClienteViewModel(this, clienteId);
         Contenuto = scheda;
         await scheda.CaricaAsync();
+    }
+
+    [RelayCommand]
+    public async Task ApriImpiantiAsync()
+    {
+        (ClientiAttivo, ImpiantiAttivo) = (false, true);
+        var impianti = new ImpiantiViewModel(this);
+        Contenuto = impianti;
+        await impianti.CaricaAsync();
+    }
+
+    public async Task ApriImpiantoAsync(Guid impiantoId)
+    {
+        (ClientiAttivo, ImpiantiAttivo) = (false, true);
+        var scheda = new SchedaImpiantoViewModel(this, impiantoId);
+        Contenuto = scheda;
+        await scheda.CaricaAsync();
+    }
+
+    /// <summary>Tipi e combustibili cambiano solo con una migrazione: basta leggerli una volta per sessione.</summary>
+    public async Task<Risposta<VociImpianti>> VociImpiantiAsync()
+    {
+        if (_vociImpianti is { } voci)
+        {
+            return new Risposta<VociImpianti>(System.Net.HttpStatusCode.OK, voci, null);
+        }
+
+        var risposta = await Api.VociImpiantiAsync();
+        _vociImpianti = risposta.Valore;
+        return risposta;
     }
 
     public bool TemaSistema => tema.Corrente == CodiciTema.Sistema;

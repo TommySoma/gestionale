@@ -26,9 +26,11 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.15" />
   </ItemGroup>
 
-  <ItemGroup Label="Test (xUnit: Apache 2.0, Testcontainers: MIT)">
+  <ItemGroup Label="Test (xUnit: Apache 2.0, Testcontainers: MIT, Avalonia.Headless: MIT)">
     <PackageVersion Include="xunit.v3" Version="4.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.15" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.17.0" />
+    <!-- Disegna le viste senza finestra. Non Avalonia.Headless.XUnit: è compilato per xUnit v3 3.x. -->
+    <PackageVersion Include="Avalonia.Headless" Version="12.1.6" />
   </ItemGroup>
 </Project>

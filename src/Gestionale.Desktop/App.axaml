@@ -17,6 +17,11 @@
     <DataTemplate DataType="vm:EditorSedeViewModel"><v:EditorSedeView /></DataTemplate>
     <DataTemplate DataType="vm:EditorContattoViewModel"><v:EditorContattoView /></DataTemplate>
     <DataTemplate DataType="vm:EditorConsensoViewModel"><v:EditorConsensoView /></DataTemplate>
+    <DataTemplate DataType="vm:ImpiantiViewModel"><v:ImpiantiView /></DataTemplate>
+    <DataTemplate DataType="vm:SchedaImpiantoViewModel"><v:SchedaImpiantoView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorImpiantoViewModel"><v:EditorImpiantoView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorGeneratoreViewModel"><v:EditorGeneratoreView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorRiferimentoCatastoViewModel"><v:EditorRiferimentoCatastoView /></DataTemplate>
     <DataTemplate DataType="vm:ConfermaViewModel"><v:ConfermaView /></DataTemplate>
   </Application.DataTemplates>
 
