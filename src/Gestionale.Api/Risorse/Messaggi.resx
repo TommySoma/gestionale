@@ -156,4 +156,64 @@
   <data name="ContattoPrincipaleGiaPresente" xml:space="preserve">
     <value>Il cliente ha già un contatto principale di questo tipo. Togli la spunta di principale a quello attuale e riprova.</value>
   </data>
+  <data name="ImpiantoNonTrovato" xml:space="preserve">
+    <value>L'impianto, il generatore o il riferimento al catasto richiesto non esiste o è stato eliminato.</value>
+  </data>
+  <data name="CreazioneImpiantoVietata" xml:space="preserve">
+    <value>Puoi modificare solo gli impianti su cui hai un intervento assegnato: per crearne uno nuovo chiedi in ufficio.</value>
+  </data>
+  <data name="AvvisoIndirizzoDuplicato" xml:space="preserve">
+    <value>C'è già un altro impianto attivo dello stesso tipo a questo indirizzo: controlla che non sia un doppione.</value>
+  </data>
+  <data name="AvvisoMatricolaDuplicata" xml:space="preserve">
+    <value>Un altro generatore ha la stessa matricola: controlla che non sia un doppione.</value>
+  </data>
+  <data name="SedeNonValida" xml:space="preserve">
+    <value>la sede indicata non esiste o è stata eliminata</value>
+  </data>
+  <data name="TipoImpiantoNonValido" xml:space="preserve">
+    <value>scegli un tipo di impianto dall'elenco</value>
+  </data>
+  <data name="StatoImpiantoNonValido" xml:space="preserve">
+    <value>lo stato deve essere attivo o dismesso</value>
+  </data>
+  <data name="DataDismissioneMancante" xml:space="preserve">
+    <value>per un impianto dismesso serve la data di dismissione</value>
+  </data>
+  <data name="AnnoInstallazioneNonValido" xml:space="preserve">
+    <value>l'anno di installazione deve essere tra il 1900 e il 2100</value>
+  </data>
+  <data name="PotenzaNonValida" xml:space="preserve">
+    <value>la potenza deve essere un numero maggiore di zero, in kW</value>
+  </data>
+  <data name="CombustibileNonValido" xml:space="preserve">
+    <value>scegli un combustibile dall'elenco</value>
+  </data>
+  <data name="ProprietarioNonValido" xml:space="preserve">
+    <value>il proprietario indicato non esiste o è stato eliminato</value>
+  </data>
+  <data name="ResponsabileNonValido" xml:space="preserve">
+    <value>il responsabile indicato non esiste o è stato eliminato</value>
+  </data>
+  <data name="PdrInUso" xml:space="preserve">
+    <value>Questo PDR è già su un altro impianto attivo. Cercalo nell'elenco degli impianti prima di crearne uno nuovo.</value>
+  </data>
+  <data name="TipoGeneratoreNonValido" xml:space="preserve">
+    <value>scegli un tipo di generatore dall'elenco</value>
+  </data>
+  <data name="DateGeneratoreNonValide" xml:space="preserve">
+    <value>la data di dismissione non può precedere quella di installazione</value>
+  </data>
+  <data name="RegioneNonValida" xml:space="preserve">
+    <value>la regione deve essere toscana (SIERT) o lombardia (CURIT)</value>
+  </data>
+  <data name="CodiceCatastoNonValido" xml:space="preserve">
+    <value>il codice del catasto non può essere vuoto né contenere spazi</value>
+  </data>
+  <data name="CodiceCatastoInUso" xml:space="preserve">
+    <value>Questo codice del catasto è già su un altro impianto. Cercalo nell'elenco degli impianti.</value>
+  </data>
+  <data name="RegioneGiaRegistrata" xml:space="preserve">
+    <value>L'impianto ha già un riferimento al catasto di questa regione: modifica quello esistente.</value>
+  </data>
 </root>
