@@ -6,7 +6,7 @@ Il piano completo è in `docs/piano-di-sviluppo.md`: leggilo prima di lavorare s
 
 ## Stato
 
-M0 completata e unita il 22/11/2026. M1 quasi completa: autenticazione (ADR 0002) e anagrafiche (ADR 0003) unite su main; client desktop con accesso, secondo fattore e anagrafiche sul branch `m1/client-desktop`. Restano l'anonimizzazione GDPR e il tema scuro. Proposta grafica: https://claude.ai/artifact/VU9RMVAS2a8shTESLADN5v Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
+M0 completata e unita il 22/11/2026. M1: autenticazione (ADR 0002), anagrafiche (ADR 0003) e client desktop uniti su main; anonimizzazione GDPR (ADR 0004) e tema scuro sul branch `m1/gdpr-tema-scuro`. Prossima: M2 (impianti e interventi). Proposta grafica: https://claude.ai/artifact/VU9RMVAS2a8shTESLADN5v Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
 
 ## Decisioni già prese (non riaprirle senza un motivo)
 
