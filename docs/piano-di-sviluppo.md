@@ -109,6 +109,7 @@ Legenda: **L** = lettura, **S** = scrittura (crea e modifica), **F** = firma o v
 | Funzione | Titolare | Amministrativo | Resp. tecnico | Tecnico | Sola lettura | Admin sistema |
 | --- | --- | --- | --- | --- | --- | --- |
 | Clienti e sedi | L, S | L, S | L | L (propri) | L | — |
+| Anonimizzazione clienti (GDPR, ADR 0004) | S | — | — | — | — | — |
 | Impianti e generatori | L, S | L, S | L, S | L, S (propri) | L | — |
 | Interventi e calendario | L, S | L, S | L, S | L, S (propri) | L | — |
 | Rapporti di controllo | L, S, F | L | L, S, F | L, S (propri) | L | — |

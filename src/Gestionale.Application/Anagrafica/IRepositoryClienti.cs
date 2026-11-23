@@ -15,6 +15,8 @@ public interface IRepositoryClienti
 
     Task<EsitoScrittura> EliminaAsync(Contesto contesto, Guid clienteId, int versione, CancellationToken ct);
 
+    Task<EsitoScrittura> AnonimizzaAsync(Contesto contesto, Guid clienteId, int versione, CancellationToken ct);
+
     Task<EsitoScrittura> CreaSedeAsync(Contesto contesto, Guid clienteId, DatiSede dati, CancellationToken ct);
 
     Task<EsitoScrittura> AggiornaSedeAsync(Contesto contesto, Guid clienteId, Guid sedeId, int versione, DatiSede dati, CancellationToken ct);

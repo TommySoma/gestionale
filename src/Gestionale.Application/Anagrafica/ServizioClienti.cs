@@ -44,6 +44,10 @@ public sealed class ServizioClienti(IRepositoryClienti repository)
     public Task<EsitoScrittura> EliminaAsync(Contesto contesto, Guid clienteId, int versione, CancellationToken ct) =>
         repository.EliminaAsync(contesto, clienteId, versione, ct);
 
+    /// <summary>Diritto alla cancellazione (GDPR): irreversibile, vedi ADR 0004.</summary>
+    public Task<EsitoScrittura> AnonimizzaAsync(Contesto contesto, Guid clienteId, int versione, CancellationToken ct) =>
+        repository.AnonimizzaAsync(contesto, clienteId, versione, ct);
+
     public Task<EsitoScrittura> CreaSedeAsync(Contesto contesto, Guid clienteId, DatiSede dati, CancellationToken ct) =>
         Valida(RegoleAnagrafica.Valida(dati), d => repository.CreaSedeAsync(contesto, clienteId, d, ct));
 

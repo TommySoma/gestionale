@@ -51,6 +51,7 @@ internal static class EndpointClienti
         clienti.MapPost("/", CreaAsync).RichiedePermesso(CodiciPermesso.ClientiScrittura);
         clienti.MapPut("/{clienteId:guid}", AggiornaAsync).RichiedePermesso(CodiciPermesso.ClientiScrittura);
         clienti.MapDelete("/{clienteId:guid}", EliminaAsync).RichiedePermesso(CodiciPermesso.ClientiScrittura);
+        clienti.MapPost("/{clienteId:guid}/anonimizzazione", AnonimizzaAsync).RichiedePermesso(CodiciPermesso.ClientiAnonimizzazione);
 
         clienti.MapPost("/{clienteId:guid}/sedi", CreaSedeAsync).RichiedePermesso(CodiciPermesso.ClientiScrittura);
         clienti.MapPut("/{clienteId:guid}/sedi/{sedeId:guid}", AggiornaSedeAsync).RichiedePermesso(CodiciPermesso.ClientiScrittura);
@@ -89,6 +90,11 @@ internal static class EndpointClienti
         versione is not { } v
             ? Problemi.RichiestaNonValida(Messaggi.VersioneMancante)
             : Risposta(await servizio.EliminaAsync(Contesto(utente), clienteId, v, ct), eliminazione: true);
+
+    private static async Task<IResult> AnonimizzaAsync(Guid clienteId, int? versione, ClaimsPrincipal utente, ServizioClienti servizio, CancellationToken ct) =>
+        versione is not { } v
+            ? Problemi.RichiestaNonValida(Messaggi.VersioneMancante)
+            : Risposta(await servizio.AnonimizzaAsync(Contesto(utente), clienteId, v, ct), eliminazione: true);
 
     private static async Task<IResult> CreaSedeAsync(
         Guid clienteId, RichiestaSede richiesta, ClaimsPrincipal utente, ServizioClienti servizio, CancellationToken ct) =>

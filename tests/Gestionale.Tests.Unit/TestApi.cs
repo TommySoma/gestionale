@@ -70,8 +70,12 @@ public sealed class TestApi(FabbricaApiSenzaDatabase fabbrica) : IClassFixture<F
     [Fact]
     public void Senza_chiavi_l_API_non_parte()
     {
-        using var senzaChiavi = new WebApplicationFactory<Program>().WithWebHostBuilder(b =>
-            b.UseSetting("ConnectionStrings:Database", "Host=database-inesistente"));
+        // Le chiavi si svuotano in modo esplicito: sul computer di chi sviluppa
+        // scripts/sviluppo le salva negli user-secrets, che in Development si leggono.
+        using var senzaChiavi = new WebApplicationFactory<Program>().WithWebHostBuilder(b => b
+            .UseSetting("ConnectionStrings:Database", "Host=database-inesistente")
+            .UseSetting("Autenticazione:ChiaveFirma", "")
+            .UseSetting("Autenticazione:ChiaveCifraturaMfa", ""));
 
         var errore = Assert.ThrowsAny<Exception>(() => senzaChiavi.CreateClient());
 
