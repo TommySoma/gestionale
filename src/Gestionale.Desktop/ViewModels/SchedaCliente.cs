@@ -28,6 +28,8 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
 
     public bool PuoModificare => shell.ModificaClienti;
 
+    public bool PuoAnonimizzare => shell.AnonimizzaClienti;
+
     [ObservableProperty]
     public partial string Nome { get; set; } = "";
 
@@ -143,6 +145,33 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
                 await shell.ApriClientiAsync();
                 return null;
             }));
+    }
+
+    [RelayCommand]
+    private void Anonimizza()
+    {
+        if (_cliente is not { } cliente)
+        {
+            return;
+        }
+
+        shell.MostraDialogo(new ConfermaViewModel(
+            shell,
+            Testi.ConfermaAnonimizzaTitolo,
+            string.Format(CultureInfo.CurrentCulture, Testi.ConfermaAnonimizza, Nome),
+            Testi.AnonimizzaCliente,
+            async () =>
+            {
+                var risposta = await shell.Api.AnonimizzaClienteAsync(cliente.ClienteId, cliente.Versione);
+                if (!risposta.Riuscita)
+                {
+                    return risposta.Messaggio;
+                }
+
+                await shell.ApriClientiAsync();
+                return null;
+            },
+            Testi.ParolaAnonimizza));
     }
 
     [RelayCommand]

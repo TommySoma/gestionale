@@ -2,12 +2,15 @@ using System.Text.Json;
 
 namespace Gestionale.Desktop.Servizi;
 
-/// <summary>Preferenze non segrete del computer: server e ultima email usata.</summary>
+/// <summary>Preferenze non segrete del computer: server, ultima email usata e tema.</summary>
 public sealed class Impostazioni
 {
     public string IndirizzoServer { get; set; } = "http://localhost:5225";
 
     public string? UltimaEmail { get; set; }
+
+    /// <summary>Uno dei <see cref="CodiciTema"/>; assente vuol dire come il sistema.</summary>
+    public string? Tema { get; set; }
 }
 
 public interface IArchivioImpostazioni

@@ -7,12 +7,23 @@
   <StackPanel Margin="24" Spacing="20">
     <TextBlock Text="{Binding Titolo}" FontSize="20" FontWeight="Bold" />
     <TextBlock Classes="secondario" FontSize="15" Text="{Binding Messaggio}" />
+    <StackPanel IsVisible="{Binding RichiedeParola}">
+      <TextBlock Classes="etichetta" Text="{Binding IstruzioneParola}" />
+      <TextBox Text="{Binding ParolaScritta}" AutomationProperties.Name="{Binding IstruzioneParola}" />
+    </StackPanel>
     <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
       <TextBlock Text="{Binding Errore}" />
     </Border>
     <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
       <Button Classes="secondario" IsCancel="True" IsDefault="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
-      <Button Classes="pericolo" Content="{Binding Azione}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+      <Button Classes="pericolo" Content="{Binding Azione}" Command="{Binding SalvaCommand}">
+        <Button.IsEnabled>
+          <MultiBinding Converter="{x:Static BoolConverters.And}">
+            <Binding Path="!InCorso" />
+            <Binding Path="PuoConfermare" />
+          </MultiBinding>
+        </Button.IsEnabled>
+      </Button>
     </StackPanel>
   </StackPanel>
 </UserControl>

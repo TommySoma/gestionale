@@ -273,8 +273,12 @@ public partial class EditorConsensoViewModel : DialogoViewModel
     protected override void DopoIlSalvataggio() => _salvato();
 }
 
-/// <summary>Conferma di un'azione che non si annulla con un clic.</summary>
-public partial class ConfermaViewModel(ShellViewModel shell, string titolo, string messaggio, string azione, Func<Task<string?>> esegui)
+/// <summary>
+/// Conferma di un'azione che non si annulla con un clic. Per le azioni irreversibili
+/// si indica una parola da scrivere: il pulsante si attiva solo quando coincide.
+/// </summary>
+public partial class ConfermaViewModel(
+    ShellViewModel shell, string titolo, string messaggio, string azione, Func<Task<string?>> esegui, string? parolaConferma = null)
     : DialogoViewModel(shell)
 {
     public string Titolo { get; } = titolo;
@@ -283,5 +287,18 @@ public partial class ConfermaViewModel(ShellViewModel shell, string titolo, stri
 
     public string Azione { get; } = azione;
 
-    protected override Task<string?> EseguiAsync() => esegui();
+    public bool RichiedeParola => parolaConferma is not null;
+
+    public string IstruzioneParola => parolaConferma is null
+        ? ""
+        : string.Format(System.Globalization.CultureInfo.CurrentCulture, Testi.ScriviPerConfermare, parolaConferma);
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PuoConfermare))]
+    public partial string ParolaScritta { get; set; } = "";
+
+    public bool PuoConfermare => parolaConferma is null || string.Equals(ParolaScritta.Trim(), parolaConferma, StringComparison.Ordinal);
+
+    // Il pulsante è già disattivato, ma anche Invio non deve scavalcare la parola.
+    protected override Task<string?> EseguiAsync() => PuoConfermare ? esegui() : Task.FromResult<string?>(IstruzioneParola);
 }

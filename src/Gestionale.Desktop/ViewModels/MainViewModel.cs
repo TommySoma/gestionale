@@ -9,11 +9,13 @@ public partial class MainViewModel : ViewModelBase, INavigazione
 {
     private readonly ClientApi _api;
     private readonly IArchivioImpostazioni _archivio;
+    private readonly PreferenzaTema _tema;
 
-    public MainViewModel(ClientApi api, IArchivioImpostazioni archivio)
+    public MainViewModel(ClientApi api, IArchivioImpostazioni archivio, PreferenzaTema tema)
     {
         _api = api;
         _archivio = archivio;
+        _tema = tema;
         _api.SessioneTerminata += (_, _) => VaiAdAccesso(Testi.SessioneScaduta);
         Pagina = new AccessoViewModel(api, archivio, this);
     }
@@ -56,7 +58,7 @@ public partial class MainViewModel : ViewModelBase, INavigazione
             return;
         }
 
-        var shell = new ShellViewModel(_api, profilo.Valore, this);
+        var shell = new ShellViewModel(_api, profilo.Valore, this, _tema);
         Pagina = shell;
         await shell.ApriClientiAsync();
     }

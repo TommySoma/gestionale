@@ -342,6 +342,36 @@
   <data name="EliminaCliente" xml:space="preserve">
     <value>Elimina cliente</value>
   </data>
+  <data name="Anonimizza" xml:space="preserve">
+    <value>Anonimizza</value>
+  </data>
+  <data name="ConfermaAnonimizzaTitolo" xml:space="preserve">
+    <value>Anonimizzare il cliente?</value>
+  </data>
+  <data name="ConfermaAnonimizza" xml:space="preserve">
+    <value>Da usare quando {0} chiede la cancellazione dei propri dati (GDPR). Nome, codice fiscale, partita IVA, PEC, note e contatti vengono cancellati per sempre. Restano solo gli indirizzi delle sedi e lo storico dei consensi, senza note, perché servono ai documenti degli impianti. Non si può annullare.</value>
+  </data>
+  <data name="ScriviPerConfermare" xml:space="preserve">
+    <value>Per confermare scrivi {0}</value>
+  </data>
+  <data name="ParolaAnonimizza" xml:space="preserve">
+    <value>ANONIMIZZA</value>
+  </data>
+  <data name="AnonimizzaCliente" xml:space="preserve">
+    <value>Anonimizza per sempre</value>
+  </data>
+  <data name="Tema" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="TemaSistema" xml:space="preserve">
+    <value>Come il sistema</value>
+  </data>
+  <data name="TemaChiaro" xml:space="preserve">
+    <value>Chiaro</value>
+  </data>
+  <data name="TemaScuro" xml:space="preserve">
+    <value>Scuro</value>
+  </data>
   <data name="Annulla" xml:space="preserve">
     <value>Annulla</value>
   </data>

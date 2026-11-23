@@ -211,6 +211,98 @@ public sealed class TestAccessoViewModel
     }
 }
 
+public sealed class TestConferma
+{
+    private sealed class NavigazioneMuta : INavigazione
+    {
+        public void VaiAdAccesso(string? messaggio = null)
+        {
+        }
+
+        public void VaiAVerificaMfa(string tokenPassaggio, string email)
+        {
+        }
+
+        public void VaiAConfiguraMfa(string tokenPassaggio, string email)
+        {
+        }
+
+        public void VaiACodiciRecupero(IReadOnlyList<string> codici)
+        {
+        }
+
+        public Task VaiAllApplicazioneAsync() => Task.CompletedTask;
+    }
+
+    [Fact]
+    public async Task Un_azione_irreversibile_parte_solo_dopo_aver_scritto_la_parola()
+    {
+        var api = new ClientApi(new PortachiaviInMemoria(), TimeProvider.System);
+        var profilo = new Profilo(Guid.NewGuid(), Guid.NewGuid(), "t@a.example", "Anna", "Titolare", ["titolare"], [new Permesso("clienti.anonimizzazione", "tutti")]);
+        var shell = new ShellViewModel(api, profilo, new NavigazioneMuta(), new PreferenzaTema(new ArchivioImpostazioniInMemoria(), _ => { }));
+        var eseguita = 0;
+        var conferma = new ConfermaViewModel(shell, "Titolo", "Messaggio", "Anonimizza", () =>
+        {
+            eseguita++;
+            return Task.FromResult<string?>(null);
+        }, "ANONIMIZZA");
+
+        Assert.True(shell.AnonimizzaClienti);
+        Assert.True(conferma.RichiedeParola);
+        Assert.False(conferma.PuoConfermare);
+
+        await conferma.SalvaCommand.ExecuteAsync(null);
+        Assert.Equal(0, eseguita);
+        Assert.True(conferma.HaErrore);
+
+        conferma.ParolaScritta = "anonimizza";
+        Assert.False(conferma.PuoConfermare);
+
+        conferma.ParolaScritta = " ANONIMIZZA ";
+        Assert.True(conferma.PuoConfermare);
+        await conferma.SalvaCommand.ExecuteAsync(null);
+        Assert.Equal(1, eseguita);
+    }
+}
+
+public sealed class TestPreferenzaTema
+{
+    [Fact]
+    public void Senza_scelta_il_tema_segue_il_sistema()
+    {
+        Avalonia.Styling.ThemeVariant? applicata = null;
+        var tema = new PreferenzaTema(new ArchivioImpostazioniInMemoria(), v => applicata = v);
+
+        tema.ApplicaSalvato();
+
+        Assert.Equal(CodiciTema.Sistema, tema.Corrente);
+        Assert.Equal(Avalonia.Styling.ThemeVariant.Default, applicata);
+    }
+
+    [Fact]
+    public void La_scelta_si_applica_subito_e_resta_nelle_impostazioni()
+    {
+        var archivio = new ArchivioImpostazioniInMemoria();
+        Avalonia.Styling.ThemeVariant? applicata = null;
+        var tema = new PreferenzaTema(archivio, v => applicata = v);
+
+        tema.Imposta(CodiciTema.Scuro);
+
+        Assert.Equal(Avalonia.Styling.ThemeVariant.Dark, applicata);
+        Assert.Equal("scuro", archivio.Carica().Tema);
+        Assert.Equal(CodiciTema.Scuro, new PreferenzaTema(archivio, _ => { }).Corrente);
+    }
+
+    [Fact]
+    public void Un_valore_sconosciuto_nelle_impostazioni_torna_al_tema_del_sistema()
+    {
+        var archivio = new ArchivioImpostazioniInMemoria();
+        archivio.Salva(new Impostazioni { Tema = "viola" });
+
+        Assert.Equal(CodiciTema.Sistema, new PreferenzaTema(archivio, _ => { }).Corrente);
+    }
+}
+
 public sealed class TestPortachiavi
 {
     [Fact]

@@ -5,10 +5,10 @@
              x:Class="Gestionale.Desktop.Views.EditorClienteView"
              x:DataType="vm:EditorClienteViewModel">
   <DockPanel>
-    <Border DockPanel.Dock="Top" BorderBrush="{StaticResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
       <TextBlock Text="{Binding Titolo}" FontSize="20" FontWeight="Bold" />
     </Border>
-    <Border DockPanel.Dock="Bottom" BorderBrush="{StaticResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
       <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
         <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
         <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.SalvaCliente}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
@@ -52,7 +52,7 @@
           <StackPanel Grid.Column="2">
             <TextBlock Classes="etichetta">
               <Run Text="{x:Static r:Testi.PartitaIva}" />
-              <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{StaticResource TestoSecondario}" />
+              <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
             </TextBlock>
             <TextBox Text="{Binding PartitaIva}" AutomationProperties.Name="{x:Static r:Testi.PartitaIva}" />
           </StackPanel>
@@ -61,7 +61,7 @@
         <StackPanel>
           <TextBlock Classes="etichetta">
             <Run Text="{x:Static r:Testi.Pec}" />
-            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{StaticResource TestoSecondario}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
           </TextBlock>
           <TextBox Text="{Binding Pec}" AutomationProperties.Name="{x:Static r:Testi.Pec}" />
         </StackPanel>
