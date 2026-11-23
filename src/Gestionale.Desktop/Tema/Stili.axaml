@@ -105,6 +105,17 @@
     <Setter Property="StrokeJoin" Value="Round" />
     <Setter Property="Stroke" Value="{DynamicResource TestoSecondario}" />
   </Style>
+  <!-- Il colore di un'icona si cambia con una classe: lo Stroke scritto sull'elemento non prevale sullo stile. -->
+  <Style Selector="Path.icona.attenzione">
+    <Setter Property="Stroke" Value="{DynamicResource Attenzione}" />
+  </Style>
+
+  <!-- Date sempre all'italiana, qualunque sia la lingua del sistema. -->
+  <Style Selector="CalendarDatePicker">
+    <Setter Property="SelectedDateFormat" Value="Custom" />
+    <Setter Property="CustomDateFormatString" Value="dd/MM/yyyy" />
+    <Setter Property="PlaceholderText" Value="gg/mm/aaaa" />
+  </Style>
 
   <!-- Testi -->
   <Style Selector="TextBlock.titolo1">

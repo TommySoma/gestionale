@@ -130,6 +130,10 @@ internal static class DatiFittizi
             new { sedeId = Guid.Parse("019ab000-0000-7000-8000-000000000040"), indirizzo = "Via Nuova", civico = "1", cap = "50100", comune = "Firenze", provincia = "FI", versione = 1 },
         },
         contatti = Array.Empty<object>(),
-        consensi = Array.Empty<object>(),
+        consensi = new object[]
+        {
+            new { finalita = "promemoria_scadenze", concesso = true, fonte = "modulo_firmato", registratoIl = "2026-11-02T10:00:00Z" },
+            new { finalita = "comunicazioni_commerciali", concesso = false, fonte = "email", registratoIl = "2026-11-05T10:00:00Z" },
+        },
     };
 }

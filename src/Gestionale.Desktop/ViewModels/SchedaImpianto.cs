@@ -117,7 +117,9 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
                 g.InstallatoIl is null ? null : string.Format(CultureInfo.CurrentCulture, Testi.InstallatoIlValore, FormatoImpianti.Data(g.InstallatoIl)),
             }.Where(v => v is not null));
             var dismissione = g.DismessoIl is null ? null : string.Format(CultureInfo.CurrentCulture, Testi.DismessoIlValore, FormatoImpianti.Data(g.DismessoIl));
-            Generatori.Add(new RigaGeneratore(g, titolo, dettaglio.Length == 0 ? Testi.NessunDettaglio : dettaglio, g.DismessoIl is not null, dismissione, g.MatricolaDuplicata));
+            // Il dettaglio può cominciare da "installato il": l'iniziale va maiuscola.
+            dettaglio = dettaglio.Length == 0 ? Testi.NessunDettaglio : char.ToUpper(dettaglio[0], CultureInfo.CurrentCulture) + dettaglio[1..];
+            Generatori.Add(new RigaGeneratore(g, titolo, dettaglio, g.DismessoIl is not null, dismissione, g.MatricolaDuplicata));
         }
 
         Riferimenti.Clear();

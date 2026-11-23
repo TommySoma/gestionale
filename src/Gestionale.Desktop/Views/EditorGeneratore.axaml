@@ -45,8 +45,8 @@
             <TextBox Text="{Binding Matricola}" AutomationProperties.Name="{x:Static r:Testi.Matricola}" />
           </StackPanel>
           <StackPanel Grid.Column="2">
-            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.PotenzaKw}" />
-            <TextBox Text="{Binding Potenza}" AutomationProperties.Name="{x:Static r:Testi.PotenzaKw}" />
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.PotenzaGeneratoreKw}" />
+            <TextBox Text="{Binding Potenza}" AutomationProperties.Name="{x:Static r:Testi.PotenzaGeneratoreKw}" />
           </StackPanel>
           <StackPanel Grid.Column="4">
             <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Combustibile}" />

@@ -77,7 +77,7 @@
                           <SelectableTextBlock Classes="secondario" FontSize="14" Text="{Binding Dettaglio}" />
                           <TextBlock Classes="secondario" FontSize="14" Text="{Binding Dismissione}" IsVisible="{Binding Dismesso}" />
                           <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding MatricolaDuplicata}">
-                            <Path Classes="icona" Data="{StaticResource IconaAvviso}" Width="14" Height="14" Stroke="{DynamicResource Attenzione}" />
+                            <Path Classes="icona attenzione" Data="{StaticResource IconaAvviso}" Width="14" Height="14" />
                             <TextBlock Text="{x:Static r:Testi.AvvisoMatricolaDuplicata}" FontSize="13" Foreground="{DynamicResource Attenzione}" TextWrapping="Wrap" />
                           </StackPanel>
                         </StackPanel>

@@ -444,6 +444,9 @@
   <data name="PotenzaUtileKw" xml:space="preserve">
     <value>Potenza utile (kW)</value>
   </data>
+  <data name="PotenzaGeneratoreKw" xml:space="preserve">
+    <value>Potenza (kW)</value>
+  </data>
   <data name="PotenzaKw" xml:space="preserve">
     <value>{0} kW</value>
   </data>
