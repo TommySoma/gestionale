@@ -59,6 +59,17 @@ internal static class Schermate
 {
     public static string Cartella { get; } = Path.Combine(AppContext.BaseDirectory, "schermate");
 
+    /// <summary>
+    /// Esegue la prova sul thread di Avalonia della sessione headless, una per tutto
+    /// l'assembly, con l'applicazione indicata da AvaloniaTestApplication.
+    /// </summary>
+    public static Task Esegui(Func<Task> prova) =>
+        HeadlessUnitTestSession.GetOrStartForAssembly(typeof(AppDiProva).Assembly).Dispatch(async () =>
+        {
+            await prova();
+            return true;
+        }, TestContext.Current.CancellationToken);
+
     public static async Task<(ShellViewModel Shell, Window Finestra)> ApriAsync(params Permesso[] permessi)
     {
         var api = new ClientApi(new PortachiaviInMemoria(), TimeProvider.System, indirizzo => new HttpClient(new ServerDatiFittizi(DatiFittizi.Rispondi)) { BaseAddress = indirizzo });

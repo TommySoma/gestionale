@@ -1,4 +1,3 @@
-using Avalonia.Headless.XUnit;
 using Gestionale.Desktop.Risorse;
 using Gestionale.Desktop.ViewModels;
 
@@ -11,8 +10,8 @@ namespace Gestionale.Tests.Unit.Schermate;
 /// </summary>
 public sealed class TestSchermateImpianti
 {
-    [AvaloniaFact]
-    public async Task Elenco_degli_impianti()
+    [Fact]
+    public Task Elenco_degli_impianti() => Schermate.Esegui(async () =>
     {
         var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
 
@@ -24,10 +23,10 @@ public sealed class TestSchermateImpianti
         Assert.Contains("Via dei Platani 12, Firenze (FI)", testi);
         Assert.Contains("TARGA-PROVA-77", testi);
         Assert.Contains(Testi.StatoDismesso, testi);
-    }
+    });
 
-    [AvaloniaFact]
-    public async Task Scheda_impianto_con_generatori_catasto_e_avvisi()
+    [Fact]
+    public Task Scheda_impianto_con_generatori_catasto_e_avvisi() => Schermate.Esegui(async () =>
     {
         var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
 
@@ -40,10 +39,10 @@ public sealed class TestSchermateImpianti
         Assert.Contains(Testi.AvvisoMatricolaDuplicata, testi);
         Assert.Contains("24,5 kW", testi);
         Assert.Contains(Testi.CatastoToscana, testi);
-    }
+    });
 
-    [AvaloniaFact]
-    public async Task Scheda_cliente_con_gli_impianti_per_sede()
+    [Fact]
+    public Task Scheda_cliente_con_gli_impianti_per_sede() => Schermate.Esegui(async () =>
     {
         var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
 
@@ -54,10 +53,10 @@ public sealed class TestSchermateImpianti
         Assert.Contains("Climatizzazione (voce di prova)", testi);
         Assert.Contains(Testi.NessunImpiantoSede, testi);
         Assert.Contains(Testi.AggiungiImpianto, testi);
-    }
+    });
 
-    [AvaloniaFact]
-    public async Task Dialogo_di_modifica_dell_impianto()
+    [Fact]
+    public Task Dialogo_di_modifica_dell_impianto() => Schermate.Esegui(async () =>
     {
         var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
         await shell.ApriImpiantoAsync(DatiFittizi.Caldaia);
@@ -70,10 +69,10 @@ public sealed class TestSchermateImpianti
         var editor = Assert.IsType<EditorImpiantoViewModel>(shell.Dialogo);
         Assert.Equal("24,5", editor.Potenza);
         Assert.Contains(Testi.TitoloModificaImpianto, testi);
-    }
+    });
 
-    [AvaloniaFact]
-    public async Task Dialogo_del_generatore()
+    [Fact]
+    public Task Dialogo_del_generatore() => Schermate.Esegui(async () =>
     {
         var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
         await shell.ApriImpiantoAsync(DatiFittizi.Caldaia);
@@ -84,10 +83,10 @@ public sealed class TestSchermateImpianti
         var testi = Schermate.Salva(finestra, "05-modifica-generatore");
 
         Assert.Contains(Testi.TitoloModificaGeneratore, testi);
-    }
+    });
 
-    [AvaloniaFact]
-    public async Task Dialogo_del_riferimento_al_catasto()
+    [Fact]
+    public Task Dialogo_del_riferimento_al_catasto() => Schermate.Esegui(async () =>
     {
         var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
         await shell.ApriImpiantoAsync(DatiFittizi.Caldaia);
@@ -98,5 +97,5 @@ public sealed class TestSchermateImpianti
         var testi = Schermate.Salva(finestra, "06-riferimento-catasto");
 
         Assert.Contains(Testi.TitoloModificaRiferimento, testi);
-    }
+    });
 }
