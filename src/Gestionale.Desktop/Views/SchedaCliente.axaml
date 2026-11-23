@@ -93,7 +93,7 @@
                         <SelectableTextBlock Grid.Column="1" Text="{Binding Valore}" FontSize="14" FontWeight="Medium" VerticalAlignment="Center" />
                         <TextBlock Grid.Column="2" Classes="secondario" FontSize="14" Text="{Binding Etichetta}" VerticalAlignment="Center" Margin="16,0" />
                         <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4" IsVisible="{Binding Principale}" VerticalAlignment="Center">
-                          <Path Classes="icona" Data="{StaticResource IconaStella}" Width="14" Height="14" Fill="{DynamicResource Accento}" Stroke="{DynamicResource Accento}" StrokeThickness="1" />
+                          <Path Classes="icona accento" Data="{StaticResource IconaStella}" Width="14" Height="14" Fill="{DynamicResource Accento}" StrokeThickness="1" />
                           <TextBlock Text="{x:Static r:Testi.Principale}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Accento}" />
                         </StackPanel>
                         <Button Grid.Column="4" Classes="collegamento" Foreground="{DynamicResource Errore}" Content="{x:Static r:Testi.Elimina}" Margin="8,0,0,0"
@@ -138,8 +138,8 @@
                   <DataTemplate x:DataType="vm:RigaConsenso">
                     <DockPanel Margin="0,0,0,12">
                       <Panel DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top">
-                        <Path Classes="icona" Data="{StaticResource IconaOk}" Stroke="{DynamicResource Successo}" StrokeThickness="2" IsVisible="{Binding Concesso}" />
-                        <Path Classes="icona" Data="{StaticResource IconaNo}" Stroke="{DynamicResource Errore}" StrokeThickness="2" IsVisible="{Binding !Concesso}" />
+                        <Path Classes="icona successo" Data="{StaticResource IconaOk}" StrokeThickness="2" IsVisible="{Binding Concesso}" />
+                        <Path Classes="icona errore" Data="{StaticResource IconaNo}" StrokeThickness="2" IsVisible="{Binding !Concesso}" />
                       </Panel>
                       <StackPanel>
                         <TextBlock Text="{Binding Finalita}" FontSize="14" FontWeight="SemiBold" />

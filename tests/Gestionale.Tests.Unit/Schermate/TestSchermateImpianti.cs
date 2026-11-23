@@ -53,6 +53,8 @@ public sealed class TestSchermateImpianti
         Assert.Contains("Climatizzazione (voce di prova)", testi);
         Assert.Contains(Testi.NessunImpiantoSede, testi);
         Assert.Contains(Testi.AggiungiImpianto, testi);
+        Assert.Contains("Promemoria delle scadenze", testi);
+        Assert.Contains(Testi.NonConcesso, testi);
     });
 
     [Fact]

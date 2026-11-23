@@ -109,6 +109,15 @@
   <Style Selector="Path.icona.attenzione">
     <Setter Property="Stroke" Value="{DynamicResource Attenzione}" />
   </Style>
+  <Style Selector="Path.icona.successo">
+    <Setter Property="Stroke" Value="{DynamicResource Successo}" />
+  </Style>
+  <Style Selector="Path.icona.errore">
+    <Setter Property="Stroke" Value="{DynamicResource Errore}" />
+  </Style>
+  <Style Selector="Path.icona.accento">
+    <Setter Property="Stroke" Value="{DynamicResource Accento}" />
+  </Style>
 
   <!-- Date sempre all'italiana, qualunque sia la lingua del sistema. -->
   <Style Selector="CalendarDatePicker">

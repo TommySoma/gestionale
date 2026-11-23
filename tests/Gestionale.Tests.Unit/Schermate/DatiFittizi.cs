@@ -26,7 +26,11 @@ internal static class DatiFittizi
             },
             "/api/impianti/voci" => Voci(),
             "/api/impianti" => new { elementi = Elenco(), totale = 3, numeroPagina = 1, dimensione = 25 },
-            "/api/finalita-privacy" => Array.Empty<object>(),
+            "/api/finalita-privacy" => new object[]
+            {
+                new { codice = "promemoria_scadenze", nome = "Promemoria delle scadenze", descrizione = "Avvisi per controlli e manutenzioni" },
+                new { codice = "comunicazioni_commerciali", nome = "Comunicazioni commerciali", descrizione = "Offerte e novità" },
+            },
             _ when percorso == $"/api/impianti/{Caldaia}" => SchedaCaldaia(),
             _ when percorso == $"/api/clienti/{Cliente}" => SchedaCliente(),
             _ => null,
@@ -129,7 +133,10 @@ internal static class DatiFittizi
             new { sedeId = SedeLivorno, descrizione = "Casa al mare", indirizzo = "Via del Mare", civico = "3", cap = "57100", comune = "Livorno", provincia = "LI", versione = 1 },
             new { sedeId = Guid.Parse("019ab000-0000-7000-8000-000000000040"), indirizzo = "Via Nuova", civico = "1", cap = "50100", comune = "Firenze", provincia = "FI", versione = 1 },
         },
-        contatti = Array.Empty<object>(),
+        contatti = new object[]
+        {
+            new { contattoId = Guid.Parse("019ab000-0000-7000-8000-000000000050"), tipo = "cellulare", valore = "+39 333 000 0000", etichetta = "Personale", principale = true, versione = 1 },
+        },
         consensi = new object[]
         {
             new { finalita = "promemoria_scadenze", concesso = true, fonte = "modulo_firmato", registratoIl = "2026-11-02T10:00:00Z" },
