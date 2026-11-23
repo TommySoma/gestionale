@@ -28,7 +28,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="x:String">
-                <Border Background="{StaticResource Sfondo}" CornerRadius="6" Padding="12,8" Margin="0,0,16,12">
+                <Border Background="{DynamicResource Sfondo}" CornerRadius="6" Padding="12,8" Margin="0,0,16,12">
                   <SelectableTextBlock Classes="codice" Text="{Binding}" FontSize="18" LetterSpacing="1.5" />
                 </Border>
               </DataTemplate>

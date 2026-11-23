@@ -125,6 +125,13 @@ public sealed class RepositoryClienti(Database.Database db) : IRepositoryClienti
                 : null,
             EsisteCliente(clienteId), ct);
 
+    public Task<EsitoScrittura> AnonimizzaAsync(Contesto contesto, Guid clienteId, int versione, CancellationToken ct) =>
+        Scrivi(contesto, async (c, t) =>
+            await c.ExecuteScalarAsync<bool>(Comando("SELECT anagrafica.anonimizza_cliente(@clienteId, @versione)", new { clienteId, versione }, t, ct))
+                ? new RigaScritta { Id = clienteId, Versione = versione + 1 }
+                : null,
+            EsisteCliente(clienteId), ct);
+
     public Task<EsitoScrittura> CreaSedeAsync(Contesto contesto, Guid clienteId, DatiSede dati, CancellationToken ct) =>
         Scrivi(contesto, (c, t) => c.QuerySingleOrDefaultAsync<RigaScritta>(Comando(
             """

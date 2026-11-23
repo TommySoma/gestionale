@@ -165,6 +165,33 @@ public sealed class TestClienti(ApiFixture api) : IClassFixture<ApiFixture>
     }
 
     [Fact]
+    public async Task Un_cliente_anonimizzato_sparisce_e_non_torna_più()
+    {
+        using var titolare = api.Client(await api.TokenTitolareAsync());
+        var cliente = await LeggiAsync<RispostaScrittura>(await titolare.PostAsJsonAsync("/api/clienti",
+            new { tipo = "privato", nome = "Livia", cognome = "Oblio", codiceFiscale = "RSSMRA80A01H501U" }, Ct));
+        await LeggiAsync<RispostaScrittura>(await titolare.PostAsJsonAsync($"/api/clienti/{cliente.Id}/contatti",
+            new { tipo = "email", valore = "livia.oblio@esempio.example", principale = true }, Ct));
+        var percorso = $"/api/clienti/{cliente.Id}/anonimizzazione";
+
+        // L'Amministrativo modifica i clienti, ma l'anonimizzazione è irreversibile: solo il Titolare.
+        var amministrativo = await api.CreaUtenteAsync("amministrativo.oblio@alfa.example", PasswordProva, "amministrativo");
+        using (var client = api.Client(await api.TokenAsync(amministrativo, PasswordProva)))
+        {
+            Assert.Equal(HttpStatusCode.Forbidden, (await client.PostAsync($"{percorso}?versione=1", null, Ct)).StatusCode);
+        }
+
+        Assert.Equal(HttpStatusCode.BadRequest, (await titolare.PostAsync(percorso, null, Ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.Conflict, (await titolare.PostAsync($"{percorso}?versione=7", null, Ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, (await titolare.PostAsync($"{percorso}?versione=1", null, Ct)).StatusCode);
+
+        Assert.Equal(HttpStatusCode.NotFound, (await titolare.GetAsync($"/api/clienti/{cliente.Id}", Ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, (await titolare.PostAsync($"{percorso}?versione=2", null, Ct)).StatusCode);
+        var ricerca = await titolare.GetFromJsonAsync<Pagina<RiepilogoCliente>>("/api/clienti?cerca=RSSMRA80A01H501U", Ct);
+        Assert.DoesNotContain(ricerca!.Elementi, c => c.ClienteId == cliente.Id);
+    }
+
+    [Fact]
     public async Task Ogni_ruolo_vede_e_modifica_solo_quello_che_gli_spetta()
     {
         using var titolare = api.Client(await api.TokenTitolareAsync());

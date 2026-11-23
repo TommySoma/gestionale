@@ -3,8 +3,8 @@
              xmlns:vm="using:Gestionale.Desktop.ViewModels"
              xmlns:v="using:Gestionale.Desktop.Views"
              x:Class="Gestionale.Desktop.App"
-             RequestedThemeVariant="Light">
-  <!-- Tema chiaro per ora: il tema scuro arriva con il design system completo. -->
+             RequestedThemeVariant="Default">
+  <!-- Il tema segue il sistema; l'utente può fissarlo dal menu utente (Servizi/PreferenzaTema). -->
   <Application.DataTemplates>
     <DataTemplate DataType="vm:AccessoViewModel"><v:AccessoView /></DataTemplate>
     <DataTemplate DataType="vm:VerificaMfaViewModel"><v:VerificaMfaView /></DataTemplate>

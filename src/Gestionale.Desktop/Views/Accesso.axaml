@@ -38,13 +38,13 @@
 
         <TextBlock Classes="secondario" FontSize="14" Text="{x:Static r:Testi.PasswordDimenticata}" />
 
-        <Border BorderBrush="{StaticResource Bordo}" BorderThickness="0,1,0,0" Padding="0,16,0,0">
+        <Border BorderBrush="{DynamicResource Bordo}" BorderThickness="0,1,0,0" Padding="0,16,0,0">
           <StackPanel Spacing="8">
             <DockPanel>
               <Button Classes="collegamento" DockPanel.Dock="Right" Content="{x:Static r:Testi.CambiaServer}" Command="{Binding CambiaServerCommand}" />
               <TextBlock Classes="secondario" FontSize="13" VerticalAlignment="Center">
                 <Run Text="{x:Static r:Testi.Server}" />
-                <Run Text="{Binding IndirizzoServer}" FontWeight="SemiBold" Foreground="{StaticResource Testo}" />
+                <Run Text="{Binding IndirizzoServer}" FontWeight="SemiBold" Foreground="{DynamicResource Testo}" />
               </TextBlock>
             </DockPanel>
             <StackPanel IsVisible="{Binding ModificaServer}">

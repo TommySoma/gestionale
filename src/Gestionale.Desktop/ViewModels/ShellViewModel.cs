@@ -9,7 +9,7 @@ namespace Gestionale.Desktop.ViewModels;
 /// Struttura dell'applicazione: barra laterale, barra superiore con l'utente,
 /// contenuto al centro e un eventuale dialogo sopra.
 /// </summary>
-public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione navigazione) : ViewModelBase
+public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione navigazione, PreferenzaTema tema) : ViewModelBase
 {
     private static readonly Dictionary<string, string> s_nomiRuolo = new(StringComparer.Ordinal)
     {
@@ -35,6 +35,8 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     public bool VedeClienti => Profilo.Ha("clienti.lettura");
 
     public bool ModificaClienti => Profilo.Ha("clienti.scrittura");
+
+    public bool AnonimizzaClienti => Profilo.Ha("clienti.anonimizzazione");
 
     public string EtichettaM2 => string.Format(System.Globalization.CultureInfo.CurrentCulture, Testi.InArrivo, "M2");
 
@@ -66,6 +68,21 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
         var scheda = new SchedaClienteViewModel(this, clienteId);
         Contenuto = scheda;
         await scheda.CaricaAsync();
+    }
+
+    public bool TemaSistema => tema.Corrente == CodiciTema.Sistema;
+
+    public bool TemaChiaro => tema.Corrente == CodiciTema.Chiaro;
+
+    public bool TemaScuro => tema.Corrente == CodiciTema.Scuro;
+
+    [RelayCommand]
+    private void ScegliTema(string codice)
+    {
+        tema.Imposta(codice);
+        OnPropertyChanged(nameof(TemaSistema));
+        OnPropertyChanged(nameof(TemaChiaro));
+        OnPropertyChanged(nameof(TemaScuro));
     }
 
     public void MostraDialogo(ViewModelBase dialogo) => Dialogo = dialogo;

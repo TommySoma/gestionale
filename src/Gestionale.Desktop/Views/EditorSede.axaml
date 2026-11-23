@@ -5,10 +5,10 @@
              x:Class="Gestionale.Desktop.Views.EditorSedeView"
              x:DataType="vm:EditorSedeViewModel">
   <DockPanel>
-    <Border DockPanel.Dock="Top" BorderBrush="{StaticResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
       <TextBlock Text="{x:Static r:Testi.TitoloNuovaSede}" FontSize="20" FontWeight="Bold" />
     </Border>
-    <Border DockPanel.Dock="Bottom" BorderBrush="{StaticResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
       <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
         <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
         <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.SalvaSede}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
@@ -22,7 +22,7 @@
         <StackPanel>
           <TextBlock Classes="etichetta">
             <Run Text="{x:Static r:Testi.Descrizione}" />
-            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{StaticResource TestoSecondario}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
           </TextBlock>
           <TextBox Text="{Binding Descrizione}" AutomationProperties.Name="{x:Static r:Testi.Descrizione}" />
         </StackPanel>
@@ -53,7 +53,7 @@
         <StackPanel>
           <TextBlock Classes="etichetta">
             <Run Text="{x:Static r:Testi.Note}" />
-            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{StaticResource TestoSecondario}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
           </TextBlock>
           <TextBox Text="{Binding NoteAccesso}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72" AutomationProperties.Name="{x:Static r:Testi.Note}" />
         </StackPanel>

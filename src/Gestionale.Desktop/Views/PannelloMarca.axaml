@@ -4,7 +4,7 @@
              x:Class="Gestionale.Desktop.Views.PannelloMarca"
              x:Name="Pannello">
   <!-- Colonna di sinistra delle schermate di accesso: marchio, messaggio, avvertenza. -->
-  <Border Width="512" Background="{StaticResource Accento}" Padding="56,64">
+  <Border Width="512" Background="{StaticResource SfondoMarca}" Padding="56,64">
     <DockPanel>
       <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12">
         <Path Classes="icona" Data="{StaticResource IconaGoccia}" Stroke="White" Width="32" Height="32" />

@@ -18,7 +18,10 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             _api = new ClientApi(Portachiavi.DelSistema(), TimeProvider.System);
-            var principale = new MainViewModel(_api, ArchivioImpostazioniSuFile.Predefinito());
+            var archivio = ArchivioImpostazioniSuFile.Predefinito();
+            var tema = new PreferenzaTema(archivio, variante => RequestedThemeVariant = variante);
+            tema.ApplicaSalvato();
+            var principale = new MainViewModel(_api, archivio, tema);
 
             desktop.MainWindow = new MainWindow { DataContext = principale };
             desktop.Exit += (_, _) => _api.Dispose();

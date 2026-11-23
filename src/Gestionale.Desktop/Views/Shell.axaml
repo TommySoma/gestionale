@@ -7,10 +7,10 @@
   <Panel>
     <DockPanel>
       <!-- Barra laterale: le aree delle prossime milestone si vedono ma non si aprono. -->
-      <Border DockPanel.Dock="Left" Width="232" Background="{StaticResource Superficie}" BorderBrush="{StaticResource Bordo}" BorderThickness="0,0,1,0" Padding="12,16">
+      <Border DockPanel.Dock="Left" Width="232" Background="{DynamicResource Superficie}" BorderBrush="{DynamicResource Bordo}" BorderThickness="0,0,1,0" Padding="12,16">
         <StackPanel Spacing="4">
           <StackPanel Orientation="Horizontal" Spacing="10" Height="48" Margin="12,0,0,12">
-            <Path Classes="icona" Data="{StaticResource IconaGoccia}" Stroke="{StaticResource Accento}" Width="24" Height="24" />
+            <Path Classes="icona" Data="{StaticResource IconaGoccia}" Stroke="{DynamicResource Accento}" Width="24" Height="24" />
             <TextBlock Text="{x:Static r:Testi.NomeBreve}" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" />
           </StackPanel>
           <DockPanel Classes="voceFutura" ToolTip.Tip="{Binding EtichettaM3}">
@@ -39,17 +39,26 @@
       </Border>
 
       <!-- Barra superiore: ricerca globale e utente. -->
-      <Border DockPanel.Dock="Top" Height="64" Background="{StaticResource Superficie}" BorderBrush="{StaticResource Bordo}" BorderThickness="0,0,0,1" Padding="24,0">
+      <Border DockPanel.Dock="Top" Height="64" Background="{DynamicResource Superficie}" BorderBrush="{DynamicResource Bordo}" BorderThickness="0,0,0,1" Padding="24,0">
         <DockPanel>
           <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
             <StackPanel VerticalAlignment="Center">
               <TextBlock Text="{Binding NomeUtente}" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Right" />
-              <TextBlock Text="{Binding Ruolo}" FontSize="12" Foreground="{StaticResource TestoSecondario}" HorizontalAlignment="Right" />
+              <TextBlock Text="{Binding Ruolo}" FontSize="12" Foreground="{DynamicResource TestoSecondario}" HorizontalAlignment="Right" />
             </StackPanel>
             <Button Width="40" Height="40" MinHeight="40" Padding="0" CornerRadius="20" Classes="primario"
                     Content="{Binding Iniziali}" AutomationProperties.Name="{x:Static r:Testi.MenuUtente}">
               <Button.Flyout>
                 <MenuFlyout>
+                  <MenuItem Header="{x:Static r:Testi.Tema}">
+                    <MenuItem Header="{x:Static r:Testi.TemaSistema}" ToggleType="Radio" GroupName="tema" IsChecked="{Binding TemaSistema, Mode=OneWay}"
+                              Command="{Binding ScegliTemaCommand}" CommandParameter="sistema" />
+                    <MenuItem Header="{x:Static r:Testi.TemaChiaro}" ToggleType="Radio" GroupName="tema" IsChecked="{Binding TemaChiaro, Mode=OneWay}"
+                              Command="{Binding ScegliTemaCommand}" CommandParameter="chiaro" />
+                    <MenuItem Header="{x:Static r:Testi.TemaScuro}" ToggleType="Radio" GroupName="tema" IsChecked="{Binding TemaScuro, Mode=OneWay}"
+                              Command="{Binding ScegliTemaCommand}" CommandParameter="scuro" />
+                  </MenuItem>
+                  <Separator />
                   <MenuItem Header="{x:Static r:Testi.Esci}" Command="{Binding EsciCommand}" />
                 </MenuFlyout>
               </Button.Flyout>
@@ -65,7 +74,7 @@
     </DockPanel>
 
     <!-- Dialogo sopra il contenuto, con lo sfondo velato. -->
-    <Border Background="{StaticResource Velo}" IsVisible="{Binding HaDialogo}">
+    <Border Background="{DynamicResource Velo}" IsVisible="{Binding HaDialogo}">
       <Border Classes="scheda" Width="640" MaxHeight="720" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="16" BorderThickness="0">
         <ContentControl Content="{Binding Dialogo}" />
       </Border>

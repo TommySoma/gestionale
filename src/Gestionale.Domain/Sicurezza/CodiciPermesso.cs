@@ -8,6 +8,7 @@ public static class CodiciPermesso
     public const string AuditLettura = "audit.lettura";
     public const string ClientiLettura = "clienti.lettura";
     public const string ClientiScrittura = "clienti.scrittura";
+    public const string ClientiAnonimizzazione = "clienti.anonimizzazione";
 }
 
 /// <summary>Estensione di un permesso: su tutto o solo sulle attività assegnate all'utente.</summary>
