@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.EditorGeneratoreView"
+             x:DataType="vm:EditorGeneratoreViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <TextBlock Text="{Binding Titolo}" FontSize="20" FontWeight="Bold" />
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+        <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+        <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.SalvaGeneratore}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+      </StackPanel>
+    </Border>
+    <ScrollViewer>
+      <StackPanel Margin="24" Spacing="20">
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaAvviso}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding Errore}" />
+          </DockPanel>
+        </Border>
+
+        <StackPanel>
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.TipoGeneratore}" />
+          <ComboBox ItemsSource="{Binding Tipi}" SelectedItem="{Binding Tipo}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.TipoGeneratore}" />
+        </StackPanel>
+
+        <Grid ColumnDefinitions="*,16,*">
+          <StackPanel Grid.Column="0">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Marca}" />
+            <TextBox Text="{Binding Marca}" AutomationProperties.Name="{x:Static r:Testi.Marca}" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Modello}" />
+            <TextBox Text="{Binding Modello}" AutomationProperties.Name="{x:Static r:Testi.Modello}" />
+          </StackPanel>
+        </Grid>
+
+        <Grid ColumnDefinitions="2*,16,*,16,2*">
+          <StackPanel Grid.Column="0">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Matricola}" />
+            <TextBox Text="{Binding Matricola}" AutomationProperties.Name="{x:Static r:Testi.Matricola}" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.PotenzaKw}" />
+            <TextBox Text="{Binding Potenza}" AutomationProperties.Name="{x:Static r:Testi.PotenzaKw}" />
+          </StackPanel>
+          <StackPanel Grid.Column="4">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Combustibile}" />
+            <ComboBox ItemsSource="{Binding Combustibili}" SelectedItem="{Binding Combustibile}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.Combustibile}" />
+          </StackPanel>
+        </Grid>
+
+        <Grid ColumnDefinitions="*,16,*">
+          <StackPanel Grid.Column="0">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.InstallatoIl}" />
+            <CalendarDatePicker SelectedDate="{Binding InstallatoIl}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.InstallatoIl}" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Classes="etichetta">
+              <Run Text="{x:Static r:Testi.DismessoIl}" />
+              <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+            </TextBlock>
+            <CalendarDatePicker SelectedDate="{Binding DismessoIl}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.DismessoIl}" />
+          </StackPanel>
+        </Grid>
+
+        <StackPanel>
+          <TextBlock Classes="etichetta">
+            <Run Text="{x:Static r:Testi.Note}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+          </TextBlock>
+          <TextBox Text="{Binding Note}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72" AutomationProperties.Name="{x:Static r:Testi.Note}" />
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

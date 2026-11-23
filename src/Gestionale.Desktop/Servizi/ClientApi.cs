@@ -177,6 +177,61 @@ public sealed class ClientApi : IDisposable
     public Task<Risposta<EsitoScrittura>> RegistraConsensoAsync(Guid clienteId, DatiConsenso dati, CancellationToken ct = default) =>
         AutenticataAsync<EsitoScrittura>(HttpMethod.Post, $"api/clienti/{clienteId}/consensi", dati, ct);
 
+    // --- Impianti ----------------------------------------------------------
+
+    public Task<Risposta<Pagina<RiepilogoImpianto>>> CercaImpiantiAsync(
+        string? testo, Guid? clienteId, string? stato, int pagina, int dimensione, CancellationToken ct = default)
+    {
+        var query = $"api/impianti?pagina={pagina}&dimensione={dimensione}";
+        if (!string.IsNullOrWhiteSpace(testo))
+        {
+            query += "&cerca=" + Uri.EscapeDataString(testo.Trim());
+        }
+
+        if (clienteId is { } cliente)
+        {
+            query += "&cliente=" + cliente;
+        }
+
+        if (!string.IsNullOrWhiteSpace(stato))
+        {
+            query += "&stato=" + Uri.EscapeDataString(stato);
+        }
+
+        return AutenticataAsync<Pagina<RiepilogoImpianto>>(HttpMethod.Get, query, null, ct);
+    }
+
+    public Task<Risposta<Impianto>> ImpiantoAsync(Guid impiantoId, CancellationToken ct = default) =>
+        AutenticataAsync<Impianto>(HttpMethod.Get, $"api/impianti/{impiantoId}", null, ct);
+
+    public Task<Risposta<VociImpianti>> VociImpiantiAsync(CancellationToken ct = default) =>
+        AutenticataAsync<VociImpianti>(HttpMethod.Get, "api/impianti/voci", null, ct);
+
+    public Task<Risposta<EsitoScritturaImpianto>> CreaImpiantoAsync(DatiImpianto dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaImpianto>(HttpMethod.Post, "api/impianti", dati, ct);
+
+    public Task<Risposta<EsitoScritturaImpianto>> AggiornaImpiantoAsync(Guid impiantoId, DatiImpianto dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaImpianto>(HttpMethod.Put, $"api/impianti/{impiantoId}", dati, ct);
+
+    public Task<Risposta<object>> EliminaImpiantoAsync(Guid impiantoId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<object>(HttpMethod.Delete, $"api/impianti/{impiantoId}?versione={versione}", null, ct);
+
+    public Task<Risposta<EsitoScritturaImpianto>> CreaGeneratoreAsync(Guid impiantoId, DatiGeneratore dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaImpianto>(HttpMethod.Post, $"api/impianti/{impiantoId}/generatori", dati, ct);
+
+    public Task<Risposta<EsitoScritturaImpianto>> AggiornaGeneratoreAsync(Guid impiantoId, Guid generatoreId, DatiGeneratore dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaImpianto>(HttpMethod.Put, $"api/impianti/{impiantoId}/generatori/{generatoreId}", dati, ct);
+
+    public Task<Risposta<EsitoScritturaImpianto>> CreaRiferimentoCatastoAsync(Guid impiantoId, DatiRiferimentoCatasto dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaImpianto>(HttpMethod.Post, $"api/impianti/{impiantoId}/riferimenti-catasto", dati, ct);
+
+    public Task<Risposta<EsitoScritturaImpianto>> AggiornaRiferimentoCatastoAsync(
+        Guid impiantoId, Guid riferimentoId, DatiRiferimentoCatasto dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaImpianto>(HttpMethod.Put, $"api/impianti/{impiantoId}/riferimenti-catasto/{riferimentoId}", dati, ct);
+
+    public Task<Risposta<object>> EliminaRiferimentoCatastoAsync(Guid impiantoId, Guid riferimentoId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<object>(HttpMethod.Delete, $"api/impianti/{impiantoId}/riferimenti-catasto/{riferimentoId}?versione={versione}", null, ct);
+
     public void Dispose()
     {
         _http?.Dispose();

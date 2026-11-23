@@ -7,7 +7,12 @@ using Gestionale.Desktop.Servizi;
 
 namespace Gestionale.Desktop.ViewModels;
 
-public sealed record RigaSede(Guid Id, int Versione, string Indirizzo, string? Note);
+public sealed record RigaImpiantoSede(Guid Id, string Tipo, string Dettaglio, bool Dismesso);
+
+public sealed record RigaSede(Guid Id, int Versione, string Indirizzo, string? Note, IReadOnlyList<RigaImpiantoSede> Impianti)
+{
+    public bool SenzaImpianti => Impianti.Count == 0;
+}
 
 public sealed record RigaContatto(Guid Id, int Versione, string Tipo, string Valore, string? Etichetta, bool Principale);
 
@@ -29,6 +34,10 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
     public bool PuoModificare => shell.ModificaClienti;
 
     public bool PuoAnonimizzare => shell.AnonimizzaClienti;
+
+    public bool VedeImpianti => shell.VedeImpianti;
+
+    public bool PuoAggiungereImpianti => shell.ModificaImpianti;
 
     [ObservableProperty]
     public partial string Nome { get; set; } = "";
@@ -74,6 +83,18 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
             _finalita = finalita;
         }
 
+        // Gli impianti si leggono a parte: chi non ha il permesso non li vede, il resto della scheda sì.
+        IReadOnlyList<RiepilogoImpianto> impianti = [];
+        if (VedeImpianti)
+        {
+            var elenco = await shell.Api.CercaImpiantiAsync(null, clienteId, null, 1, 100);
+            impianti = elenco.Valore?.Elementi ?? [];
+            if (elenco.Valore is null)
+            {
+                Errore = elenco.Messaggio;
+            }
+        }
+
         _cliente = cliente;
         Nome = cliente.Tipo == "privato" ? $"{cliente.Cognome} {cliente.Nome}" : cliente.Denominazione ?? "";
         Tipo = TipiCliente.Nome(cliente.Tipo);
@@ -86,7 +107,11 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
         {
             var indirizzo = $"{s.Indirizzo}{(s.Civico is null ? "" : " " + s.Civico)}, {s.Cap} {s.Comune} ({s.Provincia})";
             var note = s.NoteAccesso is null ? null : string.Format(CultureInfo.CurrentCulture, Testi.NoteAccesso, s.NoteAccesso);
-            Sedi.Add(new RigaSede(s.SedeId, s.Versione, indirizzo, note));
+            var impiantiSede = impianti
+                .Where(i => i.SedeId == s.SedeId)
+                .Select(i => new RigaImpiantoSede(i.ImpiantoId, i.TipoImpianto, DettaglioImpianto(i), i.Stato == "dismesso"))
+                .ToList();
+            Sedi.Add(new RigaSede(s.SedeId, s.Versione, indirizzo, note, impiantiSede));
         }
 
         Contatti.Clear();
@@ -198,6 +223,42 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
         var risposta = await shell.Api.EliminaContattoAsync(clienteId, contatto.Id, contatto.Versione);
         Errore = risposta.Riuscita ? null : risposta.Messaggio;
         await CaricaAsync();
+    }
+
+    [RelayCommand]
+    private Task ApriImpiantoAsync(RigaImpiantoSede impianto) => shell.ApriImpiantoAsync(impianto.Id);
+
+    [RelayCommand]
+    private async Task AggiungiImpiantoAsync(RigaSede sede)
+    {
+        var voci = await shell.VociImpiantiAsync();
+        if (voci.Valore is null)
+        {
+            Errore = voci.Messaggio;
+            return;
+        }
+
+        shell.MostraDialogo(new EditorImpiantoViewModel(
+            shell, voci.Valore, sede.Id, new OpzioneCliente(clienteId, Nome), null, id => _ = shell.ApriImpiantoAsync(id)));
+    }
+
+    private static string DettaglioImpianto(RiepilogoImpianto impianto)
+    {
+        var parti = new List<string>();
+        if (impianto.Stato == "dismesso")
+        {
+            parti.Add(Testi.StatoDismesso);
+        }
+
+        if (impianto.CodiceCatasto is { } codice)
+        {
+            parti.Add(codice);
+        }
+
+        parti.Add(impianto.NumeroGeneratori == 1
+            ? Testi.UnGeneratore
+            : string.Format(CultureInfo.CurrentCulture, Testi.NumeroGeneratori, impianto.NumeroGeneratori));
+        return string.Join(" · ", parti);
     }
 
     internal static string NomeTipoContatto(string tipo) => tipo switch
