@@ -69,6 +69,70 @@ public sealed class TestSchermateInterventi
     });
 
     [Fact]
+    public Task Spostare_un_intervento_mantiene_orario_e_durata() => Schermate.Esegui(async () =>
+    {
+        var (shell, _) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
+        await shell.ApriCalendarioAsync(DatiFittizi.Settimana);
+        var calendario = Assert.IsType<CalendarioViewModel>(shell.Contenuto);
+
+        // Da Sara mercoledì 14:30–16:00 a Marco venerdì.
+        await calendario.SpostaAsync(DatiFittizi.InterventoPianificato, DatiFittizi.TecnicoMarco, DatiFittizi.Settimana.AddDays(4));
+
+        Assert.Null(calendario.Errore);
+        using var corpo = System.Text.Json.JsonDocument.Parse(DatiFittizi.UltimaModifica!);
+        var radice = corpo.RootElement;
+        Assert.Equal(DatiFittizi.TecnicoMarco, radice.GetProperty("tecnicoUtenteId").GetGuid());
+        Assert.Equal(new DateTimeOffset(2027, 1, 15, 14, 30, 0, TimeSpan.FromHours(1)), radice.GetProperty("inizio").GetDateTimeOffset());
+        Assert.Equal(new DateTimeOffset(2027, 1, 15, 16, 0, 0, TimeSpan.FromHours(1)), radice.GetProperty("fine").GetDateTimeOffset());
+        Assert.Equal(2, radice.GetProperty("versione").GetInt32());
+        Assert.Equal("riparazione", radice.GetProperty("tipo").GetString());
+    });
+
+    [Fact]
+    public Task Lasciare_un_intervento_da_pianificare_apre_il_dialogo_con_giorno_e_tecnico() => Schermate.Esegui(async () =>
+    {
+        var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
+        await shell.ApriCalendarioAsync(DatiFittizi.Settimana);
+        var calendario = Assert.IsType<CalendarioViewModel>(shell.Contenuto);
+
+        await calendario.SpostaAsync(DatiFittizi.InterventoDaPianificare, DatiFittizi.TecnicoSara, DatiFittizi.Settimana.AddDays(3));
+        Schermate.Attendi();
+        var testi = Schermate.Salva(finestra, "14-da-pianificare-trascinato");
+
+        var editor = Assert.IsType<EditorInterventoViewModel>(shell.Dialogo);
+        Assert.Equal(new DateTime(2027, 1, 14), editor.Data);
+        Assert.Equal(DatiFittizi.TecnicoSara, editor.Tecnico.Id);
+        Assert.Contains(Testi.TitoloPianificaIntervento, testi);
+    });
+
+    [Fact]
+    public Task Un_intervento_completato_non_si_sposta() => Schermate.Esegui(async () =>
+    {
+        var (shell, _) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
+        await shell.ApriCalendarioAsync(DatiFittizi.Settimana);
+        var calendario = Assert.IsType<CalendarioViewModel>(shell.Contenuto);
+
+        await calendario.SpostaAsync(DatiFittizi.InterventoChiuso, DatiFittizi.TecnicoSara, DatiFittizi.Settimana.AddDays(1));
+
+        Assert.Contains("completato", calendario.Errore, StringComparison.Ordinal);
+        Assert.Null(shell.Dialogo);
+
+        // Nel calendario si trascinano solo i pianificati.
+        var voci = calendario.Righe.SelectMany(r => r.Celle).SelectMany(c => c.Interventi).ToList();
+        Assert.Equal([DatiFittizi.InterventoPianificato], voci.Where(v => v.Trascinabile).Select(v => v.Id));
+    });
+
+    [Fact]
+    public Task Il_tecnico_non_trascina_nulla() => Schermate.Esegui(async () =>
+    {
+        var (shell, _) = await Schermate.ApriComeAsync(DatiFittizi.TecnicoSara, "Sara", "Neri", "tecnico", Schermate.Tecnico);
+        await shell.ApriCalendarioAsync(DatiFittizi.Settimana);
+        var calendario = Assert.IsType<CalendarioViewModel>(shell.Contenuto);
+
+        Assert.DoesNotContain(calendario.Righe.SelectMany(r => r.Celle).SelectMany(c => c.Interventi), v => v.Trascinabile);
+    });
+
+    [Fact]
     public Task Scheda_di_un_intervento_chiuso_con_righe() => Schermate.Esegui(async () =>
     {
         var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);

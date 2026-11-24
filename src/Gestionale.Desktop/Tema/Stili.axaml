@@ -352,6 +352,12 @@
   <Style Selector="Border.cella.oggi">
     <Setter Property="Background" Value="{DynamicResource Sfondo}" />
   </Style>
+  <!-- Dove si sta per lasciare un intervento trascinato. -->
+  <Style Selector="Border.cella.bersaglio">
+    <Setter Property="Background" Value="{DynamicResource AccentoTenue}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Accento}" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
   <Style Selector="Button.voceCalendario">
     <Setter Property="Padding" Value="6,4" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
