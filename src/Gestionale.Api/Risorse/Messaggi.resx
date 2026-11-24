@@ -303,4 +303,7 @@
   <data name="ManodoperaNonInOre" xml:space="preserve">
     <value>la manodopera si indica in ore (unità h)</value>
   </data>
+  <data name="RapportinoSoloCompletati" xml:space="preserve">
+    <value>Il rapportino si genera solo per un intervento completato: questo è {0}.</value>
+  </data>
 </root>

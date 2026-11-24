@@ -9,7 +9,7 @@ namespace Gestionale.Application.Interventi;
 /// interventi assegnati all'utente, e su quelli si può solo avviare e chiudere:
 /// creare, pianificare, riassegnare e annullare spetta a chi ha l'ambito su tutto.
 /// </summary>
-public sealed class ServizioInterventi(IRepositoryInterventi repository)
+public sealed class ServizioInterventi(IRepositoryInterventi repository, IGeneratoreRapportino generatore)
 {
     public const int DimensioneMassimaPagina = 200;
 
@@ -33,6 +33,23 @@ public sealed class ServizioInterventi(IRepositoryInterventi repository)
 
     public Task<Intervento?> InterventoAsync(Contesto contesto, AmbitoPermesso ambito, Guid interventoId, CancellationToken ct) =>
         repository.InterventoAsync(contesto, interventoId, SoloTecnico(contesto, ambito), ct);
+
+    /// <summary>PDF del rapportino: solo per un intervento completato, con le stesse regole di visibilità della scheda.</summary>
+    public async Task<EsitoRapportino> RapportinoAsync(Contesto contesto, AmbitoPermesso ambito, Guid interventoId, CancellationToken ct)
+    {
+        if (await repository.InterventoAsync(contesto, interventoId, SoloTecnico(contesto, ambito), ct) is not { } intervento)
+        {
+            return new EsitoRapportino.NonTrovato();
+        }
+
+        if (intervento.Stato != StatiIntervento.Completato)
+        {
+            return new EsitoRapportino.NonChiuso(intervento.Stato);
+        }
+
+        var azienda = await repository.AziendaAsync(contesto, ct);
+        return new EsitoRapportino.Pronto(generatore.Genera(azienda, intervento), $"rapportino-{intervento.Anno}-{intervento.Numero:D4}.pdf");
+    }
 
     public Task<IReadOnlyList<TecnicoAssegnabile>> TecniciAsync(Contesto contesto, CancellationToken ct) =>
         repository.TecniciAsync(contesto, ct);

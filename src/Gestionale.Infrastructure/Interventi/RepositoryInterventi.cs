@@ -130,6 +130,11 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
             return intervento;
         }, ct);
 
+    public Task<IntestazioneAzienda> AziendaAsync(Contesto contesto, CancellationToken ct) =>
+        Esegui(contesto, (c, t) => c.QuerySingleAsync<IntestazioneAzienda>(Comando(
+            "SELECT ragione_sociale, partita_iva, indirizzo, cap, comune, provincia FROM sec.aziende WHERE azienda_id = @aziendaId",
+            new { aziendaId = contesto.AziendaId }, t, ct)), ct);
+
     public Task<IReadOnlyList<TecnicoAssegnabile>> TecniciAsync(Contesto contesto, CancellationToken ct) =>
         Esegui(contesto, async (c, t) =>
             (IReadOnlyList<TecnicoAssegnabile>)[.. await c.QueryAsync<TecnicoAssegnabile>(Comando(

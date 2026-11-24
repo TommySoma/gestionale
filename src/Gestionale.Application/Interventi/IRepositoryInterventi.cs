@@ -13,6 +13,8 @@ public interface IRepositoryInterventi
 
     Task<Intervento?> InterventoAsync(Contesto contesto, Guid interventoId, Guid? soloTecnico, CancellationToken ct);
 
+    Task<IntestazioneAzienda> AziendaAsync(Contesto contesto, CancellationToken ct);
+
     Task<IReadOnlyList<TecnicoAssegnabile>> TecniciAsync(Contesto contesto, CancellationToken ct);
 
     Task<EsitoIntervento> CreaAsync(Contesto contesto, DatiIntervento dati, CancellationToken ct);

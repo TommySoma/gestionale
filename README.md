@@ -156,3 +156,5 @@ dotnet test --filter-not-trait "Category=Integration"
 ## Licenza
 
 [MIT](LICENSE).
+
+Il carattere Inter, incorporato nei documenti PDF generati dall'API, è distribuito con la SIL Open Font License 1.1: vedi [src/Gestionale.Infrastructure/Documenti/Caratteri/OFL-Inter.txt](src/Gestionale.Infrastructure/Documenti/Caratteri/OFL-Inter.txt). I PDF si generano con SkiaSharp (MIT); le scelte sono in [ADR 0005](docs/adr/0005-pdf-con-skiasharp.md).

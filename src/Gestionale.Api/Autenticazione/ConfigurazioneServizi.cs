@@ -7,6 +7,7 @@ using Gestionale.Application.Interventi;
 using Gestionale.Infrastructure.Accessi;
 using Gestionale.Infrastructure.Anagrafica;
 using Gestionale.Infrastructure.Database;
+using Gestionale.Infrastructure.Documenti;
 using Gestionale.Infrastructure.Impianti;
 using Gestionale.Infrastructure.Interventi;
 using Gestionale.Infrastructure.Sicurezza;
@@ -53,6 +54,7 @@ internal static class ConfigurazioneServizi
         servizi.AddSingleton<IRepositoryImpianti, RepositoryImpianti>();
         servizi.AddSingleton<ServizioImpianti>();
         servizi.AddSingleton<IRepositoryInterventi, RepositoryInterventi>();
+        servizi.AddSingleton<IGeneratoreRapportino, GeneratoreRapportino>();
         servizi.AddSingleton<ServizioInterventi>();
 
         servizi.AddProblemDetails();

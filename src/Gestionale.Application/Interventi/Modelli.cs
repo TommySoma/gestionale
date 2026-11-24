@@ -166,3 +166,36 @@ public abstract record EsitoIntervento
     /// <summary>Il permesso c'è, ma solo sui propri interventi: pianificare e annullare spetta all'ufficio.</summary>
     public sealed record Vietata : EsitoIntervento;
 }
+
+/// <summary>Dati dell'impresa per l'intestazione dei documenti.</summary>
+public sealed class IntestazioneAzienda
+{
+    public string RagioneSociale { get; init; } = "";
+
+    public string? PartitaIva { get; init; }
+
+    public string? Indirizzo { get; init; }
+
+    public string? Cap { get; init; }
+
+    public string? Comune { get; init; }
+
+    public string? Provincia { get; init; }
+}
+
+/// <summary>Produce il PDF del rapportino di un intervento chiuso (ADR 0005).</summary>
+public interface IGeneratoreRapportino
+{
+    byte[] Genera(IntestazioneAzienda azienda, Intervento intervento);
+}
+
+/// <summary>Esito della richiesta del rapportino.</summary>
+public abstract record EsitoRapportino
+{
+    public sealed record Pronto(byte[] Pdf, string NomeFile) : EsitoRapportino;
+
+    public sealed record NonTrovato : EsitoRapportino;
+
+    /// <summary>Il rapportino si fa solo per un intervento completato.</summary>
+    public sealed record NonChiuso(string Stato) : EsitoRapportino;
+}

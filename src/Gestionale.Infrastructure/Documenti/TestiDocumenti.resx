@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TitoloRapportino" xml:space="preserve">
+    <value>Rapporto di intervento</value>
+  </data>
+  <data name="NumeroIntervento" xml:space="preserve">
+    <value>n. {0}/{1}</value>
+  </data>
+  <data name="PartitaIva" xml:space="preserve">
+    <value>P. IVA {0}</value>
+  </data>
+  <data name="SezioneIntervento" xml:space="preserve">
+    <value>Intervento</value>
+  </data>
+  <data name="SezioneClienteImpianto" xml:space="preserve">
+    <value>Cliente e impianto</value>
+  </data>
+  <data name="Tipo" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="DataOrario" xml:space="preserve">
+    <value>Data e orario</value>
+  </data>
+  <data name="Tecnico" xml:space="preserve">
+    <value>Tecnico</value>
+  </data>
+  <data name="Esito" xml:space="preserve">
+    <value>Esito</value>
+  </data>
+  <data name="ChiusoIl" xml:space="preserve">
+    <value>Chiuso il</value>
+  </data>
+  <data name="Cliente" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="Indirizzo" xml:space="preserve">
+    <value>Indirizzo</value>
+  </data>
+  <data name="Impianto" xml:space="preserve">
+    <value>Impianto</value>
+  </data>
+  <data name="Generatore" xml:space="preserve">
+    <value>Generatore</value>
+  </data>
+  <data name="TuttoLImpianto" xml:space="preserve">
+    <value>Tutto l'impianto</value>
+  </data>
+  <data name="Richiesta" xml:space="preserve">
+    <value>Richiesta</value>
+  </data>
+  <data name="LavoroSvolto" xml:space="preserve">
+    <value>Lavoro svolto</value>
+  </data>
+  <data name="MaterialiOre" xml:space="preserve">
+    <value>Materiali e ore</value>
+  </data>
+  <data name="NessunaRiga" xml:space="preserve">
+    <value>Nessun materiale e nessuna ora registrati.</value>
+  </data>
+  <data name="ColDescrizione" xml:space="preserve">
+    <value>Descrizione</value>
+  </data>
+  <data name="ColQuantita" xml:space="preserve">
+    <value>Quantità</value>
+  </data>
+  <data name="ColPrezzo" xml:space="preserve">
+    <value>Prezzo</value>
+  </data>
+  <data name="ColSconto" xml:space="preserve">
+    <value>Sconto</value>
+  </data>
+  <data name="ColIva" xml:space="preserve">
+    <value>IVA</value>
+  </data>
+  <data name="ColImporto" xml:space="preserve">
+    <value>Importo</value>
+  </data>
+  <data name="Imponibile" xml:space="preserve">
+    <value>Imponibile</value>
+  </data>
+  <data name="Iva" xml:space="preserve">
+    <value>IVA</value>
+  </data>
+  <data name="Totale" xml:space="preserve">
+    <value>Totale</value>
+  </data>
+  <data name="IvaNonIndicata" xml:space="preserve">
+    <value>Su alcune righe l'aliquota IVA non è indicata: per quelle righe l'IVA non è calcolata.</value>
+  </data>
+  <data name="FirmaTecnico" xml:space="preserve">
+    <value>Firma del tecnico</value>
+  </data>
+  <data name="FirmaCliente" xml:space="preserve">
+    <value>Firma del cliente</value>
+  </data>
+  <data name="NonIndicato" xml:space="preserve">
+    <value>Non indicato</value>
+  </data>
+  <data name="DaAssegnare" xml:space="preserve">
+    <value>Da assegnare</value>
+  </data>
+  <data name="FinestraStessoGiorno" xml:space="preserve">
+    <value>{0}, dalle {1} alle {2}</value>
+  </data>
+  <data name="Disclaimer" xml:space="preserve">
+    <value>Documento generato dal gestionale come supporto alla compilazione. Verificane i dati prima di firmarlo: la firma e la responsabilità restano a chi lo sottoscrive.</value>
+  </data>
+  <data name="TipoIntervento_manutenzione" xml:space="preserve">
+    <value>Manutenzione</value>
+  </data>
+  <data name="TipoIntervento_riparazione" xml:space="preserve">
+    <value>Riparazione</value>
+  </data>
+  <data name="TipoIntervento_installazione" xml:space="preserve">
+    <value>Installazione</value>
+  </data>
+  <data name="TipoIntervento_sopralluogo" xml:space="preserve">
+    <value>Sopralluogo</value>
+  </data>
+  <data name="TipoIntervento_altro" xml:space="preserve">
+    <value>Altro intervento</value>
+  </data>
+  <data name="EsitoIntervento_risolto" xml:space="preserve">
+    <value>Risolto</value>
+  </data>
+  <data name="EsitoIntervento_da_completare" xml:space="preserve">
+    <value>Da completare</value>
+  </data>
+  <data name="EsitoIntervento_non_risolto" xml:space="preserve">
+    <value>Non risolto</value>
+  </data>
+</root>
