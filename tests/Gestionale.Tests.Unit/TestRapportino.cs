@@ -72,7 +72,8 @@ public sealed class TestRapportino
         Assert.Contains("15,18", testo, StringComparison.Ordinal);
         Assert.Contains("84,16", testo, StringComparison.Ordinal);
         Assert.Contains("Firma del cliente", testo, StringComparison.Ordinal);
-        Assert.Contains("la firma e la responsabilità restano", testo, StringComparison.Ordinal);
+        // Nel piè di pagina il carattere è piccolo e PdfPig separa le parole a modo suo: si confronta senza spazi.
+        Assert.Contains("lafirmaelaresponsabilitàrestano", SenzaSpazi(testo), StringComparison.Ordinal);
         Assert.Contains("1 / 1", testo, StringComparison.Ordinal);
     }
 
@@ -140,6 +141,8 @@ public sealed class TestRapportino
         pagine = documento.NumberOfPages;
         return string.Join(" ", documento.GetPages().Select(p => string.Join(" ", p.GetWords().Select(w => w.Text))));
     }
+
+    private static string SenzaSpazi(string testo) => string.Concat(testo.Where(c => !char.IsWhiteSpace(c)));
 
     private static void Salva(byte[] pdf, string nome)
     {
