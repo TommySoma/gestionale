@@ -232,6 +232,57 @@ public sealed class ClientApi : IDisposable
     public Task<Risposta<object>> EliminaRiferimentoCatastoAsync(Guid impiantoId, Guid riferimentoId, int versione, CancellationToken ct = default) =>
         AutenticataAsync<object>(HttpMethod.Delete, $"api/impianti/{impiantoId}/riferimenti-catasto/{riferimentoId}?versione={versione}", null, ct);
 
+    // --- Interventi --------------------------------------------------------
+
+    /// <summary>Con da e a è il calendario: gli interventi la cui finestra tocca l'intervallo.</summary>
+    public Task<Risposta<Pagina<RiepilogoIntervento>>> CercaInterventiAsync(
+        DateTimeOffset? da, DateTimeOffset? a, Guid? impiantoId, string? stato, int pagina, int dimensione, CancellationToken ct = default)
+    {
+        var query = $"api/interventi?pagina={pagina}&dimensione={dimensione}";
+        if (da is { } inizio)
+        {
+            query += "&da=" + Uri.EscapeDataString(inizio.ToString("o", System.Globalization.CultureInfo.InvariantCulture));
+        }
+
+        if (a is { } fine)
+        {
+            query += "&a=" + Uri.EscapeDataString(fine.ToString("o", System.Globalization.CultureInfo.InvariantCulture));
+        }
+
+        if (impiantoId is { } impianto)
+        {
+            query += "&impianto=" + impianto;
+        }
+
+        if (!string.IsNullOrWhiteSpace(stato))
+        {
+            query += "&stato=" + Uri.EscapeDataString(stato);
+        }
+
+        return AutenticataAsync<Pagina<RiepilogoIntervento>>(HttpMethod.Get, query, null, ct);
+    }
+
+    public Task<Risposta<Intervento>> InterventoAsync(Guid interventoId, CancellationToken ct = default) =>
+        AutenticataAsync<Intervento>(HttpMethod.Get, $"api/interventi/{interventoId}", null, ct);
+
+    public Task<Risposta<IReadOnlyList<TecnicoAssegnabile>>> TecniciAsync(CancellationToken ct = default) =>
+        AutenticataAsync<IReadOnlyList<TecnicoAssegnabile>>(HttpMethod.Get, "api/interventi/tecnici", null, ct);
+
+    public Task<Risposta<EsitoScritturaIntervento>> CreaInterventoAsync(DatiIntervento dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaIntervento>(HttpMethod.Post, "api/interventi", dati, ct);
+
+    public Task<Risposta<EsitoScritturaIntervento>> AggiornaInterventoAsync(Guid interventoId, DatiIntervento dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaIntervento>(HttpMethod.Put, $"api/interventi/{interventoId}", dati, ct);
+
+    public Task<Risposta<EsitoScritturaIntervento>> AvviaInterventoAsync(Guid interventoId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaIntervento>(HttpMethod.Post, $"api/interventi/{interventoId}/avvio", new { versione }, ct);
+
+    public Task<Risposta<EsitoScritturaIntervento>> ChiudiInterventoAsync(Guid interventoId, DatiChiusura dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaIntervento>(HttpMethod.Post, $"api/interventi/{interventoId}/chiusura", dati, ct);
+
+    public Task<Risposta<EsitoScritturaIntervento>> AnnullaInterventoAsync(Guid interventoId, int versione, string motivo, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaIntervento>(HttpMethod.Post, $"api/interventi/{interventoId}/annullamento", new { versione, motivo }, ct);
+
     public void Dispose()
     {
         _http?.Dispose();

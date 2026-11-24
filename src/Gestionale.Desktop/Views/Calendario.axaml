@@ -1,0 +1,127 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.CalendarioView"
+             x:DataType="vm:CalendarioViewModel">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="16" Margin="0,0,0,16">
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Classes="primario" VerticalAlignment="Top" IsVisible="{Binding PuoPianificare}"
+                Content="{x:Static r:Testi.NuovoIntervento}" Command="{Binding NuovoInterventoCommand}" />
+        <StackPanel>
+          <TextBlock Classes="titolo2" Text="{x:Static r:Testi.CalendarioTitolo}" />
+          <TextBlock Classes="secondario" FontSize="14" Margin="0,4,0,0" Text="{Binding Periodo}" />
+        </StackPanel>
+      </DockPanel>
+
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <ToggleButton Classes="filtro" Content="{x:Static r:Testi.VistaSettimana}" IsChecked="{Binding VistaSettimana}" />
+          <ToggleButton Classes="filtro" Content="{x:Static r:Testi.VistaGiorno}" IsChecked="{Binding VistaGiorno}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Classes="secondario" Content="{x:Static r:Testi.Precedente}" Command="{Binding PrecedenteCommand}" />
+          <Button Classes="secondario" Content="{x:Static r:Testi.Oggi}" Command="{Binding OggiCommand}" />
+          <Button Classes="secondario" Content="{x:Static r:Testi.Successiva}" Command="{Binding SuccessivoCommand}" />
+        </StackPanel>
+      </DockPanel>
+
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" />
+      </Border>
+    </StackPanel>
+
+    <!-- Da pianificare: solo per chi pianifica. -->
+    <Border DockPanel.Dock="Right" Classes="scheda" Width="240" Margin="16,0,0,0" VerticalAlignment="Top" IsVisible="{Binding PuoPianificare}">
+      <StackPanel>
+        <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.DaPianificare}" Margin="20,12" />
+        <Border Height="1" Background="{DynamicResource Divisore}" />
+        <TextBlock Classes="secondario" FontSize="14" Margin="20,16" TextWrapping="Wrap" IsVisible="{Binding SenzaDaPianificare}" Text="{x:Static r:Testi.NienteDaPianificare}" />
+        <ItemsControl ItemsSource="{Binding DaPianificare}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:VoceDaPianificare">
+              <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="20,10" MinHeight="44"
+                      Command="{Binding $parent[UserControl].((vm:CalendarioViewModel)DataContext).ApriCommand}" CommandParameter="{Binding Id}">
+                <StackPanel Spacing="2">
+                  <TextBlock Text="{Binding Cliente}" FontWeight="SemiBold" Foreground="{DynamicResource Accento}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Classes="secondario" FontSize="13" TextTrimming="CharacterEllipsis" Text="{Binding Dettaglio}" />
+                </StackPanel>
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+
+    <Border Classes="scheda">
+      <DockPanel>
+        <!-- Intestazione: una colonna per giorno. -->
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="140,*">
+          <TextBlock Grid.Column="0" Classes="secondario" FontSize="12" FontWeight="SemiBold" Margin="16,12" Text="{x:Static r:Testi.Tecnico}" />
+          <ItemsControl Grid.Column="1" ItemsSource="{Binding Giorni}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <UniformGrid Rows="1" Columns="{Binding $parent[UserControl].((vm:CalendarioViewModel)DataContext).NumeroGiorni}" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:IntestazioneGiorno">
+                <Border Classes="giorno" Classes.oggi="{Binding Oggi}" Padding="8,12">
+                  <TextBlock Text="{Binding Nome}" FontSize="12" FontWeight="SemiBold" />
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Grid>
+        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource Bordo}" />
+        <Panel>
+          <TextBlock Classes="secondario" FontSize="14" Margin="16,24" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"
+                     IsVisible="{Binding SenzaTecnici}" Text="{x:Static r:Testi.CalendarioSenzaTecnici}" />
+          <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding Righe}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:RigaCalendario">
+                  <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1">
+                    <Grid ColumnDefinitions="140,*" MinHeight="96">
+                      <TextBlock Grid.Column="0" Text="{Binding Tecnico}" FontWeight="SemiBold" Margin="16,12" TextWrapping="Wrap" />
+                      <ItemsControl Grid.Column="1" ItemsSource="{Binding Celle}">
+                        <ItemsControl.ItemsPanel>
+                          <ItemsPanelTemplate>
+                            <UniformGrid Rows="1" Columns="{Binding $parent[UserControl].((vm:CalendarioViewModel)DataContext).NumeroGiorni}" />
+                          </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate x:DataType="vm:CellaCalendario">
+                            <Border Classes="cella" Classes.oggi="{Binding Oggi}" Padding="3">
+                              <ItemsControl ItemsSource="{Binding Interventi}">
+                                <ItemsControl.ItemTemplate>
+                                  <DataTemplate x:DataType="vm:VoceCalendario">
+                                    <Button Classes="voceCalendario" Classes.inCorso="{Binding InCorso}" Classes.completato="{Binding Completato}"
+                                            Margin="0,0,0,4" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                            Command="{Binding $parent[UserControl].((vm:CalendarioViewModel)DataContext).ApriCommand}" CommandParameter="{Binding Id}">
+                                      <StackPanel Spacing="1">
+                                        <TextBlock Text="{Binding Orario}" FontSize="12" FontWeight="SemiBold" TextWrapping="NoWrap" />
+                                        <TextBlock Text="{Binding Cliente}" FontSize="13" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Classes="secondario" Text="{Binding Dettaglio}" FontSize="12" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Classes="secondario" Text="{Binding Stato}" FontSize="12" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+                                      </StackPanel>
+                                    </Button>
+                                  </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                              </ItemsControl>
+                            </Border>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </Panel>
+      </DockPanel>
+    </Border>
+  </DockPanel>
+</UserControl>

@@ -154,5 +154,98 @@ public sealed record DatiRiferimentoCatasto(string Regione, string Codice, DateO
 /// <summary>Le scritture sugli impianti possono riuscire con avvisi: doppioni sospetti da controllare.</summary>
 public sealed record EsitoScritturaImpianto(Guid Id, int Versione, IReadOnlyList<string> Avvisi);
 
+// --- Interventi ---------------------------------------------------------
+// Inizio, fine e date di chiusura arrivano in UTC: il client le mostra nel fuso italiano.
+
+public sealed record RiepilogoIntervento(
+    Guid InterventoId,
+    int Anno,
+    int Numero,
+    string Tipo,
+    string Stato,
+    string? Esito,
+    DateTime? Inizio,
+    DateTime? Fine,
+    Guid? TecnicoUtenteId,
+    string? Tecnico,
+    Guid ImpiantoId,
+    string TipoImpianto,
+    string Cliente,
+    string Indirizzo,
+    string? Civico,
+    string Comune,
+    string Provincia,
+    string? Descrizione,
+    int Versione);
+
+public sealed record RigaIntervento(
+    int Posizione,
+    string Tipo,
+    string? Codice,
+    string Descrizione,
+    string Unita,
+    decimal Quantita,
+    decimal PrezzoUnitario,
+    decimal ScontoPercentuale,
+    decimal? AliquotaIva,
+    decimal Importo);
+
+public sealed record Intervento(
+    Guid InterventoId,
+    int Anno,
+    int Numero,
+    string Tipo,
+    string Stato,
+    string? Esito,
+    DateTime? Inizio,
+    DateTime? Fine,
+    Guid? TecnicoUtenteId,
+    string? Tecnico,
+    Guid ImpiantoId,
+    string TipoImpianto,
+    Guid? GeneratoreId,
+    string? Generatore,
+    Guid ClienteId,
+    string Cliente,
+    string Indirizzo,
+    string? Civico,
+    string Cap,
+    string Comune,
+    string Provincia,
+    string? Descrizione,
+    string? NoteChiusura,
+    DateTime? ChiusoIl,
+    DateTime? AnnullatoIl,
+    string? MotivoAnnullamento,
+    int Versione,
+    IReadOnlyList<RigaIntervento> Righe,
+    decimal Totale);
+
+public sealed record TecnicoAssegnabile(Guid UtenteId, string Nome);
+
+public sealed record DatiIntervento(
+    Guid ImpiantoId,
+    Guid? GeneratoreId,
+    string Tipo,
+    string? Descrizione,
+    DateTimeOffset? Inizio,
+    DateTimeOffset? Fine,
+    Guid? TecnicoUtenteId,
+    int? Versione);
+
+public sealed record DatiRiga(
+    string Tipo,
+    string? Codice,
+    string Descrizione,
+    string Unita,
+    decimal Quantita,
+    decimal? PrezzoUnitario,
+    decimal? ScontoPercentuale,
+    decimal? AliquotaIva);
+
+public sealed record DatiChiusura(int Versione, string Esito, string? Note, IReadOnlyList<DatiRiga> Righe);
+
+public sealed record EsitoScritturaIntervento(Guid Id, int Versione, int Anno, int Numero);
+
 /// <summary>Risposta di errore dell'API (RFC 9457): il campo detail è già un messaggio per l'utente.</summary>
 internal sealed record ProblemaApi(string? Title, string? Detail, int? Status);
