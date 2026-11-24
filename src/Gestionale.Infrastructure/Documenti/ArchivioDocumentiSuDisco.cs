@@ -35,6 +35,7 @@ public sealed class ArchivioDocumentiSuDisco : IArchivioDocumenti
         long totale = 0;
         var buffer = new byte[Blocco];
 
+        var troppoGrande = false;
         try
         {
             await using (var destinazione = new FileStream(temporaneo, FileMode.CreateNew, FileAccess.Write, FileShare.None, Blocco, useAsync: true))
@@ -45,8 +46,8 @@ public sealed class ArchivioDocumentiSuDisco : IArchivioDocumenti
                     totale += letti;
                     if (totale > massimo)
                     {
-                        File.Delete(temporaneo);
-                        return null;
+                        troppoGrande = true;
+                        break;
                     }
 
                     if (inizio.Count < Domain.Documenti.RegoleDocumenti.ByteFirma)
@@ -57,6 +58,13 @@ public sealed class ArchivioDocumentiSuDisco : IArchivioDocumenti
                     impronta.AppendData(buffer, 0, letti);
                     await destinazione.WriteAsync(buffer.AsMemory(0, letti), ct);
                 }
+            }
+
+            // Il file temporaneo si cancella solo dopo averlo chiuso: su Windows un file aperto non si cancella.
+            if (troppoGrande)
+            {
+                File.Delete(temporaneo);
+                return null;
             }
 
             File.Move(temporaneo, finale);
