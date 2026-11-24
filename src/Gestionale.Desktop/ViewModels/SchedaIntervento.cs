@@ -127,6 +127,7 @@ public partial class SchedaInterventoViewModel(ShellViewModel shell, Guid interv
 
         Totale = FormatoInterventi.Importo(intervento.Totale);
         OnPropertyChanged(nameof(SenzaRighe));
+        OnPropertyChanged(nameof(PuoScaricareRapportino));
 
         var aperto = intervento.Stato is "da_pianificare" or "pianificato" or "in_corso";
         PuoPianificare = aperto && shell.PianificaInterventi;
@@ -134,6 +135,29 @@ public partial class SchedaInterventoViewModel(ShellViewModel shell, Guid interv
         PuoAvviare = intervento.Stato == "pianificato" && shell.ScriveInterventi;
         PuoChiudere = intervento.Stato is "pianificato" or "in_corso" && shell.ScriveInterventi;
     }
+
+    /// <summary>Il rapportino si scarica solo da completato; il salvataggio su disco lo fa la vista.</summary>
+    public bool PuoScaricareRapportino => Chiuso;
+
+    /// <summary>Nome proposto per il file, come lo suggerisce anche il server.</summary>
+    public string NomeRapportino => _intervento is { } i ? $"rapportino-{i.Anno}-{i.Numero:D4}.pdf" : "rapportino.pdf";
+
+    /// <summary>Scarica il PDF; in caso di errore mostra il messaggio e restituisce null.</summary>
+    public async Task<byte[]?> RapportinoAsync()
+    {
+        var risposta = await shell.Api.RapportinoAsync(interventoId);
+        Errore = risposta.Valore is null ? risposta.Messaggio : null;
+        return risposta.Valore;
+    }
+
+    public void SegnalaRapportinoSalvato(string percorso) =>
+        Avviso = string.Format(CultureInfo.CurrentCulture, Testi.RapportinoSalvato, percorso);
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HaAvviso))]
+    public partial string? Avviso { get; set; }
+
+    public bool HaAvviso => !string.IsNullOrEmpty(Avviso);
 
     [RelayCommand]
     private Task IndietroAsync() => indietro?.Invoke() ?? shell.ApriCalendarioAsync(Giorno());
