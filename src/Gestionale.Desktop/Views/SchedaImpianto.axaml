@@ -89,6 +89,43 @@
             </StackPanel>
           </Border>
 
+          <!-- Foto e documenti -->
+          <Border Classes="scheda" IsVisible="{Binding VedeDocumenti}">
+            <StackPanel>
+              <DockPanel Margin="20,12">
+                <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.CaricaDocumento}" IsVisible="{Binding CaricaDocumenti}" Click="Carica_Click" />
+                <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.FotoEDocumenti}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Border Height="1" Background="{DynamicResource Divisore}" />
+              <Border Classes="avvisoSuccesso" Margin="20,12,20,0" IsVisible="{Binding HaAvviso}">
+                <TextBlock Text="{Binding Avviso}" TextWrapping="Wrap" />
+              </Border>
+              <TextBlock Classes="secondario" FontSize="14" Margin="20,16" TextWrapping="Wrap" IsVisible="{Binding SenzaDocumenti}" Text="{x:Static r:Testi.NessunDocumento}" />
+              <ItemsControl ItemsSource="{Binding Documenti}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:RigaDocumento">
+                    <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="20,12">
+                      <DockPanel>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                          <Button Classes="collegamento" Content="{x:Static r:Testi.Apri}" Click="Apri_Click" />
+                          <Button Classes="collegamento" Content="{x:Static r:Testi.SalvaCopia}" Click="Salva_Click" />
+                          <Button Classes="collegamento" Foreground="{DynamicResource Errore}" Content="{x:Static r:Testi.Elimina}"
+                                  IsVisible="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).EliminaDocumenti}"
+                                  Command="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).EliminaDocumentoCommand}" CommandParameter="{Binding}" />
+                        </StackPanel>
+                        <Path DockPanel.Dock="Left" Classes="icona" Data="{StaticResource IconaDocumento}" Width="20" Height="20" Margin="0,0,12,0" VerticalAlignment="Center" />
+                        <StackPanel Spacing="2">
+                          <TextBlock Text="{Binding Nome}" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                          <TextBlock Classes="secondario" FontSize="13" Text="{Binding Dettaglio}" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                      </DockPanel>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
           <!-- Interventi, dal più recente -->
           <Border Classes="scheda" IsVisible="{Binding VedeInterventi}">
             <StackPanel>

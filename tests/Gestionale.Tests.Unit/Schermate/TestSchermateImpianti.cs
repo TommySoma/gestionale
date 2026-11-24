@@ -58,6 +58,28 @@ public sealed class TestSchermateImpianti
     });
 
     [Fact]
+    public Task Scheda_impianto_con_foto_e_documenti() => Schermate.Esegui(async () =>
+    {
+        var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);
+
+        await shell.ApriImpiantoAsync(DatiFittizi.Caldaia);
+        Schermate.Attendi();
+        var testi = Schermate.Salva(finestra, "15-scheda-impianto-documenti");
+
+        var scheda = Assert.IsType<SchedaImpiantoViewModel>(shell.Contenuto);
+        Assert.Equal(2, scheda.Documenti.Count);
+        Assert.True(scheda.Documenti[0].Foto);
+        Assert.Contains("caldaia-frontale.jpg — Vista frontale", testi);
+        Assert.Contains("Foto · 2,3 MB · 11 gennaio 2027, 10:10 · Marco Bianchi", testi);
+        Assert.Contains(Testi.CaricaDocumento, testi);
+        Assert.True(scheda.EliminaDocumenti);
+
+        // Un file oltre i 20 MB non parte: il messaggio arriva subito.
+        await scheda.CaricaDocumentoAsync(new byte[SchedaImpiantoViewModel.DimensioneMassimaDocumento + 1], "enorme.pdf");
+        Assert.Contains("enorme.pdf", scheda.Errore, StringComparison.Ordinal);
+    });
+
+    [Fact]
     public Task Dialogo_di_modifica_dell_impianto() => Schermate.Esegui(async () =>
     {
         var (shell, finestra) = await Schermate.ApriAsync(Schermate.ResponsabileTecnico);

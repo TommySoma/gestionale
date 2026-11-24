@@ -96,6 +96,8 @@ internal static class Schermate
         new("impianti.lettura", "tutti"),
         new("impianti.scrittura", "tutti"),
         new("interventi.lettura", "tutti"),
+        new("documenti.lettura", "tutti"),
+        new("documenti.scrittura", "tutti"),
         new("interventi.scrittura", "tutti"),
     ];
 

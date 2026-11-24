@@ -247,5 +247,21 @@ public sealed record DatiChiusura(int Versione, string Esito, string? Note, IRea
 
 public sealed record EsitoScritturaIntervento(Guid Id, int Versione, int Anno, int Numero);
 
+// --- Documenti ----------------------------------------------------------
+
+public sealed record Documento(
+    Guid DocumentoId,
+    string Categoria,
+    string NomeOriginale,
+    string TipoMime,
+    long Dimensione,
+    string? Descrizione,
+    DateTime CreatoIl,
+    string? CreatoDa,
+    int Versione);
+
+/// <summary>File da caricare: il client lo invia come modulo multipart, ricostruito a ogni tentativo.</summary>
+public sealed record ModuloFile(byte[] Dati, string Nome, string? Descrizione);
+
 /// <summary>Risposta di errore dell'API (RFC 9457): il campo detail è già un messaggio per l'utente.</summary>
 internal sealed record ProblemaApi(string? Title, string? Detail, int? Status);
