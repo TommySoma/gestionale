@@ -72,8 +72,10 @@ public sealed class TestRapportino
         Assert.Contains("15,18", testo, StringComparison.Ordinal);
         Assert.Contains("84,16", testo, StringComparison.Ordinal);
         Assert.Contains("Firma del cliente", testo, StringComparison.Ordinal);
-        // Nel piè di pagina il carattere è piccolo e PdfPig separa le parole a modo suo: si confronta senza spazi.
-        Assert.Contains("lafirmaelaresponsabilitàrestano", SenzaSpazi(testo), StringComparison.Ordinal);
+        // Nel piè di pagina il numero di pagina sta sulla prima riga, e PdfPig lo legge in mezzo alla frase:
+        // si cercano i due pezzi, senza spazi.
+        Assert.Contains("lafirmaela", SenzaSpazi(testo), StringComparison.Ordinal);
+        Assert.Contains("responsabilitàrestanoachilosottoscrive", SenzaSpazi(testo), StringComparison.Ordinal);
         Assert.Contains("1 / 1", testo, StringComparison.Ordinal);
     }
 
