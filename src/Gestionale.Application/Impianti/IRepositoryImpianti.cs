@@ -10,6 +10,9 @@ public interface IRepositoryImpianti
 
     Task<Impianto?> ImpiantoAsync(Contesto contesto, Guid impiantoId, CancellationToken ct);
 
+    /// <summary>Vero se l'utente del contesto ha un intervento non annullato sull'impianto.</summary>
+    Task<bool> AssegnatoAsync(Contesto contesto, Guid impiantoId, CancellationToken ct);
+
     Task<VociImpianti> VociAsync(Contesto contesto, CancellationToken ct);
 
     Task<EsitoImpianto> CreaAsync(Contesto contesto, DatiImpianto dati, CancellationToken ct);

@@ -255,7 +255,7 @@ public sealed class TestImpianti(ApiFixture api) : IClassFixture<ApiFixture>
             Assert.Equal(HttpStatusCode.Created, (await client.PostAsJsonAsync("/api/impianti", nuovo, Ct)).StatusCode);
         }
 
-        // Tecnico: solo gli impianti dei propri interventi, che arrivano nella prossima parte di M2.
+        // Tecnico senza interventi assegnati: nessun impianto (con un intervento, vedi TestInterventi).
         var tecnico = await api.CreaUtenteAsync("tecnico.impianti@alfa.example", PasswordProva, "tecnico");
         using (var client = api.Client(await api.TokenAsync(tecnico, PasswordProva)))
         {

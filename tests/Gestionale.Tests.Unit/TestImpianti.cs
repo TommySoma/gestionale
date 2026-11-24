@@ -101,14 +101,21 @@ public sealed class TestServizioImpianti
     private static readonly Contesto s_contesto = new(Guid.CreateVersion7(), Guid.CreateVersion7());
 
     [Fact]
-    public async Task Con_l_ambito_propri_il_tecnico_non_vede_e_non_crea_impianti()
+    public async Task Con_l_ambito_propri_il_tecnico_vede_solo_gli_impianti_assegnati_e_non_ne_crea()
     {
         var repository = new RepositoryCheFallisce();
         var servizio = new ServizioImpianti(repository);
         var ct = TestContext.Current.CancellationToken;
 
         var pagina = await servizio.CercaAsync(s_contesto, AmbitoPermesso.Propri, new FiltroImpianti("x", null, null), 0, 1000, ct);
-        Assert.Equal((0, 1, ServizioImpianti.DimensioneMassimaPagina), (pagina.Totale, pagina.NumeroPagina, pagina.Dimensione));
+        Assert.Equal((1, ServizioImpianti.DimensioneMassimaPagina), (pagina.NumeroPagina, pagina.Dimensione));
+        Assert.Equal(s_contesto.UtenteId, repository.UltimoFiltro?.TecnicoUtenteId);
+
+        // Chi ha l'ambito su tutto non viene filtrato per tecnico.
+        await servizio.CercaAsync(s_contesto, AmbitoPermesso.Tutti, new FiltroImpianti(null, null, null, Guid.NewGuid()), 1, 10, ct);
+        Assert.Null(repository.UltimoFiltro?.TecnicoUtenteId);
+
+        // Nessun intervento assegnato su questo impianto: per il Tecnico non esiste.
         Assert.Null(await servizio.ImpiantoAsync(s_contesto, AmbitoPermesso.Propri, Guid.NewGuid(), ct));
 
         var dati = new DatiImpianto(Guid.NewGuid(), Guid.NewGuid(), null, null, null, null, null, null, null, null, null);
@@ -128,10 +135,21 @@ public sealed class TestServizioImpianti
         Assert.IsType<EsitoImpianto.NonValida>(esito);
     }
 
-    /// <summary>Ogni chiamata al database fa fallire il test: qui non deve arrivarne nessuna.</summary>
+    /// <summary>
+    /// Ogni scrittura o lettura di dettaglio fa fallire il test. La ricerca registra il
+    /// filtro ricevuto e nessun impianto risulta assegnato all'utente.
+    /// </summary>
     private sealed class RepositoryCheFallisce : IRepositoryImpianti
     {
-        public Task<Pagina<RiepilogoImpianto>> CercaAsync(Contesto contesto, FiltroImpianti filtro, int numeroPagina, int dimensione, CancellationToken ct) => Fallisci<Pagina<RiepilogoImpianto>>();
+        public FiltroImpianti? UltimoFiltro { get; private set; }
+
+        public Task<Pagina<RiepilogoImpianto>> CercaAsync(Contesto contesto, FiltroImpianti filtro, int numeroPagina, int dimensione, CancellationToken ct)
+        {
+            UltimoFiltro = filtro;
+            return Task.FromResult(new Pagina<RiepilogoImpianto>([], 0, numeroPagina, dimensione));
+        }
+
+        public Task<bool> AssegnatoAsync(Contesto contesto, Guid impiantoId, CancellationToken ct) => Task.FromResult(false);
 
         public Task<Impianto?> ImpiantoAsync(Contesto contesto, Guid impiantoId, CancellationToken ct) => Fallisci<Impianto?>();
 
