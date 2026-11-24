@@ -46,6 +46,52 @@ public sealed class TestDatabase(DatabaseFixture db) : IClassFixture<DatabaseFix
         Assert.Equal("app_owner", proprietario);
     }
 
+    // pgTAP gira in una sola sessione: la concorrenza vera si prova da qui, con
+    // transazioni parallele, alcune annullate. I numeri confermati devono essere
+    // 1..n senza buchi, perché chi annulla restituisce il numero a chi aspetta.
+    [Fact]
+    public async Task La_numerazione_sotto_concorrenza_non_lascia_buchi()
+    {
+        var annulla = TestContext.Current.CancellationToken;
+        var aziendaId = Guid.CreateVersion7();
+        await using (var connessione = new NpgsqlConnection(db.StringaConnessioneOwner))
+        {
+            await connessione.OpenAsync(annulla);
+            await using var comando = new NpgsqlCommand(
+                "INSERT INTO sec.aziende (azienda_id, ragione_sociale, regione) VALUES (@id, 'Prova concorrenza (fittizia)', 'toscana')",
+                connessione);
+            comando.Parameters.AddWithValue("id", aziendaId);
+            await comando.ExecuteNonQueryAsync(annulla);
+        }
+
+        var esiti = await Task.WhenAll(Enumerable.Range(1, 12).Select(async i =>
+        {
+            await using var connessione = new NpgsqlConnection(db.StringaConnessioneOwner);
+            await connessione.OpenAsync(annulla);
+            await using var transazione = await connessione.BeginTransactionAsync(annulla);
+            await using var comando = new NpgsqlCommand(
+                "SELECT commerciale.prossimo_numero(@azienda, 'preventivo', 2026)", connessione, transazione);
+            comando.Parameters.AddWithValue("azienda", aziendaId);
+            var numero = (int)(await comando.ExecuteScalarAsync(annulla))!;
+            await Task.Delay(50, annulla);
+
+            var conferma = i % 4 != 0;
+            if (conferma)
+            {
+                await transazione.CommitAsync(annulla);
+            }
+            else
+            {
+                await transazione.RollbackAsync(annulla);
+            }
+
+            return (numero, conferma);
+        }));
+
+        var confermati = esiti.Where(e => e.conferma).Select(e => e.numero).Order().ToArray();
+        Assert.Equal(Enumerable.Range(1, 9), confermati);
+    }
+
     [Fact]
     public async Task App_api_senza_azienda_impostata_non_vede_utenti()
     {
