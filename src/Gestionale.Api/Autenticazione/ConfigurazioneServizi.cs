@@ -2,6 +2,7 @@ using System.Threading.RateLimiting;
 using Gestionale.Api.Risorse;
 using Gestionale.Application.Anagrafica;
 using Gestionale.Application.Autenticazione;
+using Gestionale.Application.Documenti;
 using Gestionale.Application.Impianti;
 using Gestionale.Application.Interventi;
 using Gestionale.Infrastructure.Accessi;
@@ -55,6 +56,13 @@ internal static class ConfigurazioneServizi
         servizi.AddSingleton<ServizioImpianti>();
         servizi.AddSingleton<IRepositoryInterventi, RepositoryInterventi>();
         servizi.AddSingleton<IGeneratoreRapportino, GeneratoreRapportino>();
+        // File caricati: una cartella del server (un volume in produzione). Senza configurazione, dati/documenti accanto all'API.
+        var cartellaDocumenti = builder.Configuration["Documenti:Cartella"] is { Length: > 0 } cartella
+            ? cartella
+            : Path.Combine(builder.Environment.ContentRootPath, "dati", "documenti");
+        servizi.AddSingleton<IArchivioDocumenti>(new ArchivioDocumentiSuDisco(cartellaDocumenti));
+        servizi.AddSingleton<IRepositoryDocumenti, RepositoryDocumenti>();
+        servizi.AddSingleton<ServizioDocumenti>();
         servizi.AddSingleton<ServizioInterventi>();
 
         servizi.AddProblemDetails();

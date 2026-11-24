@@ -306,4 +306,25 @@
   <data name="RapportinoSoloCompletati" xml:space="preserve">
     <value>Il rapportino si genera solo per un intervento completato: questo è {0}.</value>
   </data>
+  <data name="DocumentoNonTrovato" xml:space="preserve">
+    <value>Il documento o l'impianto richiesto non esiste, è stato eliminato o non è tra i tuoi.</value>
+  </data>
+  <data name="FileMancante" xml:space="preserve">
+    <value>Allega il file nel campo «file» della richiesta.</value>
+  </data>
+  <data name="DocumentoFileVuoto" xml:space="preserve">
+    <value>Il file è vuoto.</value>
+  </data>
+  <data name="DocumentoFileTroppoGrande" xml:space="preserve">
+    <value>Il file supera i 20 MB ammessi. Riduci la foto o dividi il PDF.</value>
+  </data>
+  <data name="DocumentoTipoNonAmmesso" xml:space="preserve">
+    <value>Si possono caricare solo foto JPEG o PNG e documenti PDF.</value>
+  </data>
+  <data name="DocumentoDescrizioneTroppoLunga" xml:space="preserve">
+    <value>La descrizione può avere al massimo 500 caratteri.</value>
+  </data>
+  <data name="EliminazioneDocumentoVietata" xml:space="preserve">
+    <value>Puoi caricare foto e documenti sugli impianti dei tuoi interventi, ma eliminarli spetta all'ufficio.</value>
+  </data>
 </root>

@@ -38,6 +38,8 @@ public sealed class ApiFixture : IAsyncLifetime
             // Parametri leggeri per non rallentare i test; in produzione valgono i minimi OWASP.
             b.UseSetting("Argon2:MemoriaKiB", "8192");
             b.UseSetting("Argon2:Iterazioni", "1");
+            // I file caricati finiscono in una cartella temporanea, cancellata a fine test.
+            b.UseSetting("Documenti:Cartella", CartellaDocumenti);
         });
 
         using var client = Client();
@@ -60,6 +62,8 @@ public sealed class ApiFixture : IAsyncLifetime
 
     /// <summary>Per i controlli diretti sul database, senza Row-Level Security.</summary>
     public string StringaConnessioneOwner => _database.StringaConnessioneOwner;
+
+    public string CartellaDocumenti { get; } = Path.Combine(Path.GetTempPath(), "gestionale-documenti-" + Guid.NewGuid().ToString("N"));
 
     public HttpClient Client(string? tokenAccesso = null)
     {
@@ -137,5 +141,10 @@ public sealed class ApiFixture : IAsyncLifetime
 
         await _database.DisposeAsync();
         _accessi.Dispose();
+
+        if (Directory.Exists(CartellaDocumenti))
+        {
+            Directory.Delete(CartellaDocumenti, recursive: true);
+        }
     }
 }

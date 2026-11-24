@@ -119,7 +119,7 @@ Legenda: **L** = lettura, **S** = scrittura (crea e modifica), **F** = firma o v
 | Preventivi | L, S | L, S | L | — | L | — |
 | Listino prezzi | L, S | L, S | L | L | — | — |
 | Report economici | L | L | — | — | L | — |
-| Documenti | L, S | L, S | L, S | L (propri) | L | — |
+| Documenti | L, S | L, S | L, S | L, S (propri: carica, non elimina) | L | — |
 | Chatbot | S | S | S | S | — | — |
 | Utenti e ruoli | L, S | — | — | — | — | L, S |
 | Registro attività (audit) | L | — | — | — | — | L |
@@ -347,6 +347,8 @@ Realizzato in M2 (migrazione 0006): stati `da_pianificare`, `pianificato`, `in_c
 | --- | --- | --- |
 | `documenti` | Nome, tipo MIME, dimensione, SHA-256, percorso su disco, categoria, entità collegata, versione | Collegamento con tipo e id di entità, quindi integrità controllata da funzione; i documenti normativi non si cancellano |
 | `documenti_chunk` | Pagina, testo, vettore di embedding, indice di ricerca testuale | HNSW sul vettore e GIN sul testo, sempre filtrati per azienda; la dimensione del vettore dipende dal modello scelto |
+
+Realizzato in M2 (migrazione 0007, decisioni del 24/11/2026): sugli impianti si caricano solo JPEG, PNG e PDF fino a 20 MB, con il tipo riconosciuto dai primi byte; il file sta sul disco come `<azienda>/<documento>`, senza il nome originale; l'eliminazione è logica e il file resta. Il Tecnico carica sugli impianti dei propri interventi, ma non elimina.
 
 ### Funzioni SQL
 
