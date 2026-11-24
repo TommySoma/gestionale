@@ -216,4 +216,91 @@
   <data name="RegioneGiaRegistrata" xml:space="preserve">
     <value>L'impianto ha già un riferimento al catasto di questa regione: modifica quello esistente.</value>
   </data>
+  <data name="InterventoNonTrovato" xml:space="preserve">
+    <value>L'intervento richiesto non esiste o non è assegnato a te.</value>
+  </data>
+  <data name="InterventoVietato" xml:space="preserve">
+    <value>Puoi avviare e chiudere solo gli interventi assegnati a te: per crearli, pianificarli o annullarli chiedi in ufficio.</value>
+  </data>
+  <data name="TecnicoOccupato" xml:space="preserve">
+    <value>Il tecnico ha già un intervento in questa fascia oraria. Scegli un altro orario o un altro tecnico.</value>
+  </data>
+  <data name="StatoInterventoNonConsentito" xml:space="preserve">
+    <value>Non si può fare con un intervento {0}.</value>
+  </data>
+  <data name="StatoIntervento_da_pianificare" xml:space="preserve">
+    <value>da pianificare</value>
+  </data>
+  <data name="StatoIntervento_pianificato" xml:space="preserve">
+    <value>pianificato</value>
+  </data>
+  <data name="StatoIntervento_in_corso" xml:space="preserve">
+    <value>in corso</value>
+  </data>
+  <data name="StatoIntervento_completato" xml:space="preserve">
+    <value>completato</value>
+  </data>
+  <data name="StatoIntervento_annullato" xml:space="preserve">
+    <value>annullato</value>
+  </data>
+  <data name="DatiInterventoNonValidi" xml:space="preserve">
+    <value>Correggi questi dati dell'intervento: {0}</value>
+  </data>
+  <data name="ImpiantoInterventoNonValido" xml:space="preserve">
+    <value>l'impianto indicato non esiste, è dismesso o è stato eliminato</value>
+  </data>
+  <data name="GeneratoreInterventoNonValido" xml:space="preserve">
+    <value>il generatore indicato non appartiene all'impianto</value>
+  </data>
+  <data name="TipoInterventoNonValido" xml:space="preserve">
+    <value>il tipo deve essere manutenzione, riparazione, installazione, sopralluogo o altro</value>
+  </data>
+  <data name="FinestraIncompleta" xml:space="preserve">
+    <value>indica sia l'inizio sia la fine, oppure nessuno dei due per lasciarlo da pianificare</value>
+  </data>
+  <data name="FinestraNonValida" xml:space="preserve">
+    <value>la fine deve essere dopo l'inizio</value>
+  </data>
+  <data name="FinestraTroppoLunga" xml:space="preserve">
+    <value>un intervento non può durare più di 31 giorni: controlla le date</value>
+  </data>
+  <data name="FinestraSenzaTecnico" xml:space="preserve">
+    <value>per mettere un intervento in calendario serve il tecnico</value>
+  </data>
+  <data name="TecnicoNonValido" xml:space="preserve">
+    <value>il tecnico indicato non è attivo o non può ricevere interventi</value>
+  </data>
+  <data name="EsitoInterventoNonValido" xml:space="preserve">
+    <value>l'esito deve essere risolto, da_completare o non_risolto</value>
+  </data>
+  <data name="MotivoAnnullamentoMancante" xml:space="preserve">
+    <value>per annullare un intervento serve il motivo</value>
+  </data>
+  <data name="TroppeRighe" xml:space="preserve">
+    <value>un intervento può avere al massimo 200 righe</value>
+  </data>
+  <data name="RigaTipoNonValido" xml:space="preserve">
+    <value>ogni riga deve essere materiale o manodopera</value>
+  </data>
+  <data name="RigaDescrizioneMancante" xml:space="preserve">
+    <value>ogni riga deve avere una descrizione</value>
+  </data>
+  <data name="RigaUnitaMancante" xml:space="preserve">
+    <value>ogni riga di materiale deve avere l'unità di misura</value>
+  </data>
+  <data name="RigaQuantitaNonValida" xml:space="preserve">
+    <value>la quantità deve essere maggiore di zero, con al massimo tre decimali</value>
+  </data>
+  <data name="RigaPrezzoNonValido" xml:space="preserve">
+    <value>il prezzo non può essere negativo e ha al massimo due decimali</value>
+  </data>
+  <data name="RigaScontoNonValido" xml:space="preserve">
+    <value>lo sconto deve essere tra 0 e 100 per cento</value>
+  </data>
+  <data name="RigaIvaNonValida" xml:space="preserve">
+    <value>l'aliquota IVA deve essere tra 0 e 100 per cento</value>
+  </data>
+  <data name="ManodoperaNonInOre" xml:space="preserve">
+    <value>la manodopera si indica in ore (unità h)</value>
+  </data>
 </root>

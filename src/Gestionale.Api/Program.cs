@@ -21,6 +21,7 @@ EndpointAutenticazione.Mappa(api);
 EndpointUtenti.Mappa(api);
 EndpointClienti.Mappa(api);
 EndpointImpianti.Mappa(api);
+EndpointInterventi.Mappa(api);
 
 app.Run();
 
