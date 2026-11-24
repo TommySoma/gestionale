@@ -60,10 +60,11 @@ public static class RegoleDocumenti
     {
         var base_ = (nome ?? "").Replace('\\', '/');
         base_ = base_[(base_.LastIndexOf('/') + 1)..];
-        base_ = new string([.. base_.Where(c => !char.IsControl(c) && c is not ('"' or ':' or '*' or '?' or '<' or '>' or '|'))]).Trim().Trim('.');
+        base_ = new string([.. base_.Where(c => !char.IsControl(c) && c is not ('"' or ':' or '*' or '?' or '<' or '>' or '|'))]).Trim();
 
+        // Prima si toglie l'estensione dichiarata, poi spazi e punti rimasti: ".png" non diventa "png".
         var estensione = Estensione(tipoMime);
-        var senzaEstensione = Path.GetFileNameWithoutExtension(base_);
+        var senzaEstensione = Path.GetFileNameWithoutExtension(base_).Trim().Trim('.').Trim();
         if (string.IsNullOrWhiteSpace(senzaEstensione))
         {
             senzaEstensione = Categoria(tipoMime);
