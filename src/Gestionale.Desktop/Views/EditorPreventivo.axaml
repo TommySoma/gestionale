@@ -1,0 +1,161 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:s="using:Gestionale.Desktop.Servizi"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.EditorPreventivoView"
+             x:DataType="vm:EditorPreventivoViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <TextBlock Text="{Binding Titolo}" FontSize="20" FontWeight="Bold" />
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="12">
+          <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+          <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.SalvaBozza}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+        </StackPanel>
+        <StackPanel VerticalAlignment="Center" Spacing="2">
+          <TextBlock Classes="secondario" FontSize="12">
+            <Run Text="{x:Static r:Testi.Imponibile}" />
+            <Run Text="{Binding Imponibile}" />
+            <Run Text="·" />
+            <Run Text="{x:Static r:Testi.Iva}" />
+            <Run Text="{Binding Iva}" />
+          </TextBlock>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <TextBlock FontSize="14" FontWeight="SemiBold" Text="{x:Static r:Testi.Totale}" />
+            <TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding Totale}" />
+          </StackPanel>
+        </StackPanel>
+      </DockPanel>
+    </Border>
+    <ScrollViewer>
+      <StackPanel Margin="24" Spacing="20">
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaAvviso}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding Errore}" />
+          </DockPanel>
+        </Border>
+
+        <StackPanel Spacing="8">
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.ColCliente}" />
+          <ComboBox ItemsSource="{Binding Clienti}" SelectedItem="{Binding Cliente}" HorizontalAlignment="Stretch"
+                    PlaceholderText="{x:Static r:Testi.CercaUnCliente}" AutomationProperties.Name="{x:Static r:Testi.ColCliente}" />
+          <DockPanel>
+            <Button DockPanel.Dock="Right" Classes="secondario" Margin="12,0,0,0" Content="{x:Static r:Testi.Cerca}" Command="{Binding CercaClienteCommand}" />
+            <TextBox Text="{Binding RicercaCliente}" PlaceholderText="{x:Static r:Testi.CercaAltroCliente}" AutomationProperties.Name="{x:Static r:Testi.CercaAltroCliente}" />
+          </DockPanel>
+        </StackPanel>
+
+        <Grid ColumnDefinitions="*,16,*">
+          <StackPanel Grid.Column="0">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.LuogoLavori}" />
+            <ComboBox ItemsSource="{Binding Sedi}" SelectedItem="{Binding Sede}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.LuogoLavori}" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Impianto}" />
+            <ComboBox ItemsSource="{Binding Impianti}" SelectedItem="{Binding Impianto}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.Impianto}" />
+          </StackPanel>
+        </Grid>
+
+        <Grid ColumnDefinitions="3*,16,*">
+          <StackPanel Grid.Column="0">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Oggetto}" />
+            <TextBox Text="{Binding Oggetto}" AutomationProperties.Name="{x:Static r:Testi.Oggetto}" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.ValiditaGiorni}" />
+            <TextBox Text="{Binding Validita}" MaxLength="3" AutomationProperties.Name="{x:Static r:Testi.ValiditaGiorni}" />
+          </StackPanel>
+        </Grid>
+
+        <!-- Voci dal listino, con il prezzo di oggi -->
+        <StackPanel Spacing="8">
+          <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.DalListino}" />
+          <DockPanel>
+            <Button DockPanel.Dock="Right" Classes="secondario" Margin="12,0,0,0" Content="{x:Static r:Testi.Cerca}" Command="{Binding CercaListinoCommand}" />
+            <TextBox Text="{Binding RicercaListino}" PlaceholderText="{x:Static r:Testi.CercaListino}" AutomationProperties.Name="{x:Static r:Testi.CercaListino}" />
+          </DockPanel>
+          <ItemsControl ItemsSource="{Binding VociTrovate}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="s:VoceListino">
+                <DockPanel Margin="0,2">
+                  <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.Aggiungi}"
+                          Command="{Binding $parent[UserControl].((vm:EditorPreventivoViewModel)DataContext).AggiungiVoceCommand}" CommandParameter="{Binding}" />
+                  <TextBlock FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+                    <Run Text="{Binding Codice}" FontWeight="SemiBold" />
+                    <Run Text="·" />
+                    <Run Text="{Binding Descrizione}" />
+                  </TextBlock>
+                </DockPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Spacing="8">
+          <DockPanel>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4">
+              <Button Classes="collegamento" Content="{x:Static r:Testi.AggiungiManodopera}" Command="{Binding AggiungiManodoperaCommand}" />
+              <Button Classes="collegamento" Content="{x:Static r:Testi.AggiungiMateriale}" Command="{Binding AggiungiMaterialeCommand}" />
+            </StackPanel>
+            <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.VociPreventivo}" VerticalAlignment="Center" />
+          </DockPanel>
+          <TextBlock Classes="secondario" FontSize="14" TextWrapping="Wrap" IsVisible="{Binding SenzaRighe}" Text="{x:Static r:Testi.SpiegazioneRighePreventivo}" />
+          <ItemsControl ItemsSource="{Binding Righe}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:RigaModificabile">
+                <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="0,12">
+                  <StackPanel Spacing="8">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="collegamento" Foreground="{DynamicResource Errore}" Content="{x:Static r:Testi.Rimuovi}"
+                              Command="{Binding $parent[UserControl].((vm:EditorPreventivoViewModel)DataContext).RimuoviRigaCommand}" CommandParameter="{Binding}" />
+                      <TextBlock FontSize="13" FontWeight="SemiBold" Text="{Binding NomeTipo}" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <DockPanel>
+                      <TextBox DockPanel.Dock="Left" Width="120" Margin="0,0,8,0" Text="{Binding Codice}" PlaceholderText="{x:Static r:Testi.Codice}"
+                               AutomationProperties.Name="{x:Static r:Testi.Codice}" />
+                      <TextBox Text="{Binding Descrizione}" PlaceholderText="{x:Static r:Testi.DescrizioneRiga}" AutomationProperties.Name="{x:Static r:Testi.DescrizioneRiga}" />
+                    </DockPanel>
+                    <Grid ColumnDefinitions="*,8,*,8,*,8,*,8,*">
+                      <StackPanel Grid.Column="0">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Quantita}" />
+                        <TextBox Text="{Binding Quantita}" AutomationProperties.Name="{x:Static r:Testi.Quantita}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="2">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Unita}" />
+                        <TextBox Text="{Binding Unita}" IsEnabled="{Binding !Manodopera}" AutomationProperties.Name="{x:Static r:Testi.Unita}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="4">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.PrezzoUnitario}" />
+                        <TextBox Text="{Binding Prezzo}" AutomationProperties.Name="{x:Static r:Testi.PrezzoUnitario}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="6">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Sconto}" />
+                        <TextBox Text="{Binding Sconto}" AutomationProperties.Name="{x:Static r:Testi.Sconto}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="8">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Iva}" />
+                        <TextBox Text="{Binding Iva}" AutomationProperties.Name="{x:Static r:Testi.Iva}" />
+                      </StackPanel>
+                    </Grid>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+        <StackPanel>
+          <TextBlock Classes="etichetta">
+            <Run Text="{x:Static r:Testi.Note}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+          </TextBlock>
+          <TextBox Text="{Binding Note}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="56" AutomationProperties.Name="{x:Static r:Testi.Note}" />
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

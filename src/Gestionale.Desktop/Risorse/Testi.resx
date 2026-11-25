@@ -1191,4 +1191,265 @@
   <data name="NessunaScadenzaImpianto" xml:space="preserve">
     <value>Nessuna scadenza aperta. Per la manutenzione indica la periodicità con Modifica.</value>
   </data>
+  <data name="NavListino" xml:space="preserve">
+    <value>Listino</value>
+  </data>
+  <data name="ListinoTitolo" xml:space="preserve">
+    <value>Listino prezzi</value>
+  </data>
+  <data name="PreventiviTitolo" xml:space="preserve">
+    <value>Preventivi</value>
+  </data>
+  <data name="AccettatoIl" xml:space="preserve">
+    <value>Accettato il</value>
+  </data>
+  <data name="RifiutatoIl" xml:space="preserve">
+    <value>Rifiutato il</value>
+  </data>
+  <data name="Aggiungi" xml:space="preserve">
+    <value>Aggiungi</value>
+  </data>
+  <data name="AncheDisattivate" xml:space="preserve">
+    <value>Mostra anche le voci disattivate</value>
+  </data>
+  <data name="AnnullaPreventivo" xml:space="preserve">
+    <value>Annulla preventivo</value>
+  </data>
+  <data name="ApriIntervento" xml:space="preserve">
+    <value>Apri l'intervento</value>
+  </data>
+  <data name="AvvisoPreventivoScaduto" xml:space="preserve">
+    <value>La validità del preventivo è scaduta: conferma i prezzi con il cliente prima di procedere.</value>
+  </data>
+  <data name="AvvisoPreventivoSenzaImpianto" xml:space="preserve">
+    <value>Il preventivo non indica l'impianto: modificalo prima di generare l'intervento, oppure crea l'intervento dal calendario.</value>
+  </data>
+  <data name="CercaListino" xml:space="preserve">
+    <value>Cerca per codice o descrizione</value>
+  </data>
+  <data name="CercaPreventivi" xml:space="preserve">
+    <value>Cerca per cliente, oggetto o numero</value>
+  </data>
+  <data name="CercaUnCliente" xml:space="preserve">
+    <value>Cerca un cliente qui sotto</value>
+  </data>
+  <data name="ColDescrizione" xml:space="preserve">
+    <value>Descrizione</value>
+  </data>
+  <data name="ColNumero" xml:space="preserve">
+    <value>Numero</value>
+  </data>
+  <data name="ColOggetto" xml:space="preserve">
+    <value>Oggetto</value>
+  </data>
+  <data name="ColPrezzo" xml:space="preserve">
+    <value>Prezzo in vigore</value>
+  </data>
+  <data name="ConfermaEliminaBozza" xml:space="preserve">
+    <value>La bozza «{0}» sparirà con le sue righe. Non ha ancora un numero, quindi la numerazione non cambia.</value>
+  </data>
+  <data name="ConfermaEliminaBozzaTitolo" xml:space="preserve">
+    <value>Eliminare la bozza?</value>
+  </data>
+  <data name="ConfermaRifiuto" xml:space="preserve">
+    <value>Il preventivo {0} risulterà rifiutato dal cliente: non si potrà più accettare né generarne un intervento.</value>
+  </data>
+  <data name="ConfermaRifiutoTitolo" xml:space="preserve">
+    <value>Segnare il preventivo come rifiutato?</value>
+  </data>
+  <data name="ConteggioPreventivi" xml:space="preserve">
+    <value>{0} preventivi</value>
+  </data>
+  <data name="ConteggioUnPreventivo" xml:space="preserve">
+    <value>1 preventivo</value>
+  </data>
+  <data name="ConteggioUnaVoce" xml:space="preserve">
+    <value>1 voce</value>
+  </data>
+  <data name="ConteggioVoci" xml:space="preserve">
+    <value>{0} voci</value>
+  </data>
+  <data name="DalListino" xml:space="preserve">
+    <value>Dal listino</value>
+  </data>
+  <data name="DataEmissione" xml:space="preserve">
+    <value>Data di emissione</value>
+  </data>
+  <data name="DettagliPreventivo" xml:space="preserve">
+    <value>Dettagli</value>
+  </data>
+  <data name="Disattivata" xml:space="preserve">
+    <value>Disattivata</value>
+  </data>
+  <data name="Emetti" xml:space="preserve">
+    <value>Emetti</value>
+  </data>
+  <data name="FiltroAccettati" xml:space="preserve">
+    <value>Accettati</value>
+  </data>
+  <data name="FiltroBozze" xml:space="preserve">
+    <value>Bozze</value>
+  </data>
+  <data name="FiltroEmessi" xml:space="preserve">
+    <value>Emessi</value>
+  </data>
+  <data name="FiltroScaduti" xml:space="preserve">
+    <value>Scaduti</value>
+  </data>
+  <data name="GeneraIntervento" xml:space="preserve">
+    <value>Genera l'intervento</value>
+  </data>
+  <data name="Imponibile" xml:space="preserve">
+    <value>Imponibile</value>
+  </data>
+  <data name="IvaNonNumerica" xml:space="preserve">
+    <value>L'aliquota IVA deve essere un numero, per esempio 22 oppure 10.</value>
+  </data>
+  <data name="LuogoLavori" xml:space="preserve">
+    <value>Luogo dei lavori</value>
+  </data>
+  <data name="NessunPreventivo" xml:space="preserve">
+    <value>Nessun preventivo trovato.</value>
+  </data>
+  <data name="NessunaVoce" xml:space="preserve">
+    <value>Nessuna voce nel listino. Crea la prima con Nuova voce.</value>
+  </data>
+  <data name="NonEmesso" xml:space="preserve">
+    <value>Non ancora emesso</value>
+  </data>
+  <data name="NumeroPreventivo" xml:space="preserve">
+    <value>Preventivo {0}/{1}</value>
+  </data>
+  <data name="NuovaVoce" xml:space="preserve">
+    <value>Nuova voce</value>
+  </data>
+  <data name="NuovoPreventivo" xml:space="preserve">
+    <value>Nuovo preventivo</value>
+  </data>
+  <data name="NuovoPrezzo" xml:space="preserve">
+    <value>Nuovo prezzo</value>
+  </data>
+  <data name="NuovoPrezzoEuro" xml:space="preserve">
+    <value>Nuovo prezzo (€)</value>
+  </data>
+  <data name="Oggetto" xml:space="preserve">
+    <value>Oggetto</value>
+  </data>
+  <data name="PdfPreventivoSalvato" xml:space="preserve">
+    <value>PDF salvato in {0}.</value>
+  </data>
+  <data name="PrezzoAttuale" xml:space="preserve">
+    <value>Prezzo in vigore</value>
+  </data>
+  <data name="PrezzoDal" xml:space="preserve">
+    <value>{0} dal {1}</value>
+  </data>
+  <data name="PrezzoIniziale" xml:space="preserve">
+    <value>Prezzo (€)</value>
+  </data>
+  <data name="PrezzoNonNumerico" xml:space="preserve">
+    <value>Il prezzo deve essere un numero, con la virgola o il punto per i centesimi.</value>
+  </data>
+  <data name="SalvaBozza" xml:space="preserve">
+    <value>Salva la bozza</value>
+  </data>
+  <data name="ScaricaPdf" xml:space="preserve">
+    <value>Scarica PDF</value>
+  </data>
+  <data name="ScegliCliente" xml:space="preserve">
+    <value>Scegli il cliente del preventivo.</value>
+  </data>
+  <data name="ScegliTipoIntervento" xml:space="preserve">
+    <value>Scegli il tipo dell'intervento</value>
+  </data>
+  <data name="SegnaAccettato" xml:space="preserve">
+    <value>Accettato dal cliente</value>
+  </data>
+  <data name="SegnaRifiutato" xml:space="preserve">
+    <value>Rifiutato dal cliente</value>
+  </data>
+  <data name="SenzaPrezzo" xml:space="preserve">
+    <value>Senza prezzo</value>
+  </data>
+  <data name="SpiegazioneAnnullaPreventivo" xml:space="preserve">
+    <value>Il preventivo resta in archivio con il numero e il motivo, ma non si potrà più accettare.</value>
+  </data>
+  <data name="SpiegazioneGeneraIntervento" xml:space="preserve">
+    <value>Nasce un intervento da pianificare sull'impianto del preventivo, con le stesse righe e gli stessi prezzi. Il preventivo ne genera uno solo.</value>
+  </data>
+  <data name="SpiegazioneNuovoPrezzo" xml:space="preserve">
+    <value>Il nuovo prezzo vale dalla data indicata. Preventivi e interventi già fatti tengono il prezzo che avevano.</value>
+  </data>
+  <data name="SpiegazionePrezziVoce" xml:space="preserve">
+    <value>Per cambiare il prezzo usa Nuovo prezzo dall'elenco: resta lo storico.</value>
+  </data>
+  <data name="SpiegazioneRighePreventivo" xml:space="preserve">
+    <value>Aggiungi le voci dal listino, oppure manodopera e materiali a mano.</value>
+  </data>
+  <data name="StatoPreventivoAccettato" xml:space="preserve">
+    <value>Accettato</value>
+  </data>
+  <data name="StatoPreventivoAnnullato" xml:space="preserve">
+    <value>Annullato</value>
+  </data>
+  <data name="StatoPreventivoBozza" xml:space="preserve">
+    <value>Bozza</value>
+  </data>
+  <data name="StatoPreventivoEmesso" xml:space="preserve">
+    <value>Emesso</value>
+  </data>
+  <data name="StatoPreventivoRifiutato" xml:space="preserve">
+    <value>Rifiutato</value>
+  </data>
+  <data name="StatoPreventivoScaduto" xml:space="preserve">
+    <value>Scaduto</value>
+  </data>
+  <data name="TitoloAnnullaPreventivo" xml:space="preserve">
+    <value>Annullare il preventivo {0}?</value>
+  </data>
+  <data name="TitoloBozzaPreventivo" xml:space="preserve">
+    <value>Bozza di preventivo</value>
+  </data>
+  <data name="TitoloGeneraIntervento" xml:space="preserve">
+    <value>Genera l'intervento</value>
+  </data>
+  <data name="TitoloModificaPreventivo" xml:space="preserve">
+    <value>Modifica la bozza</value>
+  </data>
+  <data name="TitoloModificaVoce" xml:space="preserve">
+    <value>Modifica la voce</value>
+  </data>
+  <data name="TitoloNuovaVoce" xml:space="preserve">
+    <value>Nuova voce del listino</value>
+  </data>
+  <data name="TitoloNuovoPreventivo" xml:space="preserve">
+    <value>Nuovo preventivo</value>
+  </data>
+  <data name="TitoloNuovoPrezzo" xml:space="preserve">
+    <value>Nuovo prezzo</value>
+  </data>
+  <data name="TornaAiPreventivi" xml:space="preserve">
+    <value>← Preventivi</value>
+  </data>
+  <data name="ValiditaGiorni" xml:space="preserve">
+    <value>Validità (giorni)</value>
+  </data>
+  <data name="ValiditaGiorniValore" xml:space="preserve">
+    <value>{0} giorni dall'emissione</value>
+  </data>
+  <data name="ValiditaNonValida" xml:space="preserve">
+    <value>La validità è un numero di giorni da 1 a 365.</value>
+  </data>
+  <data name="ValidoDal" xml:space="preserve">
+    <value>Valido dal</value>
+  </data>
+  <data name="ValidoFinoAl" xml:space="preserve">
+    <value>Valido fino al</value>
+  </data>
+  <data name="VoceAttiva" xml:space="preserve">
+    <value>Voce attiva: si propone nei preventivi</value>
+  </data>
+  <data name="VociPreventivo" xml:space="preserve">
+    <value>Voci</value>
+  </data>
 </root>

@@ -82,12 +82,63 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [ObservableProperty]
     public partial bool ScadenzeAttivo { get; set; }
 
+    [ObservableProperty]
+    public partial bool PreventiviAttivo { get; set; }
+
+    [ObservableProperty]
+    public partial bool ListinoAttivo { get; set; }
+
+    public bool VedePreventivi => Profilo.Ha("preventivi.lettura");
+
+    public bool GestiscePreventivi => Profilo.Ha("preventivi.scrittura");
+
+    public bool VedeListino => Profilo.Ha("listino.lettura");
+
+    public bool GestisceListino => Profilo.Ha("listino.scrittura");
+
+    [RelayCommand]
+    public async Task ApriPreventiviAsync()
+    {
+        Evidenzia(nameof(PreventiviAttivo));
+        var preventivi = new PreventiviViewModel(this);
+        Contenuto = preventivi;
+        await preventivi.CaricaAsync();
+    }
+
+    public async Task ApriPreventivoAsync(Guid preventivoId)
+    {
+        Evidenzia(nameof(PreventiviAttivo));
+        var scheda = new SchedaPreventivoViewModel(this, preventivoId);
+        Contenuto = scheda;
+        await scheda.CaricaAsync();
+    }
+
+    [RelayCommand]
+    public async Task ApriListinoAsync()
+    {
+        Evidenzia(nameof(ListinoAttivo));
+        var listino = new ListinoViewModel(this);
+        Contenuto = listino;
+        await listino.CaricaAsync();
+    }
+
+    // Una sola voce della barra laterale è evidenziata: quella dell'area aperta.
+    private void Evidenzia(string area)
+    {
+        ClientiAttivo = area == nameof(ClientiAttivo);
+        ImpiantiAttivo = area == nameof(ImpiantiAttivo);
+        InterventiAttivo = area == nameof(InterventiAttivo);
+        ScadenzeAttivo = area == nameof(ScadenzeAttivo);
+        PreventiviAttivo = area == nameof(PreventiviAttivo);
+        ListinoAttivo = area == nameof(ListinoAttivo);
+    }
+
     private VociImpianti? _vociImpianti;
 
     [RelayCommand]
     public async Task ApriClientiAsync()
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (true, false, false, false);
+        Evidenzia(nameof(ClientiAttivo));
         var clienti = new ClientiViewModel(this);
         Contenuto = clienti;
         await clienti.CaricaAsync();
@@ -95,7 +146,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
 
     public async Task ApriClienteAsync(Guid clienteId)
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (true, false, false, false);
+        Evidenzia(nameof(ClientiAttivo));
         var scheda = new SchedaClienteViewModel(this, clienteId);
         Contenuto = scheda;
         await scheda.CaricaAsync();
@@ -104,7 +155,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [RelayCommand]
     public async Task ApriImpiantiAsync()
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, true, false, false);
+        Evidenzia(nameof(ImpiantiAttivo));
         var impianti = new ImpiantiViewModel(this);
         Contenuto = impianti;
         await impianti.CaricaAsync();
@@ -112,7 +163,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
 
     public async Task ApriImpiantoAsync(Guid impiantoId)
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, true, false, false);
+        Evidenzia(nameof(ImpiantiAttivo));
         var scheda = new SchedaImpiantoViewModel(this, impiantoId);
         Contenuto = scheda;
         await scheda.CaricaAsync();
@@ -121,7 +172,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [RelayCommand]
     public async Task ApriScadenzeAsync()
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, false, false, true);
+        Evidenzia(nameof(ScadenzeAttivo));
         var scadenze = new ScadenzeViewModel(this);
         Contenuto = scadenze;
         await scadenze.CaricaAsync();
@@ -133,7 +184,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     /// <summary>Calendario della settimana che contiene il giorno indicato; senza giorno, oggi.</summary>
     public async Task ApriCalendarioAsync(DateOnly? giorno)
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, false, true, false);
+        Evidenzia(nameof(InterventiAttivo));
         var calendario = new CalendarioViewModel(this, giorno ?? FormatoInterventi.Oggi(Orologio));
         Contenuto = calendario;
         await calendario.CaricaAsync();
@@ -142,7 +193,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     /// <summary>Scheda di un intervento; indietro dice dove tornare (di norma il calendario).</summary>
     public async Task ApriInterventoAsync(Guid interventoId, Func<Task>? indietro = null)
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, false, true, false);
+        Evidenzia(nameof(InterventiAttivo));
         var scheda = new SchedaInterventoViewModel(this, interventoId, indietro);
         Contenuto = scheda;
         await scheda.CaricaAsync();

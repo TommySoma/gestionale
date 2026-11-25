@@ -30,6 +30,14 @@
     <DataTemplate DataType="vm:ScadenzeViewModel"><v:ScadenzeView /></DataTemplate>
     <DataTemplate DataType="vm:RichiamoViewModel"><v:RichiamoView /></DataTemplate>
     <DataTemplate DataType="vm:DataScadenzaViewModel"><v:DataScadenzaView /></DataTemplate>
+    <DataTemplate DataType="vm:ListinoViewModel"><v:ListinoView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorVoceViewModel"><v:EditorVoceView /></DataTemplate>
+    <DataTemplate DataType="vm:PrezzoVoceViewModel"><v:PrezzoVoceView /></DataTemplate>
+    <DataTemplate DataType="vm:PreventiviViewModel"><v:PreventiviView /></DataTemplate>
+    <DataTemplate DataType="vm:SchedaPreventivoViewModel"><v:SchedaPreventivoView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorPreventivoViewModel"><v:EditorPreventivoView /></DataTemplate>
+    <DataTemplate DataType="vm:AnnullamentoPreventivoViewModel"><v:AnnullamentoPreventivoView /></DataTemplate>
+    <DataTemplate DataType="vm:InterventoDaPreventivoViewModel"><v:InterventoDaPreventivoView /></DataTemplate>
     <DataTemplate DataType="vm:ConfermaViewModel"><v:ConfermaView /></DataTemplate>
   </Application.DataTemplates>
 

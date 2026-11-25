@@ -321,6 +321,81 @@ public sealed class ClientApi : IDisposable
     public Task<Risposta<EsitoScrittura>> RegistraRichiamoAsync(Guid scadenzaId, DatiRichiamo dati, CancellationToken ct = default) =>
         AutenticataAsync<EsitoScrittura>(HttpMethod.Post, $"api/scadenze/{scadenzaId}/richiami", dati, ct);
 
+    // --- Listino ------------------------------------------------------------
+
+    public Task<Risposta<Pagina<VoceListino>>> CercaListinoAsync(string? testo, bool ancheDisattivate, int pagina, int dimensione, CancellationToken ct = default)
+    {
+        var query = $"api/listino?pagina={pagina}&dimensione={dimensione}&tutte={(ancheDisattivate ? "true" : "false")}";
+        if (!string.IsNullOrWhiteSpace(testo))
+        {
+            query += "&cerca=" + Uri.EscapeDataString(testo);
+        }
+
+        return AutenticataAsync<Pagina<VoceListino>>(HttpMethod.Get, query, null, ct);
+    }
+
+    public Task<Risposta<VoceListino>> VoceListinoAsync(Guid voceId, CancellationToken ct = default) =>
+        AutenticataAsync<VoceListino>(HttpMethod.Get, $"api/listino/{voceId}", null, ct);
+
+    public Task<Risposta<EsitoScrittura>> CreaVoceAsync(DatiVoce dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScrittura>(HttpMethod.Post, "api/listino", dati, ct);
+
+    public Task<Risposta<EsitoScrittura>> AggiornaVoceAsync(Guid voceId, DatiVoce dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScrittura>(HttpMethod.Put, $"api/listino/{voceId}", dati, ct);
+
+    public Task<Risposta<EsitoScrittura>> AggiungiPrezzoAsync(Guid voceId, DatiPrezzo dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScrittura>(HttpMethod.Post, $"api/listino/{voceId}/prezzi", dati, ct);
+
+    // --- Preventivi ---------------------------------------------------------
+
+    /// <summary>Stato accetta anche "scaduto": gli emessi oltre la validità.</summary>
+    public Task<Risposta<Pagina<RiepilogoPreventivo>>> CercaPreventiviAsync(
+        string? testo, string? stato, Guid? clienteId, int pagina, int dimensione, CancellationToken ct = default)
+    {
+        var query = $"api/preventivi?pagina={pagina}&dimensione={dimensione}";
+        if (!string.IsNullOrWhiteSpace(testo))
+        {
+            query += "&cerca=" + Uri.EscapeDataString(testo);
+        }
+
+        if (!string.IsNullOrWhiteSpace(stato))
+        {
+            query += "&stato=" + Uri.EscapeDataString(stato);
+        }
+
+        if (clienteId is { } cliente)
+        {
+            query += "&cliente=" + cliente;
+        }
+
+        return AutenticataAsync<Pagina<RiepilogoPreventivo>>(HttpMethod.Get, query, null, ct);
+    }
+
+    public Task<Risposta<Preventivo>> PreventivoAsync(Guid preventivoId, CancellationToken ct = default) =>
+        AutenticataAsync<Preventivo>(HttpMethod.Get, $"api/preventivi/{preventivoId}", null, ct);
+
+    public Task<Risposta<byte[]>> PdfPreventivoAsync(Guid preventivoId, CancellationToken ct = default) =>
+        AutenticataAsync<byte[]>(HttpMethod.Get, $"api/preventivi/{preventivoId}/pdf", null, ct);
+
+    public Task<Risposta<EsitoScritturaCommerciale>> CreaPreventivoAsync(DatiPreventivo dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaCommerciale>(HttpMethod.Post, "api/preventivi", dati, ct);
+
+    public Task<Risposta<EsitoScritturaCommerciale>> AggiornaPreventivoAsync(Guid preventivoId, DatiPreventivo dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaCommerciale>(HttpMethod.Put, $"api/preventivi/{preventivoId}", dati, ct);
+
+    public Task<Risposta<object>> EliminaPreventivoAsync(Guid preventivoId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<object>(HttpMethod.Delete, $"api/preventivi/{preventivoId}?versione={versione}", null, ct);
+
+    /// <summary>Passaggio di stato senza altri dati: "emissione", "accettazione" o "rifiuto".</summary>
+    public Task<Risposta<EsitoScritturaCommerciale>> CambiaStatoPreventivoAsync(Guid preventivoId, string azione, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaCommerciale>(HttpMethod.Post, $"api/preventivi/{preventivoId}/{azione}", new { versione }, ct);
+
+    public Task<Risposta<EsitoScritturaCommerciale>> AnnullaPreventivoAsync(Guid preventivoId, int versione, string motivo, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaCommerciale>(HttpMethod.Post, $"api/preventivi/{preventivoId}/annullamento", new { versione, motivo }, ct);
+
+    public Task<Risposta<EsitoScritturaCommerciale>> GeneraInterventoAsync(Guid preventivoId, int versione, string tipo, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaCommerciale>(HttpMethod.Post, $"api/preventivi/{preventivoId}/intervento", new { versione, tipo }, ct);
+
     // --- Documenti degli impianti -----------------------------------------
 
     public Task<Risposta<IReadOnlyList<Documento>>> DocumentiAsync(Guid impiantoId, CancellationToken ct = default) =>

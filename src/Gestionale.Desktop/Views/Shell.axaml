@@ -25,10 +25,10 @@
                   Content="{x:Static r:Testi.NavInterventi}" Command="{Binding ApriInterventiCommand}" />
           <Button Classes="voceMenu" Classes.attiva="{Binding ScadenzeAttivo}" IsVisible="{Binding VedeScadenze}"
                   Content="{x:Static r:Testi.NavScadenze}" Command="{Binding ApriScadenzeCommand}" />
-          <DockPanel Classes="voceFutura" ToolTip.Tip="{Binding EtichettaM3}">
-            <Border Classes="milestone"><TextBlock Text="M3" /></Border>
-            <TextBlock Text="{x:Static r:Testi.NavPreventivi}" />
-          </DockPanel>
+          <Button Classes="voceMenu" Classes.attiva="{Binding PreventiviAttivo}" IsVisible="{Binding VedePreventivi}"
+                  Content="{x:Static r:Testi.NavPreventivi}" Command="{Binding ApriPreventiviCommand}" />
+          <Button Classes="voceMenu" Classes.attiva="{Binding ListinoAttivo}" IsVisible="{Binding VedeListino}"
+                  Content="{x:Static r:Testi.NavListino}" Command="{Binding ApriListinoCommand}" />
         </StackPanel>
       </Border>
 

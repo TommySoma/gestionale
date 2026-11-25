@@ -303,6 +303,105 @@ public sealed record Scadenza(
 
 public sealed record DatiRichiamo(string Canale, string Esito, DateOnly? RichiamareIl, Guid? InterventoId, string? Note, int Versione);
 
+// --- Listino e preventivi -----------------------------------------------
+
+public sealed record PrezzoListino(Guid PrezzoId, decimal Prezzo, DateOnly ValidoDal, DateTime CreatoIl);
+
+/// <summary>Voce con il prezzo in vigore oggi (null se non ne ha ancora uno); Prezzi solo nella scheda.</summary>
+public sealed record VoceListino(
+    Guid VoceId,
+    string Codice,
+    string Descrizione,
+    string Tipo,
+    string Unita,
+    decimal? AliquotaIva,
+    bool Attiva,
+    string? Note,
+    decimal? Prezzo,
+    DateOnly? PrezzoDal,
+    int Versione,
+    IReadOnlyList<PrezzoListino>? Prezzi);
+
+/// <summary>PrezzoIniziale e ValidoDal valgono solo alla creazione.</summary>
+public sealed record DatiVoce(
+    string Codice, string Descrizione, string Tipo, string Unita, decimal? AliquotaIva, bool Attiva, string? Note,
+    decimal? PrezzoIniziale, DateOnly? ValidoDal, int? Versione);
+
+public sealed record DatiPrezzo(decimal Prezzo, DateOnly? ValidoDal);
+
+public sealed record RiepilogoPreventivo(
+    Guid PreventivoId,
+    int? Anno,
+    int? Numero,
+    string Stato,
+    bool Scaduto,
+    Guid ClienteId,
+    string Cliente,
+    string Oggetto,
+    DateOnly? EmessoIl,
+    DateOnly? ScadeIl,
+    decimal Totale,
+    Guid? InterventoId,
+    DateTime CreatoIl,
+    int Versione);
+
+public sealed record RigaPreventivo(
+    int Posizione,
+    Guid? VoceId,
+    string Tipo,
+    string? Codice,
+    string Descrizione,
+    string Unita,
+    decimal Quantita,
+    decimal PrezzoUnitario,
+    decimal ScontoPercentuale,
+    decimal? AliquotaIva,
+    decimal Importo);
+
+public sealed record Preventivo(
+    Guid PreventivoId,
+    int? Anno,
+    int? Numero,
+    string Stato,
+    bool Scaduto,
+    Guid ClienteId,
+    string Cliente,
+    string? CodiceFiscale,
+    string? PartitaIva,
+    Guid? SedeId,
+    string? Indirizzo,
+    string? Civico,
+    string? Cap,
+    string? Comune,
+    string? Provincia,
+    Guid? ImpiantoId,
+    string? TipoImpianto,
+    string Oggetto,
+    string? Note,
+    int ValiditaGiorni,
+    DateOnly? EmessoIl,
+    DateOnly? ScadeIl,
+    decimal Imponibile,
+    decimal Iva,
+    decimal Totale,
+    DateTime? AccettatoIl,
+    DateTime? RifiutatoIl,
+    DateTime? AnnullatoIl,
+    string? MotivoAnnullamento,
+    Guid? InterventoId,
+    DateTime CreatoIl,
+    int Versione,
+    IReadOnlyList<RigaPreventivo> Righe);
+
+public sealed record DatiRigaPreventivo(
+    Guid? VoceId, string Tipo, string? Codice, string Descrizione, string Unita, decimal Quantita, decimal? PrezzoUnitario, decimal? ScontoPercentuale, decimal? AliquotaIva);
+
+public sealed record DatiPreventivo(
+    Guid ClienteId, Guid? SedeId, Guid? ImpiantoId, string Oggetto, string? Note, int ValiditaGiorni, IReadOnlyList<DatiRigaPreventivo> Righe, int? Versione);
+
+/// <summary>InterventoId c'è dopo la generazione dell'intervento.</summary>
+public sealed record EsitoScritturaCommerciale(Guid Id, int Versione, int? Anno, int? Numero, Guid? InterventoId);
+
 // --- Documenti ----------------------------------------------------------
 
 public sealed record Documento(

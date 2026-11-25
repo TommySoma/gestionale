@@ -103,6 +103,23 @@ internal static class Schermate
         new("scadenze.scrittura", "tutti"),
     ];
 
+    /// <summary>Segreteria: preventivi e listino in scrittura, con clienti, impianti e interventi.</summary>
+    public static Permesso[] Amministrativo { get; } =
+    [
+        new("clienti.lettura", "tutti"),
+        new("clienti.scrittura", "tutti"),
+        new("impianti.lettura", "tutti"),
+        new("impianti.scrittura", "tutti"),
+        new("interventi.lettura", "tutti"),
+        new("interventi.scrittura", "tutti"),
+        new("scadenze.lettura", "tutti"),
+        new("scadenze.scrittura", "tutti"),
+        new("preventivi.lettura", "tutti"),
+        new("preventivi.scrittura", "tutti"),
+        new("listino.lettura", "tutti"),
+        new("listino.scrittura", "tutti"),
+    ];
+
     public static Permesso[] Tecnico { get; } =
     [
         new("impianti.lettura", "propri"),
