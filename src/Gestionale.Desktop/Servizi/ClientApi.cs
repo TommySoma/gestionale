@@ -265,6 +265,10 @@ public sealed class ClientApi : IDisposable
     public Task<Risposta<Intervento>> InterventoAsync(Guid interventoId, CancellationToken ct = default) =>
         AutenticataAsync<Intervento>(HttpMethod.Get, $"api/interventi/{interventoId}", null, ct);
 
+    /// <summary>PDF del rapportino di un intervento completato.</summary>
+    public Task<Risposta<byte[]>> RapportinoAsync(Guid interventoId, CancellationToken ct = default) =>
+        AutenticataAsync<byte[]>(HttpMethod.Get, $"api/interventi/{interventoId}/rapportino", null, ct);
+
     public Task<Risposta<IReadOnlyList<TecnicoAssegnabile>>> TecniciAsync(CancellationToken ct = default) =>
         AutenticataAsync<IReadOnlyList<TecnicoAssegnabile>>(HttpMethod.Get, "api/interventi/tecnici", null, ct);
 
@@ -406,6 +410,12 @@ public sealed class ClientApi : IDisposable
 
         using (risposta)
         {
+            if (risposta.IsSuccessStatusCode && typeof(T) == typeof(byte[]))
+            {
+                // File (per esempio un PDF): i byte così come arrivano.
+                return new Risposta<T>(risposta.StatusCode, (T)(object)await risposta.Content.ReadAsByteArrayAsync(ct), null);
+            }
+
             if (risposta.IsSuccessStatusCode)
             {
                 var valore = risposta.StatusCode == HttpStatusCode.NoContent || typeof(T) == typeof(object)

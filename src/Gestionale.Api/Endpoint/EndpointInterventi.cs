@@ -51,6 +51,7 @@ internal static class EndpointInterventi
         interventi.MapGet("/", CercaAsync).RichiedePermesso(CodiciPermesso.InterventiLettura);
         interventi.MapGet("/tecnici", TecniciAsync).RichiedePermesso(CodiciPermesso.InterventiLettura);
         interventi.MapGet("/{interventoId:guid}", InterventoAsync).RichiedePermesso(CodiciPermesso.InterventiLettura);
+        interventi.MapGet("/{interventoId:guid}/rapportino", RapportinoAsync).RichiedePermesso(CodiciPermesso.InterventiLettura);
         interventi.MapPost("/", CreaAsync).RichiedePermesso(CodiciPermesso.InterventiScrittura);
         interventi.MapPut("/{interventoId:guid}", AggiornaAsync).RichiedePermesso(CodiciPermesso.InterventiScrittura);
         interventi.MapPost("/{interventoId:guid}/avvio", AvviaAsync).RichiedePermesso(CodiciPermesso.InterventiScrittura);
@@ -73,6 +74,15 @@ internal static class EndpointInterventi
         await servizio.InterventoAsync(Contesto(utente), Ambito(utente, CodiciPermesso.InterventiLettura), interventoId, ct) is { } intervento
             ? Results.Ok(intervento)
             : NonTrovato();
+
+    // PDF del rapportino (ADR 0005): solo per un intervento completato.
+    private static async Task<IResult> RapportinoAsync(Guid interventoId, ClaimsPrincipal utente, ServizioInterventi servizio, CancellationToken ct) =>
+        await servizio.RapportinoAsync(Contesto(utente), Ambito(utente, CodiciPermesso.InterventiLettura), interventoId, ct) switch
+        {
+            EsitoRapportino.Pronto p => Results.File(p.Pdf, "application/pdf", p.NomeFile),
+            EsitoRapportino.NonChiuso n => Problemi.Conflitto(Problemi.Formatta(Messaggi.RapportinoSoloCompletati, Testo("StatoIntervento_" + n.Stato))),
+            _ => NonTrovato(),
+        };
 
     private static async Task<IResult> CreaAsync(RichiestaIntervento richiesta, ClaimsPrincipal utente, ServizioInterventi servizio, CancellationToken ct) =>
         Risposta(await servizio.CreaAsync(Contesto(utente), AmbitoScrittura(utente), Dati(richiesta), ct), creato: true);

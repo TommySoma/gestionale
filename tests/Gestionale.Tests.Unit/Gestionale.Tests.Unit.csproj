@@ -6,6 +6,7 @@
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Avalonia.Headless" />
+    <PackageReference Include="PdfPig" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Gestionale.Api\Gestionale.Api.csproj" />

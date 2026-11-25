@@ -26,11 +26,20 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.15" />
   </ItemGroup>
 
+  <ItemGroup Label="Documenti (SkiaSharp: MIT)">
+    <!-- PDF dei documenti generati dall'API (ADR 0005). Stessa versione usata da Avalonia. -->
+    <PackageVersion Include="SkiaSharp" Version="3.119.4" />
+    <!-- Libreria nativa per il server Linux; senza fontconfig: i caratteri sono incorporati. -->
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.4" />
+  </ItemGroup>
+
   <ItemGroup Label="Test (xUnit: Apache 2.0, Testcontainers: MIT, Avalonia.Headless: MIT)">
     <PackageVersion Include="xunit.v3" Version="4.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.15" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.17.0" />
     <!-- Disegna le viste senza finestra. Non Avalonia.Headless.XUnit: è compilato per xUnit v3 3.x. -->
     <PackageVersion Include="Avalonia.Headless" Version="12.1.6" />
+    <!-- Rilegge il testo dei PDF generati, solo nei test (Apache 2.0). -->
+    <PackageVersion Include="PdfPig" Version="0.1.16" />
   </ItemGroup>
 </Project>

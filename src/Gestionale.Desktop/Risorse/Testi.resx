@@ -957,4 +957,13 @@
   <data name="SuggerimentoTrascinaDaPianificare" xml:space="preserve">
     <value>Trascina sul giorno e sul tecnico: poi scegli l'orario.</value>
   </data>
+  <data name="ScaricaRapportino" xml:space="preserve">
+    <value>Scarica rapportino</value>
+  </data>
+  <data name="DocumentoPdf" xml:space="preserve">
+    <value>Documento PDF</value>
+  </data>
+  <data name="RapportinoSalvato" xml:space="preserve">
+    <value>Rapportino salvato in {0}. Verificalo prima di farlo firmare.</value>
+  </data>
 </root>

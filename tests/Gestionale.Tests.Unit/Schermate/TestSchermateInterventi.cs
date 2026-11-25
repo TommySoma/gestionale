@@ -147,6 +147,7 @@ public sealed class TestSchermateInterventi
         Assert.Contains("GUA-01 · Guarnizione di prova", testi);
         Assert.Contains(FormatoInterventi.Importo(68.98m), scheda.Totale);
         Assert.Contains(FormatoInterventi.Esito("risolto"), testi);
+        Assert.Contains(Testi.ScaricaRapportino, testi);
 
         // Completato è finale: niente azioni.
         Assert.False(scheda.PuoAvviare || scheda.PuoChiudere || scheda.PuoPianificare || scheda.PuoAnnullare);

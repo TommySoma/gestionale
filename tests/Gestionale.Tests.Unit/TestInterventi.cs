@@ -97,7 +97,7 @@ public sealed class TestServizioInterventi
     public async Task Con_l_ambito_propri_si_vedono_e_si_chiudono_solo_i_propri()
     {
         var repository = new RepositoryRegistra();
-        var servizio = new ServizioInterventi(repository);
+        var servizio = new ServizioInterventi(repository, new GeneratoreCheFallisce());
         var ct = TestContext.Current.CancellationToken;
 
         await servizio.CercaAsync(s_contesto, AmbitoPermesso.Propri, new FiltroInterventi(TecnicoUtenteId: Guid.NewGuid(), Stato: " Pianificato "), 0, 5000, ct);
@@ -116,7 +116,7 @@ public sealed class TestServizioInterventi
     [Fact]
     public async Task Con_l_ambito_propri_non_si_crea_non_si_pianifica_e_non_si_annulla()
     {
-        var servizio = new ServizioInterventi(new RepositoryRegistra());
+        var servizio = new ServizioInterventi(new RepositoryRegistra(), new GeneratoreCheFallisce());
         var ct = TestContext.Current.CancellationToken;
         var dati = new DatiIntervento(Guid.NewGuid(), null, "manutenzione", null, null, null, null);
 
@@ -128,7 +128,7 @@ public sealed class TestServizioInterventi
     [Fact]
     public async Task I_dati_non_validi_non_arrivano_al_database()
     {
-        var servizio = new ServizioInterventi(new RepositoryRegistra());
+        var servizio = new ServizioInterventi(new RepositoryRegistra(), new GeneratoreCheFallisce());
         var ct = TestContext.Current.CancellationToken;
 
         var esito = await servizio.CreaAsync(s_contesto, AmbitoPermesso.Tutti, new DatiIntervento(null, null, null, null, null, null, null), ct);
@@ -161,6 +161,9 @@ public sealed class TestServizioInterventi
             return Task.FromResult<Intervento?>(null);
         }
 
+        public Task<IntestazioneAzienda> AziendaAsync(Contesto contesto, CancellationToken ct) =>
+            Task.FromResult(new IntestazioneAzienda { RagioneSociale = "Termoidraulica Prova (fittizia)" });
+
         public Task<IReadOnlyList<TecnicoAssegnabile>> TecniciAsync(Contesto contesto, CancellationToken ct) =>
             Task.FromResult<IReadOnlyList<TecnicoAssegnabile>>([]);
 
@@ -184,4 +187,11 @@ public sealed class TestServizioInterventi
 
         private static Task<EsitoIntervento> Fallisci() => throw new InvalidOperationException("Il servizio non doveva chiamare il database.");
     }
+}
+
+/// <summary>Questi test non arrivano mai a generare un PDF.</summary>
+internal sealed class GeneratoreCheFallisce : IGeneratoreRapportino
+{
+    public byte[] Genera(IntestazioneAzienda azienda, Intervento intervento) =>
+        throw new InvalidOperationException("Il servizio non doveva generare il rapportino.");
 }

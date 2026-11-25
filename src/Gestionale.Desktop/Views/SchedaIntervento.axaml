@@ -10,6 +10,7 @@
         <Button Classes="collegamento" HorizontalAlignment="Left" Content="{x:Static r:Testi.Indietro}" Command="{Binding IndietroCommand}" />
         <DockPanel>
           <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Top">
+            <Button Classes="secondario" Content="{x:Static r:Testi.ScaricaRapportino}" Click="ScaricaRapportino_Click" IsVisible="{Binding PuoScaricareRapportino}" />
             <Button Classes="primario" Content="{x:Static r:Testi.AvviaIntervento}" Command="{Binding AvviaCommand}" IsVisible="{Binding PuoAvviare}" />
             <Button Classes="primario" Content="{x:Static r:Testi.ChiudiIntervento}" Command="{Binding ChiudiCommand}" IsVisible="{Binding PuoChiudere}" />
             <Button Classes="secondario" Content="{x:Static r:Testi.Pianifica}" Command="{Binding PianificaCommand}" IsVisible="{Binding PuoPianificare}" />
@@ -29,6 +30,12 @@
 
         <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
           <TextBlock Text="{Binding Errore}" />
+        </Border>
+        <Border Classes="avvisoSuccesso" IsVisible="{Binding HaAvviso}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaOk}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding Avviso}" TextWrapping="Wrap" />
+          </DockPanel>
         </Border>
         <Border Classes="avvisoAttenzione" IsVisible="{Binding Annullato}">
           <DockPanel>

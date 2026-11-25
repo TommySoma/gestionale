@@ -217,7 +217,7 @@ Lo stack è deciso (19 novembre 2026): desktop in Avalonia 12, backend ASP.NET C
 | Database | PostgreSQL 18, pgvector | Row-Level Security, ricerca semantica nello stesso DB |
 | Migrazioni | DbUp, script SQL versionati | Nessuna generazione automatica dello schema |
 | Autenticazione | Su misura sullo schema sec: Argon2id (Konscious), TOTP (Otp.NET), JWT a vita breve con rinnovo a rotazione | Come da sezione Login; niente ASP.NET Core Identity (ADR 0002, 22 novembre 2026) |
-| Documenti e import | QuestPDF, CsvHelper, ClosedXML, MailKit | Verificare la licenza di QuestPDF prima dell'uso |
+| Documenti e import | SkiaSharp (PDF, ADR 0005), CsvHelper, ClosedXML, MailKit | QuestPDF scartato il 24/11/2026: licenza Community a pagamento sopra 1 milione di dollari di fatturato |
 | AI locale | Ollama, Microsoft.Extensions.AI, embeddings multilingue (bge-m3) | Opzionale e disattivabile |
 | Lavoro sul campo (Fase 2) | PWA offline: Blazor WebAssembly oppure React con TypeScript | Decisione aperta, ADR a M7 dopo una prova pratica |
 | Test | xUnit, Testcontainers, pgTAP, test end-to-end sui flussi chiave | Postgres reale nei test |

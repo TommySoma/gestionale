@@ -90,6 +90,13 @@ public sealed class TestInterventi(ApiFixture api) : IClassFixture<ApiFixture>
         Assert.Equal(68.98m, letto.Totale);
         Assert.NotNull(letto.ChiusoIl);
 
+        // Il rapportino PDF c'è solo da chiuso.
+        var rapportino = await client.GetAsync($"/api/interventi/{creato.Id}/rapportino", Ct);
+        Assert.Equal(HttpStatusCode.OK, rapportino.StatusCode);
+        Assert.Equal("application/pdf", rapportino.Content.Headers.ContentType?.MediaType);
+        Assert.Equal($"rapportino-{creato.Anno}-{creato.Numero:D4}.pdf", rapportino.Content.Headers.ContentDisposition?.FileName);
+        Assert.Equal("%PDF", System.Text.Encoding.ASCII.GetString((await rapportino.Content.ReadAsByteArrayAsync(Ct))[..4]));
+
         // Completato è finale.
         var annullaChiuso = await client.PostAsJsonAsync($"/api/interventi/{creato.Id}/annullamento",
             new { versione = chiuso.Versione, motivo = "Ripensamento" }, Ct);
@@ -133,6 +140,10 @@ public sealed class TestInterventi(ApiFixture api) : IClassFixture<ApiFixture>
 
         var creato = await LeggiAsync<RispostaScritturaIntervento>(await client.PostAsJsonAsync("/api/interventi",
             new { impiantoId, tipo = "sopralluogo" }, Ct));
+        var rapportinoAperto = await client.GetAsync($"/api/interventi/{creato.Id}/rapportino", Ct);
+        Assert.Equal(HttpStatusCode.Conflict, rapportinoAperto.StatusCode);
+        Assert.Contains("solo per un intervento completato", await DettaglioAsync(rapportinoAperto), StringComparison.Ordinal);
+
         var chiusuraSenzaData = await client.PostAsJsonAsync($"/api/interventi/{creato.Id}/chiusura",
             new { versione = creato.Versione, esito = "risolto" }, Ct);
         Assert.Equal(HttpStatusCode.Conflict, chiusuraSenzaData.StatusCode);
