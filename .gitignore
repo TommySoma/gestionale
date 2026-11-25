@@ -31,3 +31,5 @@ deploy/dati/
 
 # Claude Code (impostazioni locali)
 .claude/settings.local.json
+# File caricati dall'API in sviluppo (Documenti:Cartella non impostata)
+src/Gestionale.Api/dati/
