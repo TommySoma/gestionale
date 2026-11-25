@@ -39,6 +39,14 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
 
     public bool PuoAggiungereImpianti => shell.ModificaImpianti;
 
+    public ObservableCollection<RigaElencoPreventivo> Preventivi { get; } = [];
+
+    public bool VedePreventivi => shell.VedePreventivi;
+
+    public bool PuoCrearePreventivi => shell.GestiscePreventivi;
+
+    public bool SenzaPreventivi => Caricato && Preventivi.Count == 0;
+
     [ObservableProperty]
     public partial string Nome { get; set; } = "";
 
@@ -128,14 +136,49 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
             Consensi.Add(new RigaConsenso(nome, c.Concesso, c.Concesso ? Testi.Concesso : Testi.NonConcesso, dettaglio));
         }
 
+        await CaricaPreventiviAsync();
+
         Caricato = true;
         OnPropertyChanged(nameof(SenzaSedi));
+        OnPropertyChanged(nameof(SenzaPreventivi));
         OnPropertyChanged(nameof(SenzaContatti));
         OnPropertyChanged(nameof(SenzaConsensi));
     }
 
     [RelayCommand]
     private Task IndietroAsync() => shell.ApriClientiAsync();
+
+    [RelayCommand]
+    private Task ApriPreventivoAsync(RigaElencoPreventivo riga) => shell.ApriPreventivoAsync(riga.Id);
+
+    [RelayCommand]
+    private async Task NuovoPreventivoAsync() =>
+        shell.MostraDialogo(await EditorPreventivoViewModel.CreaAsync(
+            shell, null, new OpzioneCliente(clienteId, Nome), id => _ = shell.ApriPreventivoAsync(id)));
+
+    // I preventivi del cliente, dal più recente; chi non ha il permesso non li vede.
+    private async Task CaricaPreventiviAsync()
+    {
+        Preventivi.Clear();
+        if (!VedePreventivi)
+        {
+            return;
+        }
+
+        var risposta = await shell.Api.CercaPreventiviAsync(null, null, clienteId, 1, 20);
+        foreach (var p in risposta.Valore?.Elementi ?? [])
+        {
+            Preventivi.Add(new RigaElencoPreventivo(
+                p.PreventivoId,
+                FormatoCommerciale.Numero(p.Numero, p.Anno),
+                p.Cliente,
+                p.Oggetto,
+                p.EmessoIl is { } emesso ? FormatoImpianti.Data(emesso) : FormatoInterventi.DataOra(p.CreatoIl),
+                FormatoInterventi.Importo(p.Totale),
+                FormatoCommerciale.StatoPreventivo(p.Stato, p.Scaduto),
+                p.Scaduto));
+        }
+    }
 
     [RelayCommand]
     private void Modifica()

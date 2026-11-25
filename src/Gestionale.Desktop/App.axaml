@@ -38,6 +38,7 @@
     <DataTemplate DataType="vm:EditorPreventivoViewModel"><v:EditorPreventivoView /></DataTemplate>
     <DataTemplate DataType="vm:AnnullamentoPreventivoViewModel"><v:AnnullamentoPreventivoView /></DataTemplate>
     <DataTemplate DataType="vm:InterventoDaPreventivoViewModel"><v:InterventoDaPreventivoView /></DataTemplate>
+    <DataTemplate DataType="vm:OggiViewModel"><v:OggiView /></DataTemplate>
     <DataTemplate DataType="vm:ConfermaViewModel"><v:ConfermaView /></DataTemplate>
   </Application.DataTemplates>
 
