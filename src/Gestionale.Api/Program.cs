@@ -23,6 +23,7 @@ EndpointClienti.Mappa(api);
 EndpointImpianti.Mappa(api);
 EndpointInterventi.Mappa(api);
 EndpointDocumenti.Mappa(api);
+EndpointScadenze.Mappa(api);
 
 app.Run();
 

@@ -31,7 +31,7 @@ public sealed record RichiestaRiga(
     decimal? ScontoPercentuale,
     decimal? AliquotaIva);
 
-public sealed record RichiestaChiusura(int? Versione, string? Esito, string? Note, IReadOnlyList<RichiestaRiga>? Righe);
+public sealed record RichiestaChiusura(int? Versione, string? Esito, string? Note, IReadOnlyList<RichiestaRiga>? Righe, bool? ControlloEfficienza = null);
 
 public sealed record RichiestaAnnullamento(int? Versione, string? Motivo);
 
@@ -128,7 +128,7 @@ internal static class EndpointInterventi
 
     private static DatiChiusura Dati(RichiestaChiusura r) =>
         new(r.Esito, r.Note, r.Righe?.Select(x => new DatiRiga(
-            x.Tipo, x.Codice, x.Descrizione, x.Unita, x.Quantita, x.PrezzoUnitario, x.ScontoPercentuale, x.AliquotaIva)).ToList());
+            x.Tipo, x.Codice, x.Descrizione, x.Unita, x.Quantita, x.PrezzoUnitario, x.ScontoPercentuale, x.AliquotaIva)).ToList(), r.ControlloEfficienza ?? false);
 
     private static IResult Risposta(EsitoIntervento esito, bool creato = false) => esito switch
     {

@@ -20,6 +20,7 @@ public sealed record RichiestaImpianto(
     Guid? ResponsabileClienteId,
     string? Note,
     DateOnly? DismessoIl,
+    int? ManutenzioneMesi,
     int? Versione);
 
 public sealed record RichiestaGeneratore(
@@ -137,7 +138,7 @@ internal static class EndpointImpianti
 
     private static DatiImpianto Dati(RichiestaImpianto r) =>
         new(r.SedeId, r.TipoImpiantoId, r.Stato, r.AnnoInstallazione, r.PotenzaUtileKw, r.CombustibileId, r.Pdr,
-            r.ProprietarioClienteId, r.ResponsabileClienteId, r.Note, r.DismessoIl);
+            r.ProprietarioClienteId, r.ResponsabileClienteId, r.Note, r.DismessoIl, r.ManutenzioneMesi);
 
     private static DatiGeneratore Dati(RichiestaGeneratore r) =>
         new(r.TipoGeneratoreId, r.Marca, r.Modello, r.Matricola, r.PotenzaKw, r.CombustibileId, r.InstallatoIl, r.DismessoIl, r.Note);

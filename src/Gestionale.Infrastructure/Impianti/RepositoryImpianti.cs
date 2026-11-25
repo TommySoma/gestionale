@@ -118,7 +118,7 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
                        i.stato, i.anno_installazione, i.potenza_utile_kw, i.combustibile_id, cb.nome AS combustibile, i.pdr,
                        i.proprietario_cliente_id, {NomeCliente("p")} AS proprietario,
                        i.responsabile_cliente_id, {NomeCliente("r")} AS responsabile,
-                       i.note, i.dismesso_il, i.versione,
+                       i.note, i.dismesso_il, i.manutenzione_mesi, i.versione,
                        {IndirizzoDuplicato} AS indirizzo_duplicato
                 FROM impianti.impianti i
                 JOIN anagrafica.sedi s ON s.sede_id = i.sede_id
@@ -195,10 +195,10 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
                 """
                 INSERT INTO impianti.impianti (azienda_id, sede_id, tipo_impianto_id, stato, anno_installazione, potenza_utile_kw,
                                                combustibile_id, pdr, proprietario_cliente_id, responsabile_cliente_id, note,
-                                               dismesso_il, creato_da)
+                                               dismesso_il, manutenzione_mesi, creato_da)
                 VALUES (@aziendaId, @SedeId, @TipoImpiantoId, @Stato, @AnnoInstallazione, @PotenzaUtileKw,
                         @CombustibileId, @Pdr, @ProprietarioClienteId, @ResponsabileClienteId, @Note,
-                        @DismessoIl, @utenteId)
+                        @DismessoIl, @ManutenzioneMesi, @utenteId)
                 RETURNING impianto_id AS id, versione
                 """,
                 new DynamicParameters(dati).Con(new { aziendaId = contesto.AziendaId, utenteId = contesto.UtenteId }), t, ct));
@@ -228,7 +228,7 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
                 SET sede_id = @SedeId, tipo_impianto_id = @TipoImpiantoId, stato = @Stato, anno_installazione = @AnnoInstallazione,
                     potenza_utile_kw = @PotenzaUtileKw, combustibile_id = @CombustibileId, pdr = @Pdr,
                     proprietario_cliente_id = @ProprietarioClienteId, responsabile_cliente_id = @ResponsabileClienteId,
-                    note = @Note, dismesso_il = @DismessoIl, modificato_da = @utenteId
+                    note = @Note, dismesso_il = @DismessoIl, manutenzione_mesi = @ManutenzioneMesi, modificato_da = @utenteId
                 WHERE impianto_id = @impiantoId AND versione = @versione AND eliminato_il IS NULL
                 RETURNING impianto_id AS id, versione
                 """,
