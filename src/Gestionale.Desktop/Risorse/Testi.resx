@@ -966,4 +966,37 @@
   <data name="RapportinoSalvato" xml:space="preserve">
     <value>Rapportino salvato in {0}. Verificalo prima di farlo firmare.</value>
   </data>
+  <data name="FotoEDocumenti" xml:space="preserve">
+    <value>Foto e documenti</value>
+  </data>
+  <data name="CaricaDocumento" xml:space="preserve">
+    <value>+ Carica</value>
+  </data>
+  <data name="NessunDocumento" xml:space="preserve">
+    <value>Nessuna foto e nessun documento. Si possono caricare foto JPEG o PNG e documenti PDF, fino a 20 MB.</value>
+  </data>
+  <data name="Apri" xml:space="preserve">
+    <value>Apri</value>
+  </data>
+  <data name="SalvaCopia" xml:space="preserve">
+    <value>Salva copia</value>
+  </data>
+  <data name="Foto" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="DocumentoTroppoGrande" xml:space="preserve">
+    <value>«{0}» supera i 20 MB ammessi: riduci la foto o dividi il PDF.</value>
+  </data>
+  <data name="DocumentoCaricato" xml:space="preserve">
+    <value>«{0}» caricato.</value>
+  </data>
+  <data name="DocumentoSalvato" xml:space="preserve">
+    <value>Copia salvata in {0}.</value>
+  </data>
+  <data name="ConfermaEliminaDocumentoTitolo" xml:space="preserve">
+    <value>Eliminare il documento?</value>
+  </data>
+  <data name="ConfermaEliminaDocumento" xml:space="preserve">
+    <value>«{0}» non comparirà più nella scheda dell'impianto. Il file resta archiviato sul server.</value>
+  </data>
 </root>

@@ -86,6 +86,7 @@
     <StreamGeometry x:Key="IconaLuogo">M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z M12 7a2.5 2.5 0 1 1 0 5a2.5 2.5 0 1 1 0-5z</StreamGeometry>
     <StreamGeometry x:Key="IconaPiu">M12 5v14 M5 12h14</StreamGeometry>
     <StreamGeometry x:Key="IconaChiudi">M6 6l12 12 M18 6L6 18</StreamGeometry>
+    <StreamGeometry x:Key="IconaDocumento">M7 3h7l5 5v13H7z M14 3v5h5 M10 13h6 M10 17h6</StreamGeometry>
     <StreamGeometry x:Key="IconaStella">M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z</StreamGeometry>
     </ResourceDictionary>
   </Styles.Resources>

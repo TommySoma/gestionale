@@ -15,12 +15,18 @@ public sealed record RigaRiferimento(RiferimentoCatasto Dati, string Sistema, st
 
 public sealed record RigaStoricoIntervento(Guid Id, string Titolo, string Dettaglio, string Stato);
 
+/// <summary>Foto o PDF dell'impianto: il tipo è sempre scritto, non solo indicato dall'icona.</summary>
+public sealed record RigaDocumento(Documento Dati, string Nome, string Dettaglio, bool Foto);
+
 /// <summary>
 /// Scheda di un impianto: dati tecnici, generatori, riferimenti al catasto e
 /// interventi, dal più recente. La prossima azione arriva con le scadenze (M3).
 /// </summary>
 public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impiantoId) : ViewModelBase
 {
+    /// <summary>Lo stesso limite del server: il file troppo grande non parte nemmeno.</summary>
+    public const long DimensioneMassimaDocumento = 20L * 1024 * 1024;
+
     private Impianto? _impianto;
 
     public ObservableCollection<CampoScheda> DatiTecnici { get; } = [];
@@ -38,6 +44,23 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
     public bool VedeInterventi => shell.VedeInterventi;
 
     public bool PuoCreareInterventi => shell.PianificaInterventi;
+
+    public ObservableCollection<RigaDocumento> Documenti { get; } = [];
+
+    public bool VedeDocumenti => shell.Profilo.Ha("documenti.lettura");
+
+    // Il Tecnico carica sugli impianti dei propri interventi (li vede solo se suoi); eliminare spetta all'ufficio.
+    public bool CaricaDocumenti => shell.Profilo.Ha("documenti.scrittura");
+
+    public bool EliminaDocumenti => shell.Profilo.Permessi.Any(p => p.Codice == "documenti.scrittura" && p.Ambito == "tutti");
+
+    public bool SenzaDocumenti => Caricato && Documenti.Count == 0;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HaAvviso))]
+    public partial string? Avviso { get; set; }
+
+    public bool HaAvviso => !string.IsNullOrEmpty(Avviso);
 
     public string EtichettaProssimaAzione => string.Format(CultureInfo.CurrentCulture, Testi.InArrivo, "M3");
 
@@ -138,11 +161,13 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
         }
 
         await CaricaInterventiAsync();
+        await CaricaDocumentiAsync();
 
         Caricato = true;
         OnPropertyChanged(nameof(SenzaGeneratori));
         OnPropertyChanged(nameof(SenzaRiferimenti));
         OnPropertyChanged(nameof(SenzaInterventi));
+        OnPropertyChanged(nameof(SenzaDocumenti));
     }
 
     [RelayCommand]
@@ -163,6 +188,92 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
         var tecnici = await shell.TecniciPerDialogoAsync();
         var opzione = new OpzioneImpianto(impianto.ImpiantoId, $"{impianto.TipoImpianto} · {impianto.Cliente} · {impianto.Comune}");
         shell.MostraDialogo(new EditorInterventoViewModel(shell, opzione, null, tecnici, id => _ = shell.ApriInterventoAsync(id, () => shell.ApriImpiantoAsync(impiantoId))));
+    }
+
+    /// <summary>Carica un file scelto dall'utente; dimensione e tipo li controlla anche il server.</summary>
+    public async Task CaricaDocumentoAsync(byte[] dati, string nome)
+    {
+        ArgumentNullException.ThrowIfNull(dati);
+
+        Avviso = null;
+        if (dati.LongLength > DimensioneMassimaDocumento)
+        {
+            Errore = string.Format(CultureInfo.CurrentCulture, Testi.DocumentoTroppoGrande, nome);
+            return;
+        }
+
+        var risposta = await shell.Api.CaricaDocumentoAsync(impiantoId, new ModuloFile(dati, nome, null));
+        Errore = risposta.Riuscita ? null : risposta.Messaggio;
+        if (risposta.Valore is { } documento)
+        {
+            Avviso = string.Format(CultureInfo.CurrentCulture, Testi.DocumentoCaricato, documento.NomeOriginale);
+        }
+
+        await CaricaDocumentiAsync();
+        OnPropertyChanged(nameof(SenzaDocumenti));
+    }
+
+    /// <summary>Contenuto del file per aprirlo o salvarlo; null (con il messaggio) se non arriva.</summary>
+    public async Task<byte[]?> ContenutoDocumentoAsync(RigaDocumento riga)
+    {
+        ArgumentNullException.ThrowIfNull(riga);
+
+        var risposta = await shell.Api.ContenutoDocumentoAsync(impiantoId, riga.Dati.DocumentoId);
+        Errore = risposta.Valore is null ? risposta.Messaggio : null;
+        return risposta.Valore;
+    }
+
+    public void SegnalaFileTroppoGrande(string nome)
+    {
+        Avviso = null;
+        Errore = string.Format(CultureInfo.CurrentCulture, Testi.DocumentoTroppoGrande, nome);
+    }
+
+    public void SegnalaDocumentoSalvato(string percorso) =>
+        Avviso = string.Format(CultureInfo.CurrentCulture, Testi.DocumentoSalvato, percorso);
+
+    [RelayCommand]
+    private void EliminaDocumento(RigaDocumento riga) =>
+        shell.MostraDialogo(new ConfermaViewModel(
+            shell,
+            Testi.ConfermaEliminaDocumentoTitolo,
+            string.Format(CultureInfo.CurrentCulture, Testi.ConfermaEliminaDocumento, riga.Nome),
+            Testi.Elimina,
+            async () =>
+            {
+                var risposta = await shell.Api.EliminaDocumentoAsync(impiantoId, riga.Dati.DocumentoId, riga.Dati.Versione);
+                if (!risposta.Riuscita)
+                {
+                    return risposta.Messaggio;
+                }
+
+                await CaricaDocumentiAsync();
+                OnPropertyChanged(nameof(SenzaDocumenti));
+                return null;
+            }));
+
+    // Foto e documenti, dal più recente.
+    private async Task CaricaDocumentiAsync()
+    {
+        Documenti.Clear();
+        if (!VedeDocumenti)
+        {
+            return;
+        }
+
+        var risposta = await shell.Api.DocumentiAsync(impiantoId);
+        foreach (var d in risposta.Valore ?? [])
+        {
+            var foto = d.Categoria == "foto";
+            var dettaglio = string.Join(" · ", new[]
+            {
+                foto ? Testi.Foto : Testi.DocumentoPdf,
+                FormatoDocumenti.Dimensione(d.Dimensione),
+                FormatoInterventi.DataOra(d.CreatoIl),
+                d.CreatoDa,
+            }.Where(v => !string.IsNullOrEmpty(v)));
+            Documenti.Add(new RigaDocumento(d, d.Descrizione is null ? d.NomeOriginale : $"{d.NomeOriginale} — {d.Descrizione}", dettaglio, foto));
+        }
     }
 
     // Gli ultimi interventi dell'impianto; il Tecnico vede solo i propri.
@@ -272,4 +383,16 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
         Errore = risposta.Valore is null ? risposta.Messaggio : null;
         return risposta.Valore;
     }
+}
+
+public static class FormatoDocumenti
+{
+    private static readonly CultureInfo s_italiano = CultureInfo.GetCultureInfo("it-IT");
+
+    public static string Dimensione(long byte_) => byte_ switch
+    {
+        < 1024 => $"{byte_} B",
+        < 1024 * 1024 => $"{(byte_ / 1024m).ToString("0", s_italiano)} KB",
+        _ => $"{(byte_ / (1024m * 1024)).ToString("0.#", s_italiano)} MB",
+    };
 }

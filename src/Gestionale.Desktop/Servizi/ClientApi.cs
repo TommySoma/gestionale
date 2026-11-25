@@ -287,6 +287,20 @@ public sealed class ClientApi : IDisposable
     public Task<Risposta<EsitoScritturaIntervento>> AnnullaInterventoAsync(Guid interventoId, int versione, string motivo, CancellationToken ct = default) =>
         AutenticataAsync<EsitoScritturaIntervento>(HttpMethod.Post, $"api/interventi/{interventoId}/annullamento", new { versione, motivo }, ct);
 
+    // --- Documenti degli impianti -----------------------------------------
+
+    public Task<Risposta<IReadOnlyList<Documento>>> DocumentiAsync(Guid impiantoId, CancellationToken ct = default) =>
+        AutenticataAsync<IReadOnlyList<Documento>>(HttpMethod.Get, $"api/impianti/{impiantoId}/documenti", null, ct);
+
+    public Task<Risposta<byte[]>> ContenutoDocumentoAsync(Guid impiantoId, Guid documentoId, CancellationToken ct = default) =>
+        AutenticataAsync<byte[]>(HttpMethod.Get, $"api/impianti/{impiantoId}/documenti/{documentoId}/contenuto", null, ct);
+
+    public Task<Risposta<Documento>> CaricaDocumentoAsync(Guid impiantoId, ModuloFile file, CancellationToken ct = default) =>
+        AutenticataAsync<Documento>(HttpMethod.Post, $"api/impianti/{impiantoId}/documenti", file, ct);
+
+    public Task<Risposta<object>> EliminaDocumentoAsync(Guid impiantoId, Guid documentoId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<object>(HttpMethod.Delete, $"api/impianti/{impiantoId}/documenti/{documentoId}?versione={versione}", null, ct);
+
     public void Dispose()
     {
         _http?.Dispose();
@@ -384,7 +398,20 @@ public sealed class ClientApi : IDisposable
         }
 
         using var richiesta = new HttpRequestMessage(metodo, percorso);
-        if (corpo is not null)
+        if (corpo is ModuloFile file)
+        {
+            // Il tipo lo riconosce il server dal contenuto: qui basta un tipo generico.
+            var parte = new ByteArrayContent(file.Dati);
+            parte.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            var modulo = new MultipartFormDataContent { { parte, "file", file.Nome } };
+            if (file.Descrizione is { } descrizione)
+            {
+                modulo.Add(new StringContent(descrizione), "descrizione");
+            }
+
+            richiesta.Content = modulo;
+        }
+        else if (corpo is not null)
         {
             richiesta.Content = JsonContent.Create(corpo, options: s_json);
         }

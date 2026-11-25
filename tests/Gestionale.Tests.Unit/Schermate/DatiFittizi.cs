@@ -53,6 +53,11 @@ internal static class DatiFittizi
             _ when percorso == $"/api/interventi/{InterventoChiuso}" => SchedaInterventoChiuso(),
             _ when percorso == $"/api/interventi/{InterventoPianificato}" => SchedaIntervento(InterventoPianificato, 13, "riparazione", "pianificato", "2027-01-13T13:30:00Z", "2027-01-13T15:00:00Z", TecnicoSara, "Sara Neri"),
             _ when percorso == $"/api/interventi/{InterventoDaPianificare}" => SchedaIntervento(InterventoDaPianificare, 14, "sopralluogo", "da_pianificare", null, null, null, null),
+            _ when percorso == $"/api/impianti/{Caldaia}/documenti" => new object[]
+            {
+                new { documentoId = Guid.Parse("019ab000-0000-7000-8000-000000000080"), categoria = "foto", nomeOriginale = "caldaia-frontale.jpg", tipoMime = "image/jpeg", dimensione = 2_456_000L, descrizione = "Vista frontale", creatoIl = "2027-01-11T09:10:00Z", creatoDa = "Marco Bianchi", versione = 1 },
+                new { documentoId = Guid.Parse("019ab000-0000-7000-8000-000000000081"), categoria = "documento", nomeOriginale = "libretto-di-impianto.pdf", tipoMime = "application/pdf", dimensione = 845_000L, descrizione = (string?)null, creatoIl = "2026-11-20T15:00:00Z", creatoDa = "Anna Verdi", versione = 1 },
+            },
             _ when percorso == $"/api/impianti/{Caldaia}" => SchedaCaldaia(),
             _ when percorso == $"/api/clienti/{Cliente}" => SchedaCliente(),
             _ => null,
