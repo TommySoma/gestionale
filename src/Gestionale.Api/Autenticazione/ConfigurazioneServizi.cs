@@ -1,6 +1,7 @@
 using System.Threading.RateLimiting;
 using Gestionale.Api.Risorse;
 using Gestionale.Application.Anagrafica;
+using Gestionale.Application.Commerciale;
 using Gestionale.Application.Autenticazione;
 using Gestionale.Application.Documenti;
 using Gestionale.Application.Impianti;
@@ -8,6 +9,7 @@ using Gestionale.Application.Interventi;
 using Gestionale.Application.Scadenze;
 using Gestionale.Infrastructure.Accessi;
 using Gestionale.Infrastructure.Anagrafica;
+using Gestionale.Infrastructure.Commerciale;
 using Gestionale.Infrastructure.Database;
 using Gestionale.Infrastructure.Documenti;
 using Gestionale.Infrastructure.Impianti;
@@ -68,6 +70,11 @@ internal static class ConfigurazioneServizi
         servizi.AddSingleton<ServizioInterventi>();
         servizi.AddSingleton<IRepositoryScadenze, RepositoryScadenze>();
         servizi.AddSingleton<ServizioScadenze>();
+        servizi.AddSingleton<IRepositoryListino, RepositoryListino>();
+        servizi.AddSingleton<ServizioListino>();
+        servizi.AddSingleton<IRepositoryPreventivi, RepositoryPreventivi>();
+        servizi.AddSingleton<IGeneratorePreventivo, GeneratorePreventivo>();
+        servizi.AddSingleton<ServizioPreventivi>();
 
         servizi.AddProblemDetails();
 

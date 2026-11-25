@@ -24,6 +24,7 @@ EndpointImpianti.Mappa(api);
 EndpointInterventi.Mappa(api);
 EndpointDocumenti.Mappa(api);
 EndpointScadenze.Mappa(api);
+EndpointCommerciale.Mappa(api);
 
 app.Run();
 

@@ -381,4 +381,91 @@
   <data name="GiorniNonValidi" xml:space="preserve">
     <value>i giorni devono essere tra 0 e 3650</value>
   </data>
+  <data name="VoceNonTrovata" xml:space="preserve">
+    <value>La voce del listino richiesta non esiste.</value>
+  </data>
+  <data name="PreventivoNonTrovato" xml:space="preserve">
+    <value>Il preventivo richiesto non esiste o è stato eliminato.</value>
+  </data>
+  <data name="DatiCommercialiNonValidi" xml:space="preserve">
+    <value>Correggi questi dati: {0}</value>
+  </data>
+  <data name="StatoPreventivoNonConsentito" xml:space="preserve">
+    <value>Non si può fare con un preventivo {0}.</value>
+  </data>
+  <data name="StatoPreventivo_bozza" xml:space="preserve">
+    <value>in bozza</value>
+  </data>
+  <data name="StatoPreventivo_emesso" xml:space="preserve">
+    <value>emesso</value>
+  </data>
+  <data name="StatoPreventivo_accettato" xml:space="preserve">
+    <value>accettato</value>
+  </data>
+  <data name="StatoPreventivo_rifiutato" xml:space="preserve">
+    <value>rifiutato</value>
+  </data>
+  <data name="StatoPreventivo_annullato" xml:space="preserve">
+    <value>annullato</value>
+  </data>
+  <data name="StatoPreventivo_convertito" xml:space="preserve">
+    <value>che ha già generato l'intervento</value>
+  </data>
+  <data name="CodiceVoceNonValido" xml:space="preserve">
+    <value>il codice della voce non può essere vuoto né contenere spazi</value>
+  </data>
+  <data name="DescrizioneVoceMancante" xml:space="preserve">
+    <value>la voce deve avere una descrizione</value>
+  </data>
+  <data name="TipoVoceNonValido" xml:space="preserve">
+    <value>la voce deve essere materiale o manodopera</value>
+  </data>
+  <data name="UnitaVoceMancante" xml:space="preserve">
+    <value>indica l'unità di misura della voce</value>
+  </data>
+  <data name="ManodoperaVoceNonInOre" xml:space="preserve">
+    <value>la manodopera si indica in ore (unità h)</value>
+  </data>
+  <data name="IvaVoceNonValida" xml:space="preserve">
+    <value>l'aliquota IVA deve essere tra 0 e 100 per cento</value>
+  </data>
+  <data name="PrezzoListinoNonValido" xml:space="preserve">
+    <value>il prezzo non può essere negativo e ha al massimo due decimali</value>
+  </data>
+  <data name="CodiceVoceInUso" xml:space="preserve">
+    <value>C'è già una voce del listino con questo codice: cercala nell'elenco.</value>
+  </data>
+  <data name="PrezzoGiaPresente" xml:space="preserve">
+    <value>La voce ha già un prezzo che parte da questa data: scegli un'altra data.</value>
+  </data>
+  <data name="ClientePreventivoNonValido" xml:space="preserve">
+    <value>il cliente indicato non esiste, è stato eliminato o anonimizzato</value>
+  </data>
+  <data name="SedePreventivoNonValida" xml:space="preserve">
+    <value>la sede indicata non è del cliente o è stata eliminata</value>
+  </data>
+  <data name="ImpiantoPreventivoNonValido" xml:space="preserve">
+    <value>l'impianto indicato non è del cliente o della sede, è dismesso o è stato eliminato</value>
+  </data>
+  <data name="OggettoPreventivoMancante" xml:space="preserve">
+    <value>indica l'oggetto del preventivo</value>
+  </data>
+  <data name="ValiditaPreventivoNonValida" xml:space="preserve">
+    <value>la validità va da 1 a 365 giorni</value>
+  </data>
+  <data name="VoceRigaNonValida" xml:space="preserve">
+    <value>una riga si riferisce a una voce che non è nel listino</value>
+  </data>
+  <data name="PreventivoSenzaRighe" xml:space="preserve">
+    <value>un preventivo senza righe non si emette</value>
+  </data>
+  <data name="MotivoAnnullamentoPreventivoMancante" xml:space="preserve">
+    <value>per annullare un preventivo serve il motivo</value>
+  </data>
+  <data name="ImpiantoMancantePerIntervento" xml:space="preserve">
+    <value>per generare l'intervento il preventivo deve indicare l'impianto</value>
+  </data>
+  <data name="TipoInterventoPreventivoNonValido" xml:space="preserve">
+    <value>scegli il tipo dell'intervento: manutenzione, riparazione, installazione, sopralluogo o altro</value>
+  </data>
 </root>
