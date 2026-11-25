@@ -287,6 +287,40 @@ public sealed class ClientApi : IDisposable
     public Task<Risposta<EsitoScritturaIntervento>> AnnullaInterventoAsync(Guid interventoId, int versione, string motivo, CancellationToken ct = default) =>
         AutenticataAsync<EsitoScritturaIntervento>(HttpMethod.Post, $"api/interventi/{interventoId}/annullamento", new { versione, motivo }, ct);
 
+    // --- Scadenze ----------------------------------------------------------
+
+    /// <summary>Scadute e in arrivo entro i giorni indicati; tipo e stato del richiamo sono filtri facoltativi.</summary>
+    public Task<Risposta<Pagina<ScadenzaInArrivo>>> ScadenzeInArrivoAsync(
+        int giorni, string? tipo, string? richiamo, int pagina, int dimensione, CancellationToken ct = default)
+    {
+        var query = $"api/scadenze?giorni={giorni}&pagina={pagina}&dimensione={dimensione}";
+        if (!string.IsNullOrWhiteSpace(tipo))
+        {
+            query += "&tipo=" + Uri.EscapeDataString(tipo);
+        }
+
+        if (!string.IsNullOrWhiteSpace(richiamo))
+        {
+            query += "&richiamo=" + Uri.EscapeDataString(richiamo);
+        }
+
+        return AutenticataAsync<Pagina<ScadenzaInArrivo>>(HttpMethod.Get, query, null, ct);
+    }
+
+    public Task<Risposta<Scadenza>> ScadenzaAsync(Guid scadenzaId, CancellationToken ct = default) =>
+        AutenticataAsync<Scadenza>(HttpMethod.Get, $"api/scadenze/{scadenzaId}", null, ct);
+
+    /// <summary>Scadenze dell'impianto: prima le aperte, poi lo storico.</summary>
+    public Task<Risposta<IReadOnlyList<Scadenza>>> ScadenzeImpiantoAsync(Guid impiantoId, CancellationToken ct = default) =>
+        AutenticataAsync<IReadOnlyList<Scadenza>>(HttpMethod.Get, $"api/impianti/{impiantoId}/scadenze", null, ct);
+
+    /// <summary>Data corretta a mano: da quel momento il server non la ricalcola più.</summary>
+    public Task<Risposta<EsitoScrittura>> CorreggiDataScadenzaAsync(Guid scadenzaId, DateOnly data, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScrittura>(HttpMethod.Put, $"api/scadenze/{scadenzaId}/data", new { data, versione }, ct);
+
+    public Task<Risposta<EsitoScrittura>> RegistraRichiamoAsync(Guid scadenzaId, DatiRichiamo dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScrittura>(HttpMethod.Post, $"api/scadenze/{scadenzaId}/richiami", dati, ct);
+
     // --- Documenti degli impianti -----------------------------------------
 
     public Task<Risposta<IReadOnlyList<Documento>>> DocumentiAsync(Guid impiantoId, CancellationToken ct = default) =>

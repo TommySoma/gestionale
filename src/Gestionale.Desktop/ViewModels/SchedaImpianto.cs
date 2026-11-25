@@ -15,12 +15,22 @@ public sealed record RigaRiferimento(RiferimentoCatasto Dati, string Sistema, st
 
 public sealed record RigaStoricoIntervento(Guid Id, string Titolo, string Dettaglio, string Stato);
 
+/// <summary>Scadenza aperta dell'impianto, con urgenza (icona e testo), periodicità e stato del richiamo.</summary>
+public sealed record RigaScadenzaImpianto(Scadenza Dati, string Tipo, string Data, string Urgenza, LivelloScadenza Livello, string Dettaglio, string Richiamo)
+{
+    public bool Scaduta => Livello == LivelloScadenza.Scaduta;
+
+    public bool InScadenza => Livello == LivelloScadenza.InScadenza;
+
+    public bool InRegola => Livello == LivelloScadenza.InRegola;
+}
+
 /// <summary>Foto o PDF dell'impianto: il tipo è sempre scritto, non solo indicato dall'icona.</summary>
 public sealed record RigaDocumento(Documento Dati, string Nome, string Dettaglio, bool Foto);
 
 /// <summary>
 /// Scheda di un impianto: dati tecnici, generatori, riferimenti al catasto e
-/// interventi, dal più recente. La prossima azione arriva con le scadenze (M3).
+/// interventi, dal più recente. In alto a destra la prossima azione: le scadenze aperte.
 /// </summary>
 public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impiantoId) : ViewModelBase
 {
@@ -45,6 +55,14 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
 
     public bool PuoCreareInterventi => shell.PianificaInterventi;
 
+    public ObservableCollection<RigaScadenzaImpianto> Scadenze { get; } = [];
+
+    public bool VedeScadenze => shell.VedeScadenze;
+
+    public bool GestisceScadenze => shell.GestisceScadenze;
+
+    public bool SenzaScadenze => Caricato && Scadenze.Count == 0;
+
     public ObservableCollection<RigaDocumento> Documenti { get; } = [];
 
     public bool VedeDocumenti => shell.Profilo.Ha("documenti.lettura");
@@ -61,8 +79,6 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
     public partial string? Avviso { get; set; }
 
     public bool HaAvviso => !string.IsNullOrEmpty(Avviso);
-
-    public string EtichettaProssimaAzione => string.Format(CultureInfo.CurrentCulture, Testi.InArrivo, "M3");
 
     [ObservableProperty]
     public partial string Titolo { get; set; } = "";
@@ -122,6 +138,7 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
         DatiTecnici.Add(new(Testi.AnnoInstallazione, impianto.AnnoInstallazione?.ToString(CultureInfo.InvariantCulture) ?? Testi.NonIndicato));
         DatiTecnici.Add(new(Testi.PotenzaUtile, FormatoImpianti.Potenza(impianto.PotenzaUtileKw)));
         DatiTecnici.Add(new(Testi.Combustibile, impianto.Combustibile ?? Testi.NonIndicato));
+        DatiTecnici.Add(new(Testi.Manutenzione, impianto.ManutenzioneMesi is { } mesi ? FormatoScadenze.Periodicita(mesi) : Testi.ManutenzioneNonIndicata));
         DatiTecnici.Add(new(Testi.Pdr, impianto.Pdr ?? Testi.NonIndicato));
         DatiTecnici.Add(new(Testi.Proprietario, impianto.Proprietario ?? Testi.NonIndicato));
         DatiTecnici.Add(new(Testi.Responsabile, impianto.Responsabile ?? Testi.NonIndicato));
@@ -160,6 +177,7 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
             Riferimenti.Add(new RigaRiferimento(r, FormatoImpianti.Regione(r.Regione), r.Codice, registrazione));
         }
 
+        await CaricaScadenzeAsync();
         await CaricaInterventiAsync();
         await CaricaDocumentiAsync();
 
@@ -168,6 +186,7 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
         OnPropertyChanged(nameof(SenzaRiferimenti));
         OnPropertyChanged(nameof(SenzaInterventi));
         OnPropertyChanged(nameof(SenzaDocumenti));
+        OnPropertyChanged(nameof(SenzaScadenze));
     }
 
     [RelayCommand]
@@ -251,6 +270,41 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
                 OnPropertyChanged(nameof(SenzaDocumenti));
                 return null;
             }));
+
+    [RelayCommand]
+    private void RegistraRichiamo(RigaScadenzaImpianto riga) =>
+        shell.MostraDialogo(new RichiamoViewModel(shell, riga.Dati.ScadenzaId, riga.Dati.Versione, $"{riga.Tipo} · {Cliente}", null, () => _ = CaricaAsync()));
+
+    [RelayCommand]
+    private void CorreggiData(RigaScadenzaImpianto riga) =>
+        shell.MostraDialogo(new DataScadenzaViewModel(
+            shell, riga.Dati.ScadenzaId, riga.Dati.Versione, riga.Dati.DataScadenza, $"{riga.Tipo} · {Cliente}", () => _ = CaricaAsync()));
+
+    // Solo le aperte: sono la prossima azione. Lo storico resta sul server per i report.
+    private async Task CaricaScadenzeAsync()
+    {
+        Scadenze.Clear();
+        if (!VedeScadenze)
+        {
+            return;
+        }
+
+        var oggi = FormatoInterventi.Oggi(shell.Orologio);
+        var risposta = await shell.Api.ScadenzeImpiantoAsync(impiantoId);
+        foreach (var s in (risposta.Valore ?? []).Where(s => s.Stato == "aperta").OrderBy(s => s.DataScadenza))
+        {
+            var giorni = s.DataScadenza.DayNumber - oggi.DayNumber;
+            var dettaglio = string.Join(" · ", new[]
+            {
+                FormatoScadenze.Periodicita(s.PeriodicitaMesi),
+                s.DataManuale ? Testi.DataCorrettaAMano : null,
+                s.RegolaDaVerificare ? Testi.RegolaDaVerificare : null,
+            }.Where(v => v is not null));
+            Scadenze.Add(new RigaScadenzaImpianto(
+                s, FormatoScadenze.Tipo(s.Tipo), FormatoImpianti.Data(s.DataScadenza), FormatoScadenze.Urgenza(giorni),
+                FormatoScadenze.Livello(giorni), dettaglio, FormatoScadenze.StatoRichiamo(s.StatoRichiamo)));
+        }
+    }
 
     // Foto e documenti, dal più recente.
     private async Task CaricaDocumentiAsync()

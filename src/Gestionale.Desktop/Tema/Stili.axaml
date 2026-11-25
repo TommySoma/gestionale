@@ -230,6 +230,34 @@
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Foreground" Value="{DynamicResource TestoDistintivo}" />
   </Style>
+  <!-- Urgenza delle scadenze: colore, icona e testo insieme, mai il solo colore. -->
+  <Style Selector="Border.distintivo.scaduta">
+    <Setter Property="Background" Value="{DynamicResource ErroreTenue}" />
+  </Style>
+  <Style Selector="Border.distintivo.scaduta TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Errore}" />
+  </Style>
+  <Style Selector="Border.distintivo.scaduta Path.icona">
+    <Setter Property="Stroke" Value="{DynamicResource Errore}" />
+  </Style>
+  <Style Selector="Border.distintivo.inScadenza">
+    <Setter Property="Background" Value="{DynamicResource AttenzioneTenue}" />
+  </Style>
+  <Style Selector="Border.distintivo.inScadenza TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Attenzione}" />
+  </Style>
+  <Style Selector="Border.distintivo.inScadenza Path.icona">
+    <Setter Property="Stroke" Value="{DynamicResource Attenzione}" />
+  </Style>
+  <Style Selector="Border.distintivo.inRegola">
+    <Setter Property="Background" Value="{DynamicResource SuccessoTenue}" />
+  </Style>
+  <Style Selector="Border.distintivo.inRegola TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Successo}" />
+  </Style>
+  <Style Selector="Border.distintivo.inRegola Path.icona">
+    <Setter Property="Stroke" Value="{DynamicResource Successo}" />
+  </Style>
   <Style Selector="Border.avvisoErrore">
     <Setter Property="Background" Value="{DynamicResource ErroreTenue}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ErroreBordo}" />

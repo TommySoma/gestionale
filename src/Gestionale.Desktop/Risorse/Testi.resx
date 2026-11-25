@@ -999,4 +999,196 @@
   <data name="ConfermaEliminaDocumento" xml:space="preserve">
     <value>«{0}» non comparirà più nella scheda dell'impianto. Il file resta archiviato sul server.</value>
   </data>
+  <data name="ScadenzeTitolo" xml:space="preserve">
+    <value>Scadenze da richiamare</value>
+  </data>
+  <data name="TipoScadenzaManutenzione" xml:space="preserve">
+    <value>Manutenzione</value>
+  </data>
+  <data name="TipoScadenzaControllo" xml:space="preserve">
+    <value>Controllo di efficienza energetica</value>
+  </data>
+  <data name="ScadutaIeri" xml:space="preserve">
+    <value>Scaduta da ieri</value>
+  </data>
+  <data name="ScadutaDaGiorni" xml:space="preserve">
+    <value>Scaduta da {0} giorni</value>
+  </data>
+  <data name="ScadeOggi" xml:space="preserve">
+    <value>Scade oggi</value>
+  </data>
+  <data name="ScadeDomani" xml:space="preserve">
+    <value>Scade domani</value>
+  </data>
+  <data name="ScadeTraGiorni" xml:space="preserve">
+    <value>Tra {0} giorni</value>
+  </data>
+  <data name="InRegola" xml:space="preserve">
+    <value>In regola</value>
+  </data>
+  <data name="RichiamoNonContattato" xml:space="preserve">
+    <value>Da contattare</value>
+  </data>
+  <data name="RichiamoInAttesa" xml:space="preserve">
+    <value>Da risentire</value>
+  </data>
+  <data name="RichiamoFissato" xml:space="preserve">
+    <value>Appuntamento fissato</value>
+  </data>
+  <data name="RichiamoRifiutato" xml:space="preserve">
+    <value>Ha rifiutato</value>
+  </data>
+  <data name="CanaleTelefono" xml:space="preserve">
+    <value>Telefono</value>
+  </data>
+  <data name="CanaleEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="CanaleSms" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="CanaleWhatsapp" xml:space="preserve">
+    <value>WhatsApp</value>
+  </data>
+  <data name="CanaleDiPersona" xml:space="preserve">
+    <value>Di persona</value>
+  </data>
+  <data name="CanaleAltro" xml:space="preserve">
+    <value>Altro</value>
+  </data>
+  <data name="EsitoNessunaRisposta" xml:space="preserve">
+    <value>Nessuna risposta</value>
+  </data>
+  <data name="EsitoDaRichiamare" xml:space="preserve">
+    <value>Da richiamare</value>
+  </data>
+  <data name="EsitoAppuntamento" xml:space="preserve">
+    <value>Appuntamento fissato</value>
+  </data>
+  <data name="EsitoRifiutato" xml:space="preserve">
+    <value>Rifiutato</value>
+  </data>
+  <data name="OgniMese" xml:space="preserve">
+    <value>Ogni mese</value>
+  </data>
+  <data name="OgniAnno" xml:space="preserve">
+    <value>Ogni anno</value>
+  </data>
+  <data name="OgniAnni" xml:space="preserve">
+    <value>Ogni {0} anni</value>
+  </data>
+  <data name="OgniMesi" xml:space="preserve">
+    <value>Ogni {0} mesi</value>
+  </data>
+  <data name="UltimoRichiamo" xml:space="preserve">
+    <value>Ultimo: {0}, {1}</value>
+  </data>
+  <data name="RisentireIl" xml:space="preserve">
+    <value>risentire il {0}</value>
+  </data>
+  <data name="AvvisoUnaScaduta" xml:space="preserve">
+    <value>Una scadenza è già passata: è in cima alla lista.</value>
+  </data>
+  <data name="AvvisoScadute" xml:space="preserve">
+    <value>{0} scadenze sono già passate: sono in cima alla lista.</value>
+  </data>
+  <data name="ConteggioUnaScadenza" xml:space="preserve">
+    <value>1 scadenza scaduta o entro {0} giorni</value>
+  </data>
+  <data name="ConteggioScadenze" xml:space="preserve">
+    <value>{0} scadenze scadute o entro {1} giorni</value>
+  </data>
+  <data name="FiltroTutteLeScadenze" xml:space="preserve">
+    <value>Tutte</value>
+  </data>
+  <data name="FiltroManutenzioni" xml:space="preserve">
+    <value>Manutenzioni</value>
+  </data>
+  <data name="FiltroControlli" xml:space="preserve">
+    <value>Controlli</value>
+  </data>
+  <data name="ScadutoEEntro" xml:space="preserve">
+    <value>Scadute ed entro</value>
+  </data>
+  <data name="Entro30Giorni" xml:space="preserve">
+    <value>30 giorni</value>
+  </data>
+  <data name="Entro60Giorni" xml:space="preserve">
+    <value>60 giorni</value>
+  </data>
+  <data name="Entro90Giorni" xml:space="preserve">
+    <value>90 giorni</value>
+  </data>
+  <data name="ColUrgenza" xml:space="preserve">
+    <value>Urgenza</value>
+  </data>
+  <data name="ColData" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="ColRichiamo" xml:space="preserve">
+    <value>Richiamo</value>
+  </data>
+  <data name="NessunaScadenza" xml:space="preserve">
+    <value>Nessuna scadenza scaduta o in arrivo in questo periodo.</value>
+  </data>
+  <data name="RegistraRichiamo" xml:space="preserve">
+    <value>Registra richiamo</value>
+  </data>
+  <data name="CorreggiData" xml:space="preserve">
+    <value>Correggi data</value>
+  </data>
+  <data name="TitoloRichiamo" xml:space="preserve">
+    <value>Registra un richiamo</value>
+  </data>
+  <data name="Canale" xml:space="preserve">
+    <value>Canale</value>
+  </data>
+  <data name="RichiamareIl" xml:space="preserve">
+    <value>Da risentire il</value>
+  </data>
+  <data name="SpiegazioneAppuntamento" xml:space="preserve">
+    <value>Fissa poi l'intervento dal calendario: la scadenza si chiude quando la manutenzione è completata.</value>
+  </data>
+  <data name="TitoloCorreggiData" xml:space="preserve">
+    <value>Correggi la data della scadenza</value>
+  </data>
+  <data name="SpiegazioneCorreggiData" xml:space="preserve">
+    <value>Usala quando conosci la data vera, per esempio quella dell'ultima manutenzione fatta da altri. Da quel momento il gestionale non sposta più questa data da solo.</value>
+  </data>
+  <data name="NuovaData" xml:space="preserve">
+    <value>Nuova data</value>
+  </data>
+  <data name="ScegliDataScadenza" xml:space="preserve">
+    <value>Scegli la nuova data della scadenza.</value>
+  </data>
+  <data name="ManutenzioneMesiNonValida" xml:space="preserve">
+    <value>La periodicità della manutenzione è un numero di mesi da 1 a 120, oppure lasciala vuota.</value>
+  </data>
+  <data name="ManutenzioneOgniMesi" xml:space="preserve">
+    <value>Manutenzione ogni (mesi)</value>
+  </data>
+  <data name="SpiegazioneManutenzioneMesi" xml:space="preserve">
+    <value>Dalle istruzioni del costruttore o dell'installatore. Vuoto: nessuna scadenza di manutenzione.</value>
+  </data>
+  <data name="EseguitoControlloEfficienza" xml:space="preserve">
+    <value>Eseguito anche il controllo di efficienza energetica</value>
+  </data>
+  <data name="SpiegazioneControlloEfficienza" xml:space="preserve">
+    <value>Con esito risolto chiude la scadenza del controllo e calcola la successiva.</value>
+  </data>
+  <data name="Manutenzione" xml:space="preserve">
+    <value>Manutenzione</value>
+  </data>
+  <data name="ManutenzioneNonIndicata" xml:space="preserve">
+    <value>Periodicità non indicata</value>
+  </data>
+  <data name="DataCorrettaAMano" xml:space="preserve">
+    <value>data corretta a mano</value>
+  </data>
+  <data name="RegolaDaVerificare" xml:space="preserve">
+    <value>regola di prova, da verificare</value>
+  </data>
+  <data name="NessunaScadenzaImpianto" xml:space="preserve">
+    <value>Nessuna scadenza aperta. Per la manutenzione indica la periodicità con Modifica.</value>
+  </data>
 </root>

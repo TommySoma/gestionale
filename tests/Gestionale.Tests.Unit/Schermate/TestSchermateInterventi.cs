@@ -212,5 +212,9 @@ public sealed class TestSchermateInterventi
         Assert.NotNull(scheda);
         Assert.Equal(FormatoInterventi.Importo(68.98m), chiusura.Totale);
         Assert.Contains(Testi.AggiungiMateriale, testi);
+
+        // È una manutenzione: si può segnare anche il controllo di efficienza.
+        Assert.True(chiusura.PuoSegnareControllo);
+        Assert.Contains(Testi.EseguitoControlloEfficienza, testi);
     });
 }

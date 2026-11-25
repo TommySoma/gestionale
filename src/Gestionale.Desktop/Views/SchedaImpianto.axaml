@@ -159,11 +159,40 @@
         </StackPanel>
 
         <StackPanel Grid.Column="2" Spacing="20">
-          <!-- Prossima azione: arriva con le scadenze (M3). -->
-          <Border Classes="scheda" Padding="20,16">
-            <StackPanel Spacing="8">
+          <!-- Prossima azione: le scadenze aperte, dalla più vicina. -->
+          <Border Classes="scheda" Padding="20,16" IsVisible="{Binding VedeScadenze}">
+            <StackPanel Spacing="12">
               <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.ProssimaAzione}" />
-              <TextBlock Classes="secondario" FontSize="14" Text="{Binding EtichettaProssimaAzione}" />
+              <TextBlock Classes="secondario" FontSize="14" TextWrapping="Wrap" IsVisible="{Binding SenzaScadenze}" Text="{x:Static r:Testi.NessunaScadenzaImpianto}" />
+              <ItemsControl ItemsSource="{Binding Scadenze}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:RigaScadenzaImpianto">
+                    <StackPanel Spacing="4" Margin="0,0,0,16">
+                      <TextBlock Text="{Binding Tipo}" FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap" />
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Border Classes="distintivo" Classes.scaduta="{Binding Scaduta}" Classes.inScadenza="{Binding InScadenza}" Classes.inRegola="{Binding InRegola}">
+                          <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Path Classes="icona" Data="{StaticResource IconaAvviso}" Width="14" Height="14" IsVisible="{Binding Scaduta}" />
+                            <Path Classes="icona" Data="{StaticResource IconaInfo}" Width="14" Height="14" IsVisible="{Binding InScadenza}" />
+                            <Path Classes="icona" Data="{StaticResource IconaOk}" Width="14" Height="14" IsVisible="{Binding InRegola}" />
+                            <TextBlock Text="{Binding Urgenza}" />
+                          </StackPanel>
+                        </Border>
+                        <TextBlock FontSize="14" Text="{Binding Data}" VerticalAlignment="Center" />
+                      </StackPanel>
+                      <TextBlock Classes="secondario" FontSize="13" Text="{Binding Dettaglio}" TextWrapping="Wrap" />
+                      <TextBlock Classes="secondario" FontSize="13" Text="{Binding Richiamo}" />
+                      <StackPanel Orientation="Horizontal" Spacing="4"
+                                  IsVisible="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).GestisceScadenze}">
+                        <Button Classes="collegamento" Padding="0,4,8,4" Content="{x:Static r:Testi.RegistraRichiamo}"
+                                Command="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).RegistraRichiamoCommand}" CommandParameter="{Binding}" />
+                        <Button Classes="collegamento" Padding="8,4" Content="{x:Static r:Testi.CorreggiData}"
+                                Command="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).CorreggiDataCommand}" CommandParameter="{Binding}" />
+                      </StackPanel>
+                    </StackPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
             </StackPanel>
           </Border>
 

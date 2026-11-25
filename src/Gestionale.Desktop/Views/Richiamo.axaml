@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.RichiamoView"
+             x:DataType="vm:RichiamoViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <StackPanel Spacing="4">
+        <TextBlock Text="{x:Static r:Testi.TitoloRichiamo}" FontSize="20" FontWeight="Bold" />
+        <TextBlock Classes="secondario" FontSize="14" Text="{Binding Descrizione}" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+        <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+        <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.RegistraRichiamo}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+      </StackPanel>
+    </Border>
+    <StackPanel Margin="24" Spacing="20">
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <DockPanel>
+          <Path Classes="icona" Data="{StaticResource IconaAvviso}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+          <TextBlock Text="{Binding Errore}" />
+        </DockPanel>
+      </Border>
+
+      <StackPanel IsVisible="{Binding HaTelefono}">
+        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Telefono}" />
+        <SelectableTextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding Telefono}" />
+      </StackPanel>
+
+      <Grid ColumnDefinitions="*,16,*">
+        <StackPanel Grid.Column="0">
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Canale}" />
+          <ComboBox ItemsSource="{Binding Canali}" SelectedItem="{Binding Canale}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.Canale}" />
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Esito}" />
+          <ComboBox ItemsSource="{Binding Esiti}" SelectedItem="{Binding Esito}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.Esito}" />
+        </StackPanel>
+      </Grid>
+
+      <StackPanel IsVisible="{Binding ConData}">
+        <TextBlock Classes="etichetta">
+          <Run Text="{x:Static r:Testi.RichiamareIl}" />
+          <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+        </TextBlock>
+        <CalendarDatePicker SelectedDate="{Binding RichiamareIl}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.RichiamareIl}" />
+      </StackPanel>
+
+      <TextBlock Classes="secondario" FontSize="13" TextWrapping="Wrap" IsVisible="{Binding ConAppuntamento}" Text="{x:Static r:Testi.SpiegazioneAppuntamento}" />
+
+      <StackPanel>
+        <TextBlock Classes="etichetta">
+          <Run Text="{x:Static r:Testi.Note}" />
+          <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+        </TextBlock>
+        <TextBox Text="{Binding Note}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72" MaxLength="2000" AutomationProperties.Name="{x:Static r:Testi.Note}" />
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</UserControl>

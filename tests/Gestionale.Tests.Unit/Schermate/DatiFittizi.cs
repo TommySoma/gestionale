@@ -18,6 +18,9 @@ internal static class DatiFittizi
     public static readonly Guid InterventoChiuso = Guid.Parse("019ab000-0000-7000-8000-000000000070");
     public static readonly Guid InterventoPianificato = Guid.Parse("019ab000-0000-7000-8000-000000000071");
     public static readonly Guid InterventoDaPianificare = Guid.Parse("019ab000-0000-7000-8000-000000000072");
+    public static readonly Guid ScadenzaScaduta = Guid.Parse("019ab000-0000-7000-8000-000000000090");
+    public static readonly Guid ScadenzaOggi = Guid.Parse("019ab000-0000-7000-8000-000000000091");
+    public static readonly Guid ScadenzaVicina = Guid.Parse("019ab000-0000-7000-8000-000000000092");
 
     /// <summary>Lunedì della settimana mostrata nelle schermate del calendario.</summary>
     public static readonly DateOnly Settimana = new(2027, 1, 11);
@@ -28,6 +31,11 @@ internal static class DatiFittizi
     public static object? Rispondi(HttpRequestMessage richiesta)
     {
         var percorso = richiesta.RequestUri!.AbsolutePath;
+        if (richiesta.Method == HttpMethod.Post && percorso.EndsWith("/richiami", StringComparison.Ordinal))
+        {
+            return new { id = Guid.Parse(percorso.Split('/')[3]), versione = 5 };
+        }
+
         if (richiesta.Method == HttpMethod.Put)
         {
             UltimaModifica = richiesta.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -50,6 +58,8 @@ internal static class DatiFittizi
             },
             "/api/interventi/tecnici" => new object[] { new { utenteId = TecnicoMarco, nome = "Marco Bianchi" }, new { utenteId = TecnicoSara, nome = "Sara Neri" } },
             "/api/interventi" => ElencoInterventi(richiesta.RequestUri.Query),
+            "/api/scadenze" => ElencoScadenze(),
+            _ when percorso == $"/api/impianti/{Caldaia}/scadenze" => ScadenzeCaldaia(),
             _ when percorso == $"/api/interventi/{InterventoChiuso}" => SchedaInterventoChiuso(),
             _ when percorso == $"/api/interventi/{InterventoPianificato}" => SchedaIntervento(InterventoPianificato, 13, "riparazione", "pianificato", "2027-01-13T13:30:00Z", "2027-01-13T15:00:00Z", TecnicoSara, "Sara Neri"),
             _ when percorso == $"/api/interventi/{InterventoDaPianificare}" => SchedaIntervento(InterventoDaPianificare, 14, "sopralluogo", "da_pianificare", null, null, null, null),
@@ -124,6 +134,7 @@ internal static class DatiFittizi
         proprietarioClienteId = Cliente,
         proprietario = "Rossi Mario",
         note = "Caldaia in cucina, accesso dal balcone.",
+        manutenzioneMesi = 12,
         versione = 3,
         indirizzoDuplicato = true,
         generatori = new object[]
@@ -270,4 +281,63 @@ internal static class DatiFittizi
         },
         totale = 68.98m,
     };
+
+    // La lista da richiamare: il server manda già i giorni mancanti (negativi per le scadute), dalla più urgente.
+    private static object ElencoScadenze()
+    {
+        object[] elementi =
+        [
+            InArrivo(ScadenzaScaduta, Caldaia, "manutenzione", "2027-01-10", -3, "in_attesa", "Rossi Mario", "Via dei Platani 12", "Firenze", "FI",
+                "+39 333 000 0000", "2027-01-12T09:30:00Z", "nessuna_risposta", "2027-01-14"),
+            InArrivo(ScadenzaOggi, Climatizzatore, "controllo_efficienza", "2027-01-13", 0, "non_contattato", "Rossi Mario", "Via dei Platani 12", "Firenze", "FI",
+                "+39 333 000 0000", null, null, null),
+            InArrivo(ScadenzaVicina, Dismesso, "manutenzione", "2027-01-25", 12, "fissato", "Condominio Le Querce", "Via del Mare 3", "Livorno", "LI",
+                null, "2027-01-08T15:00:00Z", "appuntamento", null),
+        ];
+        return new { elementi, totale = elementi.Length, numeroPagina = 1, dimensione = 50 };
+    }
+
+    private static object InArrivo(
+        Guid id, Guid impianto, string tipo, string data, int giorni, string richiamo, string cliente, string indirizzo, string comune, string provincia,
+        string? telefono, string? ultimoIl, string? ultimoEsito, string? richiamareIl) => new
+        {
+            scadenzaId = id,
+            impiantoId = impianto,
+            tipo,
+            dataScadenza = data,
+            giorniMancanti = giorni,
+            statoRichiamo = richiamo,
+            versione = 2,
+            clienteId = Cliente,
+            cliente,
+            indirizzo,
+            comune,
+            provincia,
+            telefono,
+            ultimoRichiamoIl = ultimoIl,
+            ultimoEsito,
+            richiamareIl,
+        };
+
+    // Le scadenze della caldaia: due aperte (una scaduta, il controllo con la regola di prova) e una chiusa nello storico.
+    private static object[] ScadenzeCaldaia() =>
+    [
+        new
+        {
+            scadenzaId = ScadenzaScaduta, impiantoId = Caldaia, tipo = "manutenzione", dataScadenza = "2027-01-10", stato = "aperta", periodicitaMesi = 12,
+            regolaDaVerificare = false, dataManuale = true, statoRichiamo = "in_attesa", versione = 2, richiami = Array.Empty<object>(),
+        },
+        new
+        {
+            scadenzaId = Guid.Parse("019ab000-0000-7000-8000-000000000093"), impiantoId = Caldaia, tipo = "controllo_efficienza", dataScadenza = "2028-03-01",
+            stato = "aperta", periodicitaMesi = 48, regola = "Riscaldamento fino a 100 kW (voce di prova)", regolaDaVerificare = true, dataManuale = false,
+            statoRichiamo = "non_contattato", versione = 1, richiami = Array.Empty<object>(),
+        },
+        new
+        {
+            scadenzaId = Guid.Parse("019ab000-0000-7000-8000-000000000094"), impiantoId = Caldaia, tipo = "manutenzione", dataScadenza = "2026-01-10", stato = "chiusa",
+            periodicitaMesi = 12, regolaDaVerificare = false, dataManuale = false, interventoChiusuraId = InterventoChiuso, chiusaIl = "2026-01-11T10:05:00Z",
+            statoRichiamo = "fissato", versione = 4, richiami = Array.Empty<object>(),
+        },
+    ];
 }

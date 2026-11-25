@@ -248,6 +248,12 @@ public partial class ChiusuraInterventoViewModel : DialogoViewModel
     [ObservableProperty]
     public partial string Note { get; set; } = "";
 
+    /// <summary>Solo per una manutenzione: con esito risolto chiude anche la scadenza del controllo di efficienza.</summary>
+    public bool PuoSegnareControllo => _intervento.Tipo == "manutenzione";
+
+    [ObservableProperty]
+    public partial bool ControlloEfficienza { get; set; }
+
     [ObservableProperty]
     public partial string Totale { get; set; } = FormatoInterventi.Importo(0);
 
@@ -286,7 +292,7 @@ public partial class ChiusuraInterventoViewModel : DialogoViewModel
 
         var risposta = await Shell.Api.ChiudiInterventoAsync(
             _intervento.InterventoId,
-            new DatiChiusura(_intervento.Versione, Esito.Codice, string.IsNullOrWhiteSpace(Note) ? null : Note.Trim(), righe));
+            new DatiChiusura(_intervento.Versione, Esito.Codice, string.IsNullOrWhiteSpace(Note) ? null : Note.Trim(), righe, PuoSegnareControllo && ControlloEfficienza));
         return risposta.Riuscita ? null : risposta.Messaggio;
     }
 
