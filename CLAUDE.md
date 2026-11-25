@@ -6,7 +6,7 @@ Il piano completo è in `docs/piano-di-sviluppo.md`: leggilo prima di lavorare s
 
 ## Stato
 
-M0 completata e unita il 22/11/2026. M1 completata e unita il 23/11/2026: autenticazione (ADR 0002), anagrafiche (ADR 0003), client desktop, anonimizzazione GDPR (ADR 0004) e tema scuro. M2 e M3 completate e unite il 25/11/2026 (PR 7-21).
+M0 completata e unita il 22/11/2026. M1 completata e unita il 23/11/2026: autenticazione (ADR 0002), anagrafiche (ADR 0003), client desktop, anonimizzazione GDPR (ADR 0004) e tema scuro. M2 e M3 completate e unite il 25/11/2026 (PR 7-23).
 
 - **M2, impianti e interventi:** impianti con generatori e riferimenti al catasto; interventi con numerazione senza buchi, calendario per tecnico con trascinamento, chiusura con righe; rapportino PDF con SkiaSharp e Inter incorporato (ADR 0005); foto e documenti degli impianti (JPEG, PNG, PDF fino a 20 MB, tipo dai primi byte, eliminazione logica). Migrazioni 0005-0007.
 - **M3, scadenze e preventivi:** scadenze di manutenzione (periodicità sull'impianto) e di controllo di efficienza (da `norma.regole_cadenza`), chiuse da una manutenzione risolta, con lista da richiamare, richiami e prossima azione nella scheda impianto; listino con storico dei prezzi; preventivi numerati all'emissione, PDF anche in bozza, generazione dell'intervento da un accettato. Migrazioni 0008-0009.
