@@ -411,9 +411,6 @@
   <data name="StoricoInterventi" xml:space="preserve">
     <value>Interventi</value>
   </data>
-  <data name="ParteInterventi" xml:space="preserve">
-    <value>la prossima parte di M2</value>
-  </data>
   <data name="ProssimaAzione" xml:space="preserve">
     <value>Prossima azione</value>
   </data>
@@ -713,5 +710,242 @@
   </data>
   <data name="SalvaConsenso" xml:space="preserve">
     <value>Salva consenso</value>
+  </data>
+  <data name="CalendarioTitolo" xml:space="preserve">
+    <value>Calendario interventi</value>
+  </data>
+  <data name="CalendarioSenzaTecnici" xml:space="preserve">
+    <value>Nessun tecnico da mostrare. Gli utenti con il ruolo di Tecnico o di Responsabile tecnico compaiono qui.</value>
+  </data>
+  <data name="CalendarioTroncato" xml:space="preserve">
+    <value>Il periodo ha più di {0} interventi: ne vedi solo una parte. Passa alla vista giorno.</value>
+  </data>
+  <data name="VistaSettimana" xml:space="preserve">
+    <value>Settimana</value>
+  </data>
+  <data name="VistaGiorno" xml:space="preserve">
+    <value>Giorno</value>
+  </data>
+  <data name="Oggi" xml:space="preserve">
+    <value>Oggi</value>
+  </data>
+  <data name="NuovoIntervento" xml:space="preserve">
+    <value>Nuovo intervento</value>
+  </data>
+  <data name="DaPianificare" xml:space="preserve">
+    <value>Da pianificare</value>
+  </data>
+  <data name="NienteDaPianificare" xml:space="preserve">
+    <value>Nessun intervento in attesa di una data.</value>
+  </data>
+  <data name="NumeroIntervento" xml:space="preserve">
+    <value>n. {0}/{1}</value>
+  </data>
+  <data name="TitoloIntervento" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="FinestraStessoGiorno" xml:space="preserve">
+    <value>{0}, dalle {1} alle {2}</value>
+  </data>
+  <data name="Indietro" xml:space="preserve">
+    <value>← Indietro</value>
+  </data>
+  <data name="Impianto" xml:space="preserve">
+    <value>Impianto</value>
+  </data>
+  <data name="Tecnico" xml:space="preserve">
+    <value>Tecnico</value>
+  </data>
+  <data name="NessunTecnico" xml:space="preserve">
+    <value>Da assegnare</value>
+  </data>
+  <data name="DaAssegnare" xml:space="preserve">
+    <value>Da assegnare</value>
+  </data>
+  <data name="Generatore" xml:space="preserve">
+    <value>Generatore</value>
+  </data>
+  <data name="TuttoLImpianto" xml:space="preserve">
+    <value>Tutto l'impianto</value>
+  </data>
+  <data name="ChiusoIl" xml:space="preserve">
+    <value>Chiuso il</value>
+  </data>
+  <data name="AnnullatoIlValore" xml:space="preserve">
+    <value>Annullato il {0}. Motivo: {1}</value>
+  </data>
+  <data name="DescrizioneIntervento" xml:space="preserve">
+    <value>Descrizione</value>
+  </data>
+  <data name="DettagliIntervento" xml:space="preserve">
+    <value>Dettagli</value>
+  </data>
+  <data name="Esito" xml:space="preserve">
+    <value>Esito</value>
+  </data>
+  <data name="MaterialiEOre" xml:space="preserve">
+    <value>Materiali e ore</value>
+  </data>
+  <data name="NessunaRiga" xml:space="preserve">
+    <value>Nessun materiale e nessuna ora registrati.</value>
+  </data>
+  <data name="Totale" xml:space="preserve">
+    <value>Totale</value>
+  </data>
+  <data name="AvviaIntervento" xml:space="preserve">
+    <value>Avvia</value>
+  </data>
+  <data name="ChiudiIntervento" xml:space="preserve">
+    <value>Chiudi intervento</value>
+  </data>
+  <data name="Pianifica" xml:space="preserve">
+    <value>Pianifica</value>
+  </data>
+  <data name="AnnullaIntervento" xml:space="preserve">
+    <value>Annulla intervento</value>
+  </data>
+  <data name="TitoloNuovoIntervento" xml:space="preserve">
+    <value>Nuovo intervento</value>
+  </data>
+  <data name="TitoloPianificaIntervento" xml:space="preserve">
+    <value>Pianifica intervento</value>
+  </data>
+  <data name="TitoloChiusuraIntervento" xml:space="preserve">
+    <value>Chiusura dell'intervento {0}</value>
+  </data>
+  <data name="TitoloAnnullaIntervento" xml:space="preserve">
+    <value>Annulla l'intervento {0}</value>
+  </data>
+  <data name="TipoIntervento" xml:space="preserve">
+    <value>Tipo di intervento</value>
+  </data>
+  <data name="ScegliImpianto" xml:space="preserve">
+    <value>Scegli l'impianto: cercalo per cliente, indirizzo, PDR o codice.</value>
+  </data>
+  <data name="NessunImpiantoTrovato" xml:space="preserve">
+    <value>Nessun impianto attivo trovato con questa ricerca.</value>
+  </data>
+  <data name="Quando" xml:space="preserve">
+    <value>Quando</value>
+  </data>
+  <data name="SpiegazioneDaPianificare" xml:space="preserve">
+    <value>Senza data l'intervento resta da pianificare e compare nell'elenco a destra del calendario.</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="TogliData" xml:space="preserve">
+    <value>Togli la data</value>
+  </data>
+  <data name="OraInizio" xml:space="preserve">
+    <value>Dalle</value>
+  </data>
+  <data name="OraFine" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="OrarioNonValido" xml:space="preserve">
+    <value>Indica l'ora di inizio e quella di fine, con la fine dopo l'inizio.</value>
+  </data>
+  <data name="ScegliTecnico" xml:space="preserve">
+    <value>Per mettere l'intervento in calendario scegli il tecnico.</value>
+  </data>
+  <data name="AggiungiManodopera" xml:space="preserve">
+    <value>Aggiungi ore</value>
+  </data>
+  <data name="AggiungiMateriale" xml:space="preserve">
+    <value>Aggiungi materiale</value>
+  </data>
+  <data name="ManodoperaPredefinita" xml:space="preserve">
+    <value>Manodopera</value>
+  </data>
+  <data name="SpiegazioneRighe" xml:space="preserve">
+    <value>Aggiungi le ore di lavoro e i materiali usati. Puoi anche chiudere senza righe.</value>
+  </data>
+  <data name="RigaManodopera" xml:space="preserve">
+    <value>Manodopera</value>
+  </data>
+  <data name="RigaMateriale" xml:space="preserve">
+    <value>Materiale</value>
+  </data>
+  <data name="Rimuovi" xml:space="preserve">
+    <value>Rimuovi</value>
+  </data>
+  <data name="Codice" xml:space="preserve">
+    <value>Codice</value>
+  </data>
+  <data name="DescrizioneRiga" xml:space="preserve">
+    <value>Descrizione</value>
+  </data>
+  <data name="Quantita" xml:space="preserve">
+    <value>Quantità</value>
+  </data>
+  <data name="Unita" xml:space="preserve">
+    <value>Unità</value>
+  </data>
+  <data name="PrezzoUnitario" xml:space="preserve">
+    <value>Prezzo (€)</value>
+  </data>
+  <data name="Sconto" xml:space="preserve">
+    <value>Sconto (%)</value>
+  </data>
+  <data name="Iva" xml:space="preserve">
+    <value>IVA (%)</value>
+  </data>
+  <data name="RigaNumeriNonValidi" xml:space="preserve">
+    <value>Nella riga {0} quantità, prezzo, sconto o IVA non sono numeri validi: usa la virgola per i decimali.</value>
+  </data>
+  <data name="MotivoAnnullamento" xml:space="preserve">
+    <value>Motivo</value>
+  </data>
+  <data name="MotivoAnnullamentoObbligatorio" xml:space="preserve">
+    <value>Scrivi il motivo dell'annullamento.</value>
+  </data>
+  <data name="SpiegazioneAnnullamento" xml:space="preserve">
+    <value>L'intervento non si cancella: resta con il suo numero e il motivo, e libera il calendario del tecnico.</value>
+  </data>
+  <data name="TipoIntervento_manutenzione" xml:space="preserve">
+    <value>Manutenzione</value>
+  </data>
+  <data name="TipoIntervento_riparazione" xml:space="preserve">
+    <value>Riparazione</value>
+  </data>
+  <data name="TipoIntervento_installazione" xml:space="preserve">
+    <value>Installazione</value>
+  </data>
+  <data name="TipoIntervento_sopralluogo" xml:space="preserve">
+    <value>Sopralluogo</value>
+  </data>
+  <data name="TipoIntervento_altro" xml:space="preserve">
+    <value>Altro intervento</value>
+  </data>
+  <data name="StatoIntervento_da_pianificare" xml:space="preserve">
+    <value>Da pianificare</value>
+  </data>
+  <data name="StatoIntervento_pianificato" xml:space="preserve">
+    <value>Pianificato</value>
+  </data>
+  <data name="StatoIntervento_in_corso" xml:space="preserve">
+    <value>In corso</value>
+  </data>
+  <data name="StatoIntervento_completato" xml:space="preserve">
+    <value>Completato</value>
+  </data>
+  <data name="StatoIntervento_annullato" xml:space="preserve">
+    <value>Annullato</value>
+  </data>
+  <data name="EsitoIntervento_risolto" xml:space="preserve">
+    <value>Risolto</value>
+  </data>
+  <data name="EsitoIntervento_da_completare" xml:space="preserve">
+    <value>Da completare</value>
+  </data>
+  <data name="EsitoIntervento_non_risolto" xml:space="preserve">
+    <value>Non risolto</value>
+  </data>
+  <data name="NuovoInterventoImpianto" xml:space="preserve">
+    <value>Nuovo intervento</value>
+  </data>
+  <data name="NessunIntervento" xml:space="preserve">
+    <value>Nessun intervento su questo impianto.</value>
   </data>
 </root>

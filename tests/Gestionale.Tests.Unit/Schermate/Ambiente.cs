@@ -70,14 +70,21 @@ internal static class Schermate
             return true;
         }, TestContext.Current.CancellationToken);
 
-    public static async Task<(ShellViewModel Shell, Window Finestra)> ApriAsync(params Permesso[] permessi)
+    public static Task<(ShellViewModel Shell, Window Finestra)> ApriAsync(params Permesso[] permessi) =>
+        ApriComeAsync(Guid.NewGuid(), "Anna", "Verdi", "responsabile_tecnico", permessi);
+
+    /// <summary>Come <see cref="ApriAsync"/>, con un utente preciso: serve per vedere ciò che vede un Tecnico.</summary>
+    public static async Task<(ShellViewModel Shell, Window Finestra)> ApriComeAsync(Guid utenteId, string nome, string cognome, string ruolo, params Permesso[] permessi)
     {
         var api = new ClientApi(new PortachiaviInMemoria(), TimeProvider.System, indirizzo => new HttpClient(new ServerDatiFittizi(DatiFittizi.Rispondi)) { BaseAddress = indirizzo });
         api.ImpostaServer(new Uri("http://gestionale.locale:5225"));
         await api.AccediAsync("anna.verdi@prova.example", "password-di-prova-lunga");
 
-        var profilo = new Profilo(Guid.NewGuid(), Guid.NewGuid(), "anna.verdi@prova.example", "Anna", "Verdi", ["responsabile_tecnico"], permessi);
-        var shell = new ShellViewModel(api, profilo, new NavigazioneMuta(), new PreferenzaTema(new ArchivioImpostazioniInMemoria(), _ => { }));
+        var profilo = new Profilo(utenteId, Guid.NewGuid(), "anna.verdi@prova.example", nome, cognome, [ruolo], permessi);
+        var shell = new ShellViewModel(api, profilo, new NavigazioneMuta(), new PreferenzaTema(new ArchivioImpostazioniInMemoria(), _ => { }))
+        {
+            Orologio = new OrologioFisso(new DateTimeOffset(2027, 1, 13, 9, 0, 0, TimeSpan.Zero)),
+        };
         var finestra = new Window { Width = 1440, Height = 960, Content = new ShellView(), DataContext = shell };
         finestra.Show();
         return (shell, finestra);
@@ -88,6 +95,15 @@ internal static class Schermate
         new("clienti.lettura", "tutti"),
         new("impianti.lettura", "tutti"),
         new("impianti.scrittura", "tutti"),
+        new("interventi.lettura", "tutti"),
+        new("interventi.scrittura", "tutti"),
+    ];
+
+    public static Permesso[] Tecnico { get; } =
+    [
+        new("impianti.lettura", "propri"),
+        new("interventi.lettura", "propri"),
+        new("interventi.scrittura", "propri"),
     ];
 
     /// <summary>Salva la finestra in chiaro e in scuro; restituisce i testi visibili per i controlli.</summary>
@@ -113,4 +129,10 @@ internal static class Schermate
         AvaloniaHeadlessPlatform.ForceRenderTimerTick();
         Dispatcher.UIThread.RunJobs();
     }
+}
+
+/// <summary>Un orologio fermo: "oggi" è sempre lo stesso giorno nelle schermate.</summary>
+internal sealed class OrologioFisso(DateTimeOffset adesso) : TimeProvider
+{
+    public override DateTimeOffset GetUtcNow() => adesso;
 }

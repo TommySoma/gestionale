@@ -22,6 +22,11 @@
     <DataTemplate DataType="vm:EditorImpiantoViewModel"><v:EditorImpiantoView /></DataTemplate>
     <DataTemplate DataType="vm:EditorGeneratoreViewModel"><v:EditorGeneratoreView /></DataTemplate>
     <DataTemplate DataType="vm:EditorRiferimentoCatastoViewModel"><v:EditorRiferimentoCatastoView /></DataTemplate>
+    <DataTemplate DataType="vm:CalendarioViewModel"><v:CalendarioView /></DataTemplate>
+    <DataTemplate DataType="vm:SchedaInterventoViewModel"><v:SchedaInterventoView /></DataTemplate>
+    <DataTemplate DataType="vm:EditorInterventoViewModel"><v:EditorInterventoView /></DataTemplate>
+    <DataTemplate DataType="vm:ChiusuraInterventoViewModel"><v:ChiusuraInterventoView /></DataTemplate>
+    <DataTemplate DataType="vm:AnnullamentoInterventoViewModel"><v:AnnullamentoInterventoView /></DataTemplate>
     <DataTemplate DataType="vm:ConfermaViewModel"><v:ConfermaView /></DataTemplate>
   </Application.DataTemplates>
 

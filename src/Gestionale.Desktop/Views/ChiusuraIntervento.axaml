@@ -1,0 +1,101 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.ChiusuraInterventoView"
+             x:DataType="vm:ChiusuraInterventoViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <TextBlock Text="{Binding Titolo}" FontSize="20" FontWeight="Bold" />
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="12">
+          <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+          <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.ChiudiIntervento}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+        </StackPanel>
+        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Spacing="6">
+          <TextBlock FontSize="14" FontWeight="SemiBold" Text="{x:Static r:Testi.Totale}" />
+          <TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding Totale}" />
+        </StackPanel>
+      </DockPanel>
+    </Border>
+    <ScrollViewer>
+      <StackPanel Margin="24" Spacing="20">
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <DockPanel>
+            <Path Classes="icona" Data="{StaticResource IconaAvviso}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding Errore}" />
+          </DockPanel>
+        </Border>
+
+        <StackPanel>
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Esito}" />
+          <ComboBox ItemsSource="{Binding Esiti}" SelectedItem="{Binding Esito}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.Esito}" />
+        </StackPanel>
+
+        <StackPanel>
+          <TextBlock Classes="etichetta">
+            <Run Text="{x:Static r:Testi.Note}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+          </TextBlock>
+          <TextBox Text="{Binding Note}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72" AutomationProperties.Name="{x:Static r:Testi.Note}" />
+        </StackPanel>
+
+        <StackPanel Spacing="8">
+          <DockPanel>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4">
+              <Button Classes="collegamento" Content="{x:Static r:Testi.AggiungiManodopera}" Command="{Binding AggiungiManodoperaCommand}" />
+              <Button Classes="collegamento" Content="{x:Static r:Testi.AggiungiMateriale}" Command="{Binding AggiungiMaterialeCommand}" />
+            </StackPanel>
+            <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.MaterialiEOre}" VerticalAlignment="Center" />
+          </DockPanel>
+          <TextBlock Classes="secondario" FontSize="14" TextWrapping="Wrap" IsVisible="{Binding SenzaRighe}" Text="{x:Static r:Testi.SpiegazioneRighe}" />
+          <ItemsControl ItemsSource="{Binding Righe}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:RigaModificabile">
+                <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="0,12">
+                  <StackPanel Spacing="8">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="collegamento" Foreground="{DynamicResource Errore}" Content="{x:Static r:Testi.Rimuovi}"
+                              Command="{Binding $parent[UserControl].((vm:ChiusuraInterventoViewModel)DataContext).RimuoviRigaCommand}" CommandParameter="{Binding}" />
+                      <TextBlock FontSize="13" FontWeight="SemiBold" Text="{Binding NomeTipo}" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <DockPanel>
+                      <TextBox DockPanel.Dock="Left" Width="120" Margin="0,0,8,0" Text="{Binding Codice}" PlaceholderText="{x:Static r:Testi.Codice}" IsVisible="{Binding !Manodopera}"
+                               AutomationProperties.Name="{x:Static r:Testi.Codice}" />
+                      <TextBox Text="{Binding Descrizione}" PlaceholderText="{x:Static r:Testi.DescrizioneRiga}"
+                               AutomationProperties.Name="{x:Static r:Testi.DescrizioneRiga}" />
+                    </DockPanel>
+                    <Grid ColumnDefinitions="*,8,*,8,*,8,*,8,*">
+                      <StackPanel Grid.Column="0">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Quantita}" />
+                        <TextBox Text="{Binding Quantita}" AutomationProperties.Name="{x:Static r:Testi.Quantita}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="2">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Unita}" />
+                        <TextBox Text="{Binding Unita}" IsEnabled="{Binding !Manodopera}" AutomationProperties.Name="{x:Static r:Testi.Unita}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="4">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.PrezzoUnitario}" />
+                        <TextBox Text="{Binding Prezzo}" AutomationProperties.Name="{x:Static r:Testi.PrezzoUnitario}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="6">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Sconto}" />
+                        <TextBox Text="{Binding Sconto}" AutomationProperties.Name="{x:Static r:Testi.Sconto}" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="8">
+                        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Iva}" />
+                        <TextBox Text="{Binding Iva}" AutomationProperties.Name="{x:Static r:Testi.Iva}" />
+                      </StackPanel>
+                    </Grid>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

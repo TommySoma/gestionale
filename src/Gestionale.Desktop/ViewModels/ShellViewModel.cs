@@ -43,7 +43,16 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     // Con l'ambito "propri" (il Tecnico) non si creano impianti nuovi.
     public bool ModificaImpianti => Profilo.Permessi.Any(p => p.Codice == "impianti.scrittura" && p.Ambito == "tutti");
 
-    public string EtichettaM2 => string.Format(System.Globalization.CultureInfo.CurrentCulture, Testi.InArrivo, "M2");
+    public bool VedeInterventi => Profilo.Ha("interventi.lettura");
+
+    // Creare, pianificare, riassegnare e annullare spetta a chi ha l'ambito su tutto.
+    public bool PianificaInterventi => Profilo.Permessi.Any(p => p.Codice == "interventi.scrittura" && p.Ambito == "tutti");
+
+    // Avviare e chiudere: anche il Tecnico, sui propri interventi.
+    public bool ScriveInterventi => Profilo.Ha("interventi.scrittura");
+
+    /// <summary>Data e ora correnti; nei test si fissa per avere schermate ripetibili.</summary>
+    public TimeProvider Orologio { get; init; } = TimeProvider.System;
 
     public string EtichettaM3 => string.Format(System.Globalization.CultureInfo.CurrentCulture, Testi.InArrivo, "M3");
 
@@ -62,12 +71,15 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [ObservableProperty]
     public partial bool ImpiantiAttivo { get; set; }
 
+    [ObservableProperty]
+    public partial bool InterventiAttivo { get; set; }
+
     private VociImpianti? _vociImpianti;
 
     [RelayCommand]
     public async Task ApriClientiAsync()
     {
-        (ClientiAttivo, ImpiantiAttivo) = (true, false);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (true, false, false);
         var clienti = new ClientiViewModel(this);
         Contenuto = clienti;
         await clienti.CaricaAsync();
@@ -75,7 +87,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
 
     public async Task ApriClienteAsync(Guid clienteId)
     {
-        (ClientiAttivo, ImpiantiAttivo) = (true, false);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (true, false, false);
         var scheda = new SchedaClienteViewModel(this, clienteId);
         Contenuto = scheda;
         await scheda.CaricaAsync();
@@ -84,7 +96,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [RelayCommand]
     public async Task ApriImpiantiAsync()
     {
-        (ClientiAttivo, ImpiantiAttivo) = (false, true);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (false, true, false);
         var impianti = new ImpiantiViewModel(this);
         Contenuto = impianti;
         await impianti.CaricaAsync();
@@ -92,11 +104,36 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
 
     public async Task ApriImpiantoAsync(Guid impiantoId)
     {
-        (ClientiAttivo, ImpiantiAttivo) = (false, true);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (false, true, false);
         var scheda = new SchedaImpiantoViewModel(this, impiantoId);
         Contenuto = scheda;
         await scheda.CaricaAsync();
     }
+
+    [RelayCommand]
+    public Task ApriInterventiAsync() => ApriCalendarioAsync(null);
+
+    /// <summary>Calendario della settimana che contiene il giorno indicato; senza giorno, oggi.</summary>
+    public async Task ApriCalendarioAsync(DateOnly? giorno)
+    {
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (false, false, true);
+        var calendario = new CalendarioViewModel(this, giorno ?? FormatoInterventi.Oggi(Orologio));
+        Contenuto = calendario;
+        await calendario.CaricaAsync();
+    }
+
+    /// <summary>Scheda di un intervento; indietro dice dove tornare (di norma il calendario).</summary>
+    public async Task ApriInterventoAsync(Guid interventoId, Func<Task>? indietro = null)
+    {
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (false, false, true);
+        var scheda = new SchedaInterventoViewModel(this, interventoId, indietro);
+        Contenuto = scheda;
+        await scheda.CaricaAsync();
+    }
+
+    /// <summary>Tecnici da proporre nei dialoghi; se il server non risponde, l'elenco è vuoto e l'intervento resta da assegnare.</summary>
+    public async Task<IReadOnlyList<TecnicoAssegnabile>> TecniciPerDialogoAsync() =>
+        (await Api.TecniciAsync()).Valore ?? [];
 
     /// <summary>Tipi e combustibili cambiano solo con una migrazione: basta leggerli una volta per sessione.</summary>
     public async Task<Risposta<VociImpianti>> VociImpiantiAsync()

@@ -89,11 +89,34 @@
             </StackPanel>
           </Border>
 
-          <!-- Interventi: arrivano con la prossima parte di M2. -->
-          <Border Classes="scheda" Padding="20,16">
-            <StackPanel Spacing="8">
-              <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.StoricoInterventi}" />
-              <TextBlock Classes="secondario" FontSize="14" Text="{Binding EtichettaInterventi}" />
+          <!-- Interventi, dal più recente -->
+          <Border Classes="scheda" IsVisible="{Binding VedeInterventi}">
+            <StackPanel>
+              <DockPanel Margin="20,12">
+                <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.NuovoInterventoImpianto}" IsVisible="{Binding PuoCreareInterventi}" Command="{Binding NuovoInterventoCommand}" />
+                <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.StoricoInterventi}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Border Height="1" Background="{DynamicResource Divisore}" />
+              <TextBlock Classes="secondario" FontSize="14" Margin="20,16" IsVisible="{Binding SenzaInterventi}" Text="{x:Static r:Testi.NessunIntervento}" />
+              <ItemsControl ItemsSource="{Binding Interventi}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:RigaStoricoIntervento">
+                    <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="20,12" MinHeight="44" CornerRadius="0"
+                            BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1"
+                            Command="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).ApriInterventoCommand}" CommandParameter="{Binding Id}">
+                      <DockPanel>
+                        <Border DockPanel.Dock="Right" Classes="distintivo" VerticalAlignment="Center">
+                          <TextBlock Text="{Binding Stato}" />
+                        </Border>
+                        <StackPanel Spacing="2">
+                          <TextBlock Text="{Binding Titolo}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource Accento}" />
+                          <TextBlock Classes="secondario" FontSize="13" TextTrimming="CharacterEllipsis" Text="{Binding Dettaglio}" />
+                        </StackPanel>
+                      </DockPanel>
+                    </Button>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
             </StackPanel>
           </Border>
         </StackPanel>

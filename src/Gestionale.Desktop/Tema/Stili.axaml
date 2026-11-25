@@ -332,4 +332,42 @@
     <Setter Property="BorderBrush" Value="{DynamicResource Accento}" />
     <Setter Property="Foreground" Value="{DynamicResource TestoSuAccento}" />
   </Style>
+
+  <!-- Calendario: il giorno di oggi ha lo sfondo dell'accento; gli interventi sono
+       colorati per stato, che però è sempre anche scritto nella voce. -->
+  <Style Selector="Border.giorno">
+    <Setter Property="BorderBrush" Value="{DynamicResource Divisore}" />
+    <Setter Property="BorderThickness" Value="1,0,0,0" />
+  </Style>
+  <Style Selector="Border.giorno.oggi">
+    <Setter Property="Background" Value="{DynamicResource AccentoTenue}" />
+  </Style>
+  <Style Selector="Border.giorno.oggi > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Accento}" />
+  </Style>
+  <Style Selector="Border.cella">
+    <Setter Property="BorderBrush" Value="{DynamicResource Divisore}" />
+    <Setter Property="BorderThickness" Value="1,0,0,0" />
+  </Style>
+  <Style Selector="Border.cella.oggi">
+    <Setter Property="Background" Value="{DynamicResource Sfondo}" />
+  </Style>
+  <Style Selector="Button.voceCalendario">
+    <Setter Property="Padding" Value="6,4" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="MinHeight" Value="44" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Background" Value="{DynamicResource AccentoTenue}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Bordo}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Foreground" Value="{DynamicResource Testo}" />
+  </Style>
+  <Style Selector="Button.voceCalendario.inCorso">
+    <Setter Property="Background" Value="{DynamicResource AttenzioneTenue}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AttenzioneBordo}" />
+  </Style>
+  <Style Selector="Button.voceCalendario.completato">
+    <Setter Property="Background" Value="{DynamicResource SuccessoTenue}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource SuccessoBordo}" />
+  </Style>
 </Styles>

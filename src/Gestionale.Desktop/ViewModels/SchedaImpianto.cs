@@ -13,9 +13,11 @@ public sealed record RigaGeneratore(Generatore Dati, string Titolo, string Detta
 
 public sealed record RigaRiferimento(RiferimentoCatasto Dati, string Sistema, string Codice, string? Registrazione);
 
+public sealed record RigaStoricoIntervento(Guid Id, string Titolo, string Dettaglio, string Stato);
+
 /// <summary>
-/// Scheda di un impianto: dati tecnici, generatori e riferimenti al catasto. Gli
-/// interventi e la prossima azione arrivano con le parti successive del piano.
+/// Scheda di un impianto: dati tecnici, generatori, riferimenti al catasto e
+/// interventi, dal più recente. La prossima azione arriva con le scadenze (M3).
 /// </summary>
 public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impiantoId) : ViewModelBase
 {
@@ -31,7 +33,11 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
 
     public bool PuoAprireCliente => shell.VedeClienti;
 
-    public string EtichettaInterventi => string.Format(CultureInfo.CurrentCulture, Testi.InArrivo, Testi.ParteInterventi);
+    public ObservableCollection<RigaStoricoIntervento> Interventi { get; } = [];
+
+    public bool VedeInterventi => shell.VedeInterventi;
+
+    public bool PuoCreareInterventi => shell.PianificaInterventi;
 
     public string EtichettaProssimaAzione => string.Format(CultureInfo.CurrentCulture, Testi.InArrivo, "M3");
 
@@ -68,6 +74,8 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
     public bool SenzaGeneratori => Caricato && Generatori.Count == 0;
 
     public bool SenzaRiferimenti => Caricato && Riferimenti.Count == 0;
+
+    public bool SenzaInterventi => Caricato && Interventi.Count == 0;
 
     public async Task CaricaAsync()
     {
@@ -129,13 +137,53 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
             Riferimenti.Add(new RigaRiferimento(r, FormatoImpianti.Regione(r.Regione), r.Codice, registrazione));
         }
 
+        await CaricaInterventiAsync();
+
         Caricato = true;
         OnPropertyChanged(nameof(SenzaGeneratori));
         OnPropertyChanged(nameof(SenzaRiferimenti));
+        OnPropertyChanged(nameof(SenzaInterventi));
     }
 
     [RelayCommand]
     private Task IndietroAsync() => shell.ApriImpiantiAsync();
+
+    [RelayCommand]
+    private Task ApriInterventoAsync(Guid interventoId) =>
+        shell.ApriInterventoAsync(interventoId, () => shell.ApriImpiantoAsync(impiantoId));
+
+    [RelayCommand]
+    private async Task NuovoInterventoAsync()
+    {
+        if (_impianto is not { } impianto)
+        {
+            return;
+        }
+
+        var tecnici = await shell.TecniciPerDialogoAsync();
+        var opzione = new OpzioneImpianto(impianto.ImpiantoId, $"{impianto.TipoImpianto} · {impianto.Cliente} · {impianto.Comune}");
+        shell.MostraDialogo(new EditorInterventoViewModel(shell, opzione, null, tecnici, id => _ = shell.ApriInterventoAsync(id, () => shell.ApriImpiantoAsync(impiantoId))));
+    }
+
+    // Gli ultimi interventi dell'impianto; il Tecnico vede solo i propri.
+    private async Task CaricaInterventiAsync()
+    {
+        Interventi.Clear();
+        if (!shell.VedeInterventi)
+        {
+            return;
+        }
+
+        var risposta = await shell.Api.CercaInterventiAsync(null, null, impiantoId, null, 1, 20);
+        foreach (var i in risposta.Valore?.Elementi ?? [])
+        {
+            Interventi.Add(new RigaStoricoIntervento(
+                i.InterventoId,
+                $"{FormatoInterventi.Tipo(i.Tipo)} {FormatoInterventi.Numero(i.Numero, i.Anno)}",
+                i.Tecnico is null ? FormatoInterventi.Finestra(i.Inizio, i.Fine) : $"{FormatoInterventi.Finestra(i.Inizio, i.Fine)} · {i.Tecnico}",
+                FormatoInterventi.Stato(i.Stato)));
+        }
+    }
 
     [RelayCommand]
     private async Task ApriClienteAsync()
