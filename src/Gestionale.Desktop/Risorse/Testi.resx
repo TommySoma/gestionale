@@ -948,4 +948,13 @@
   <data name="NessunIntervento" xml:space="preserve">
     <value>Nessun intervento su questo impianto.</value>
   </data>
+  <data name="SpostamentoNonConsentito" xml:space="preserve">
+    <value>Si spostano solo gli interventi pianificati: questo è {0}.</value>
+  </data>
+  <data name="SuggerimentoTrascina" xml:space="preserve">
+    <value>Trascina su un altro giorno o su un altro tecnico per spostarlo: orario e durata restano gli stessi.</value>
+  </data>
+  <data name="SuggerimentoTrascinaDaPianificare" xml:space="preserve">
+    <value>Trascina sul giorno e sul tecnico: poi scegli l'orario.</value>
+  </data>
 </root>

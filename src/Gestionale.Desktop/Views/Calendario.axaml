@@ -42,6 +42,7 @@
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="vm:VoceDaPianificare">
               <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="20,10" MinHeight="44"
+                      ToolTip.Tip="{x:Static r:Testi.SuggerimentoTrascinaDaPianificare}"
                       Command="{Binding $parent[UserControl].((vm:CalendarioViewModel)DataContext).ApriCommand}" CommandParameter="{Binding Id}">
                 <StackPanel Spacing="2">
                   <TextBlock Text="{Binding Cliente}" FontWeight="SemiBold" Foreground="{DynamicResource Accento}" TextTrimming="CharacterEllipsis" />
@@ -93,11 +94,12 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                           <DataTemplate x:DataType="vm:CellaCalendario">
-                            <Border Classes="cella" Classes.oggi="{Binding Oggi}" Padding="3">
+                            <Border Classes="cella" Classes.oggi="{Binding Oggi}" Padding="3" DragDrop.AllowDrop="True">
                               <ItemsControl ItemsSource="{Binding Interventi}">
                                 <ItemsControl.ItemTemplate>
                                   <DataTemplate x:DataType="vm:VoceCalendario">
                                     <Button Classes="voceCalendario" Classes.inCorso="{Binding InCorso}" Classes.completato="{Binding Completato}"
+                                            ToolTip.Tip="{x:Static r:Testi.SuggerimentoTrascina}" ToolTip.ServiceEnabled="{Binding Trascinabile}"
                                             Margin="0,0,0,4" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                                             Command="{Binding $parent[UserControl].((vm:CalendarioViewModel)DataContext).ApriCommand}" CommandParameter="{Binding Id}">
                                       <StackPanel Spacing="1">

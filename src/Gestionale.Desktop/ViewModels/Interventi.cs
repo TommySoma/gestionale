@@ -103,10 +103,11 @@ public static class FormatoInterventi
     }
 }
 
-/// <summary>Un intervento nel calendario: il colore segue lo stato, che è sempre scritto.</summary>
-public sealed record VoceCalendario(Guid Id, string Orario, string Cliente, string Dettaglio, string Stato, bool InCorso, bool Completato);
+/// <summary>Un intervento nel calendario: il colore segue lo stato, che è sempre scritto. Si trascina solo se pianificato e da chi pianifica.</summary>
+public sealed record VoceCalendario(Guid Id, string Orario, string Cliente, string Dettaglio, string Stato, bool InCorso, bool Completato, bool Trascinabile);
 
-public sealed record CellaCalendario(bool Oggi, IReadOnlyList<VoceCalendario> Interventi);
+/// <summary>Un giorno di un tecnico: è anche il punto dove si lascia un intervento trascinato.</summary>
+public sealed record CellaCalendario(Guid TecnicoUtenteId, DateOnly Giorno, bool Oggi, IReadOnlyList<VoceCalendario> Interventi);
 
 public sealed record RigaCalendario(string Tecnico, IReadOnlyList<CellaCalendario> Celle);
 
@@ -215,9 +216,9 @@ public partial class CalendarioViewModel(ShellViewModel shell, DateOnly giorno) 
                     var voci = interventi
                         .Where(i => i.TecnicoUtenteId == tecnico.UtenteId && Tocca(i, data))
                         .OrderBy(i => i.Inizio)
-                        .Select(Voce)
+                        .Select(i => Voce(i, PuoPianificare))
                         .ToList();
-                    celle.Add(new CellaCalendario(data == _oggi, voci));
+                    celle.Add(new CellaCalendario(tecnico.UtenteId, data, data == _oggi, voci));
                 }
 
                 Righe.Add(new RigaCalendario(tecnico.Nome, celle));
@@ -274,6 +275,64 @@ public partial class CalendarioViewModel(ShellViewModel shell, DateOnly giorno) 
         }
     }
 
+    /// <summary>
+    /// Un intervento lasciato sul giorno di un tecnico. Se era già in calendario
+    /// mantiene orario e durata e cambia solo giorno e tecnico; se era da
+    /// pianificare si apre il dialogo con giorno e tecnico già scelti, perché
+    /// manca l'orario. Una sovrapposizione la rifiuta il server, con il suo messaggio.
+    /// </summary>
+    public async Task SpostaAsync(Guid interventoId, Guid tecnicoUtenteId, DateOnly giorno)
+    {
+        if (!PuoPianificare)
+        {
+            return;
+        }
+
+        Errore = null;
+        var letto = await shell.Api.InterventoAsync(interventoId);
+        if (letto.Valore is not { } intervento)
+        {
+            Errore = letto.Messaggio;
+            return;
+        }
+
+        if (intervento.Stato == "da_pianificare")
+        {
+            var tecnici = await shell.TecniciPerDialogoAsync();
+            var editor = new EditorInterventoViewModel(shell, null, intervento, tecnici, salvato => { _ = CaricaAsync(); })
+            {
+                Data = giorno.ToDateTime(TimeOnly.MinValue),
+            };
+            editor.Tecnico = editor.Tecnici.FirstOrDefault(t => t.Id == tecnicoUtenteId) ?? editor.Tecnico;
+            shell.MostraDialogo(editor);
+            return;
+        }
+
+        if (intervento is not { Stato: "pianificato", Inizio: { } inizio, Fine: { } fine })
+        {
+            Errore = string.Format(CultureInfo.CurrentCulture, Testi.SpostamentoNonConsentito, FormatoInterventi.Stato(intervento.Stato).ToLower(CultureInfo.CurrentCulture));
+            return;
+        }
+
+        var nuovoInizio = FormatoInterventi.DaLocale(giorno, FormatoInterventi.Locale(inizio).TimeOfDay);
+        if (intervento.TecnicoUtenteId == tecnicoUtenteId && nuovoInizio.UtcDateTime == DateTime.SpecifyKind(inizio, DateTimeKind.Utc))
+        {
+            return;
+        }
+
+        var dati = new DatiIntervento(
+            intervento.ImpiantoId, intervento.GeneratoreId, intervento.Tipo, intervento.Descrizione,
+            nuovoInizio, nuovoInizio + (fine - inizio), tecnicoUtenteId, intervento.Versione);
+        var risposta = await shell.Api.AggiornaInterventoAsync(interventoId, dati);
+        if (!risposta.Riuscita)
+        {
+            Errore = risposta.Messaggio;
+            return;
+        }
+
+        await CaricaAsync();
+    }
+
     private void CambiaVista(bool settimanale)
     {
         if (Settimanale == settimanale)
@@ -319,12 +378,13 @@ public partial class CalendarioViewModel(ShellViewModel shell, DateOnly giorno) 
         return giorno >= inizio && giorno <= ultimoGiorno;
     }
 
-    private static VoceCalendario Voce(RiepilogoIntervento i) => new(
+    private static VoceCalendario Voce(RiepilogoIntervento i, bool puoPianificare) => new(
         i.InterventoId,
         FormatoInterventi.Orario(i.Inizio, i.Fine),
         i.Cliente,
         $"{FormatoInterventi.Tipo(i.Tipo)} · {i.Comune}",
         FormatoInterventi.Stato(i.Stato),
         i.Stato == "in_corso",
-        i.Stato == "completato");
+        i.Stato == "completato",
+        puoPianificare && i.Stato == "pianificato");
 }

@@ -17,13 +17,23 @@ internal static class DatiFittizi
     public static readonly Guid TecnicoSara = Guid.Parse("019ab000-0000-7000-8000-000000000061");
     public static readonly Guid InterventoChiuso = Guid.Parse("019ab000-0000-7000-8000-000000000070");
     public static readonly Guid InterventoPianificato = Guid.Parse("019ab000-0000-7000-8000-000000000071");
+    public static readonly Guid InterventoDaPianificare = Guid.Parse("019ab000-0000-7000-8000-000000000072");
 
     /// <summary>Lunedì della settimana mostrata nelle schermate del calendario.</summary>
     public static readonly DateOnly Settimana = new(2027, 1, 11);
 
+    /// <summary>Corpo dell'ultima modifica inviata (PUT): i test dello spostamento lo controllano.</summary>
+    public static string? UltimaModifica { get; private set; }
+
     public static object? Rispondi(HttpRequestMessage richiesta)
     {
         var percorso = richiesta.RequestUri!.AbsolutePath;
+        if (richiesta.Method == HttpMethod.Put)
+        {
+            UltimaModifica = richiesta.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
+            return new { id = Guid.Parse(percorso[(percorso.LastIndexOf('/') + 1)..]), versione = 3, anno = 2027, numero = 13 };
+        }
+
         return percorso switch
         {
             "/api/accesso" => new
@@ -41,6 +51,8 @@ internal static class DatiFittizi
             "/api/interventi/tecnici" => new object[] { new { utenteId = TecnicoMarco, nome = "Marco Bianchi" }, new { utenteId = TecnicoSara, nome = "Sara Neri" } },
             "/api/interventi" => ElencoInterventi(richiesta.RequestUri.Query),
             _ when percorso == $"/api/interventi/{InterventoChiuso}" => SchedaInterventoChiuso(),
+            _ when percorso == $"/api/interventi/{InterventoPianificato}" => SchedaIntervento(InterventoPianificato, 13, "riparazione", "pianificato", "2027-01-13T13:30:00Z", "2027-01-13T15:00:00Z", TecnicoSara, "Sara Neri"),
+            _ when percorso == $"/api/interventi/{InterventoDaPianificare}" => SchedaIntervento(InterventoDaPianificare, 14, "sopralluogo", "da_pianificare", null, null, null, null),
             _ when percorso == $"/api/impianti/{Caldaia}" => SchedaCaldaia(),
             _ when percorso == $"/api/clienti/{Cliente}" => SchedaCliente(),
             _ => null,
@@ -160,7 +172,7 @@ internal static class DatiFittizi
         object[] elementi = query.Contains("stato=da_pianificare", StringComparison.Ordinal)
             ?
             [
-                RiepilogoIntervento(Guid.Parse("019ab000-0000-7000-8000-000000000072"), 14, "sopralluogo", "da_pianificare", null, null, null, null, "Livorno"),
+                RiepilogoIntervento(InterventoDaPianificare, 14, "sopralluogo", "da_pianificare", null, null, null, null, "Livorno"),
             ]
             :
             [
@@ -192,6 +204,33 @@ internal static class DatiFittizi
             comune,
             provincia = "FI",
             versione = 2,
+        };
+
+    private static object SchedaIntervento(
+        Guid id, int numero, string tipo, string stato, string? inizio, string? fine, Guid? tecnico, string? nomeTecnico) => new
+        {
+            interventoId = id,
+            anno = 2027,
+            numero,
+            tipo,
+            stato,
+            inizio,
+            fine,
+            tecnicoUtenteId = tecnico,
+            tecnico = nomeTecnico,
+            impiantoId = Caldaia,
+            tipoImpianto = "Riscaldamento (voce di prova)",
+            clienteId = Cliente,
+            cliente = "Rossi Mario",
+            indirizzo = "Via dei Platani",
+            civico = "12",
+            cap = "50100",
+            comune = "Firenze",
+            provincia = "FI",
+            descrizione = "Perdita d'acqua sotto la caldaia.",
+            versione = 2,
+            righe = Array.Empty<object>(),
+            totale = 0m,
         };
 
     private static object SchedaInterventoChiuso() => new
