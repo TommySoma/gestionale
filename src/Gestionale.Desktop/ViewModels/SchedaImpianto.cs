@@ -273,7 +273,7 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
 
     [RelayCommand]
     private void RegistraRichiamo(RigaScadenzaImpianto riga) =>
-        shell.MostraDialogo(new RichiamoViewModel(shell, riga.Dati.ScadenzaId, riga.Dati.Versione, $"{riga.Tipo} · {Cliente}", null, () => _ = CaricaAsync()));
+        shell.MostraDialogo(new RichiamoViewModel(shell, riga.Dati.ScadenzaId, impiantoId, riga.Dati.Versione, $"{riga.Tipo} · {Cliente}", null, () => _ = CaricaAsync()));
 
     [RelayCommand]
     private void CorreggiData(RigaScadenzaImpianto riga) =>

@@ -1,0 +1,112 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.OggiView"
+             x:DataType="vm:OggiViewModel">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="20">
+      <StackPanel>
+        <TextBlock Classes="titolo2" Text="{Binding Saluto}" />
+        <TextBlock Classes="secondario" FontSize="14" Margin="0,4,0,0" Text="{Binding Data}" />
+      </StackPanel>
+
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" />
+      </Border>
+
+      <Grid ColumnDefinitions="3*,20,2*">
+        <!-- Interventi di oggi, in ordine di orario -->
+        <Border Grid.Column="0" Classes="scheda" VerticalAlignment="Top" IsVisible="{Binding VedeInterventi}">
+          <StackPanel>
+            <DockPanel Margin="20,12">
+              <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.ApriCalendario}" Command="{Binding ApriCalendarioCommand}" />
+              <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.InterventiDiOggi}" VerticalAlignment="Center" />
+            </DockPanel>
+            <Border Height="1" Background="{DynamicResource Divisore}" />
+            <TextBlock Classes="secondario" FontSize="14" Margin="20,16" IsVisible="{Binding SenzaInterventi}" Text="{x:Static r:Testi.NessunInterventoOggi}" />
+            <ItemsControl ItemsSource="{Binding Interventi}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:RigaOggiIntervento">
+                  <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="20,12" MinHeight="44" CornerRadius="0"
+                          BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1"
+                          Command="{Binding $parent[UserControl].((vm:OggiViewModel)DataContext).ApriInterventoCommand}" CommandParameter="{Binding}">
+                    <DockPanel>
+                      <TextBlock DockPanel.Dock="Left" Width="104" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Text="{Binding Orario}" />
+                      <Border DockPanel.Dock="Right" Classes="distintivo" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Stato}" />
+                      </Border>
+                      <StackPanel Spacing="2">
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource Accento}" Text="{Binding Titolo}" />
+                        <TextBlock Classes="secondario" FontSize="13" TextTrimming="CharacterEllipsis" Text="{Binding Dettaglio}" />
+                      </StackPanel>
+                    </DockPanel>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Classes="collegamento" Margin="20,12" HorizontalAlignment="Left" IsVisible="{Binding PianificaInterventi}"
+                    Content="{Binding ConteggioDaPianificare}" Command="{Binding ApriCalendarioCommand}" />
+          </StackPanel>
+        </Border>
+
+        <StackPanel Grid.Column="2" Spacing="20">
+          <!-- Scadenze scadute e della settimana: urgenza sempre con icona e testo -->
+          <Border Classes="scheda" IsVisible="{Binding VedeScadenze}">
+            <StackPanel>
+              <DockPanel Margin="20,12">
+                <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.TutteLeScadenze}" Command="{Binding ApriScadenzeCommand}" />
+                <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.NavScadenze}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Border Height="1" Background="{DynamicResource Divisore}" />
+              <TextBlock Classes="secondario" FontSize="14" Margin="20,12,20,4" TextWrapping="Wrap" Text="{Binding ConteggioScadenze}" />
+              <TextBlock Classes="secondario" FontSize="14" Margin="20,4,20,16" IsVisible="{Binding SenzaScadenze}" Text="{x:Static r:Testi.NessunaScadenzaSettimana}" TextWrapping="Wrap" />
+              <ItemsControl ItemsSource="{Binding Scadenze}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:RigaScadenza">
+                    <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="20,10" CornerRadius="0"
+                            BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1"
+                            Command="{Binding $parent[UserControl].((vm:OggiViewModel)DataContext).ApriImpiantoCommand}" CommandParameter="{Binding}">
+                      <StackPanel Spacing="4">
+                        <Border Classes="distintivo" HorizontalAlignment="Left"
+                                Classes.scaduta="{Binding Scaduta}" Classes.inScadenza="{Binding InScadenza}" Classes.inRegola="{Binding InRegola}">
+                          <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Path Classes="icona" Data="{StaticResource IconaAvviso}" Width="14" Height="14" IsVisible="{Binding Scaduta}" />
+                            <Path Classes="icona" Data="{StaticResource IconaInfo}" Width="14" Height="14" IsVisible="{Binding InScadenza}" />
+                            <Path Classes="icona" Data="{StaticResource IconaOk}" Width="14" Height="14" IsVisible="{Binding InRegola}" />
+                            <TextBlock Text="{Binding Urgenza}" />
+                          </StackPanel>
+                        </Border>
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource Accento}" Text="{Binding Cliente}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Classes="secondario" FontSize="13" TextTrimming="CharacterEllipsis">
+                          <Run Text="{Binding Tipo}" />
+                          <Run Text="·" />
+                          <Run Text="{Binding Indirizzo}" />
+                        </TextBlock>
+                      </StackPanel>
+                    </Button>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <Button Classes="collegamento" Margin="20,12" HorizontalAlignment="Left" IsVisible="{Binding AltreScadenze}"
+                      Content="{x:Static r:Testi.VediTutteLeScadenze}" Command="{Binding ApriScadenzeCommand}" />
+            </StackPanel>
+          </Border>
+
+          <!-- Preventivi in attesa di risposta -->
+          <Border Classes="scheda" Padding="20,16" IsVisible="{Binding VedePreventivi}">
+            <StackPanel Spacing="8">
+              <DockPanel>
+                <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.ApriPreventivi}" Command="{Binding ApriPreventiviCommand}" />
+                <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.PreventiviTitolo}" VerticalAlignment="Center" />
+              </DockPanel>
+              <TextBlock FontSize="14" TextWrapping="Wrap" Text="{Binding ConteggioPreventivi}" />
+            </StackPanel>
+          </Border>
+
+          <TextBlock Classes="secondario" FontSize="13" TextWrapping="Wrap" Text="{x:Static r:Testi.OggiInArrivoM4}" />
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

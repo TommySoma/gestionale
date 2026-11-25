@@ -59,7 +59,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     /// <summary>Data e ora correnti; nei test si fissa per avere schermate ripetibili.</summary>
     public TimeProvider Orologio { get; init; } = TimeProvider.System;
 
-    public string EtichettaM3 => string.Format(System.Globalization.CultureInfo.CurrentCulture, Testi.InArrivo, "M3");
+    public string EtichettaRicerca => Testi.RicercaGlobaleInArrivo;
 
     [ObservableProperty]
     public partial ViewModelBase? Contenuto { get; set; }
@@ -69,6 +69,9 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     public partial ViewModelBase? Dialogo { get; set; }
 
     public bool HaDialogo => Dialogo is not null;
+
+    [ObservableProperty]
+    public partial bool OggiAttivo { get; set; }
 
     [ObservableProperty]
     public partial bool ClientiAttivo { get; set; }
@@ -122,9 +125,20 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
         await listino.CaricaAsync();
     }
 
+    /// <summary>La pagina iniziale: interventi di oggi, scadenze della settimana, preventivi in attesa.</summary>
+    [RelayCommand]
+    public async Task ApriOggiAsync()
+    {
+        Evidenzia(nameof(OggiAttivo));
+        var oggi = new OggiViewModel(this);
+        Contenuto = oggi;
+        await oggi.CaricaAsync();
+    }
+
     // Una sola voce della barra laterale è evidenziata: quella dell'area aperta.
     private void Evidenzia(string area)
     {
+        OggiAttivo = area == nameof(OggiAttivo);
         ClientiAttivo = area == nameof(ClientiAttivo);
         ImpiantiAttivo = area == nameof(ImpiantiAttivo);
         InterventiAttivo = area == nameof(InterventiAttivo);

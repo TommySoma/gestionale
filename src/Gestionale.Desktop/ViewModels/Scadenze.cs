@@ -288,7 +288,7 @@ public partial class ScadenzeViewModel(ShellViewModel shell) : ViewModelBase
     [RelayCommand]
     private void RegistraRichiamo(RigaScadenza riga) =>
         shell.MostraDialogo(new RichiamoViewModel(
-            shell, riga.Dati.ScadenzaId, riga.Dati.Versione, $"{riga.Tipo} · {riga.Cliente}", riga.Telefono, () => _ = CaricaAsync()));
+            shell, riga.Dati.ScadenzaId, riga.Dati.ImpiantoId, riga.Dati.Versione, $"{riga.Tipo} · {riga.Cliente}", riga.Telefono, () => _ = CaricaAsync()));
 
     [RelayCommand]
     private void CorreggiData(RigaScadenza riga) =>
@@ -296,16 +296,23 @@ public partial class ScadenzeViewModel(ShellViewModel shell) : ViewModelBase
             shell, riga.Dati.ScadenzaId, riga.Dati.Versione, riga.Dati.DataScadenza, $"{riga.Tipo} · {riga.Cliente}", () => _ = CaricaAsync()));
 }
 
-/// <summary>Un tentativo di contatto per una scadenza: canale, esito e, se va risentito, quando.</summary>
+/// <summary>
+/// Un tentativo di contatto per una scadenza: canale, esito e, se va risentito,
+/// quando. Con l'appuntamento si collega uno degli interventi aperti dell'impianto.
+/// </summary>
 public partial class RichiamoViewModel : DialogoViewModel
 {
     private readonly Guid _scadenzaId;
+    private readonly Guid _impiantoId;
     private readonly int _versione;
     private readonly Action _salvato;
+    private Task? _caricamentoInterventi;
+    private bool _interventiCaricati;
 
-    public RichiamoViewModel(ShellViewModel shell, Guid scadenzaId, int versione, string descrizione, string? telefono, Action salvato) : base(shell)
+    public RichiamoViewModel(ShellViewModel shell, Guid scadenzaId, Guid impiantoId, int versione, string descrizione, string? telefono, Action salvato) : base(shell)
     {
         _scadenzaId = scadenzaId;
+        _impiantoId = impiantoId;
         _versione = versione;
         _salvato = salvato;
         Descrizione = descrizione;
@@ -338,6 +345,54 @@ public partial class RichiamoViewModel : DialogoViewModel
 
     public bool ConAppuntamento => Esito.Codice == "appuntamento";
 
+    /// <summary>Interventi aperti dell'impianto a cui legare l'appuntamento; il primo è "nessuno".</summary>
+    public ObservableCollection<OpzioneVoce> Interventi { get; } = [];
+
+    [ObservableProperty]
+    public partial OpzioneVoce? Intervento { get; set; }
+
+    public bool SenzaInterventiAperti => _interventiCaricati && Interventi.Count <= 1;
+
+    /// <summary>Carica gli interventi aperti la prima volta che serve l'appuntamento; chi richiama aspetta lo stesso caricamento.</summary>
+    public Task CaricaInterventiAsync() => _caricamentoInterventi ??= CaricaInterventiApertiAsync();
+
+    private async Task CaricaInterventiApertiAsync()
+    {
+        var nessuno = new OpzioneVoce(null, Testi.NessunInterventoCollegato);
+        Interventi.Add(nessuno);
+        Intervento = nessuno;
+        if (!Shell.VedeInterventi)
+        {
+            _interventiCaricati = true;
+            OnPropertyChanged(nameof(SenzaInterventiAperti));
+            return;
+        }
+
+        var risposta = await Shell.Api.CercaInterventiAsync(null, null, _impiantoId, null, 1, 50);
+        foreach (var i in (risposta.Valore?.Elementi ?? []).Where(i => i.Stato is "da_pianificare" or "pianificato" or "in_corso"))
+        {
+            var quando = i.Inizio is null ? FormatoInterventi.Stato(i.Stato) : FormatoInterventi.Finestra(i.Inizio, i.Fine);
+            Interventi.Add(new OpzioneVoce(i.InterventoId, $"{FormatoInterventi.Tipo(i.Tipo)} {FormatoInterventi.Numero(i.Numero, i.Anno)} · {quando}"));
+        }
+
+        // Se c'è un solo intervento aperto, è quasi sempre quello dell'appuntamento.
+        if (Interventi.Count == 2)
+        {
+            Intervento = Interventi[1];
+        }
+
+        _interventiCaricati = true;
+        OnPropertyChanged(nameof(SenzaInterventiAperti));
+    }
+
+    partial void OnEsitoChanged(Opzione value)
+    {
+        if (value.Codice == "appuntamento")
+        {
+            _ = CaricaInterventiAsync();
+        }
+    }
+
     [ObservableProperty]
     public partial DateTime? RichiamareIl { get; set; }
 
@@ -350,7 +405,7 @@ public partial class RichiamoViewModel : DialogoViewModel
             Canale.Codice,
             Esito.Codice,
             ConData ? FormatoImpianti.DaSelettore(RichiamareIl) : null,
-            null,
+            ConAppuntamento ? Intervento?.Id : null,
             Vuoto(Note),
             _versione));
         return risposta.Riuscita ? null : risposta.Messaggio;

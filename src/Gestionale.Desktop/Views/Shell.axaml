@@ -6,17 +6,14 @@
              x:DataType="vm:ShellViewModel">
   <Panel>
     <DockPanel>
-      <!-- Barra laterale: le aree delle prossime milestone si vedono ma non si aprono. -->
+      <!-- Barra laterale: ogni area compare solo a chi ha il permesso di leggerla. -->
       <Border DockPanel.Dock="Left" Width="232" Background="{DynamicResource Superficie}" BorderBrush="{DynamicResource Bordo}" BorderThickness="0,0,1,0" Padding="12,16">
         <StackPanel Spacing="4">
           <StackPanel Orientation="Horizontal" Spacing="10" Height="48" Margin="12,0,0,12">
             <Path Classes="icona" Data="{StaticResource IconaGoccia}" Stroke="{DynamicResource Accento}" Width="24" Height="24" />
             <TextBlock Text="{x:Static r:Testi.NomeBreve}" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" />
           </StackPanel>
-          <DockPanel Classes="voceFutura" ToolTip.Tip="{Binding EtichettaM3}">
-            <Border Classes="milestone"><TextBlock Text="M3" /></Border>
-            <TextBlock Text="{x:Static r:Testi.NavOggi}" />
-          </DockPanel>
+          <Button Classes="voceMenu" Classes.attiva="{Binding OggiAttivo}" Content="{x:Static r:Testi.NavOggi}" Command="{Binding ApriOggiCommand}" />
           <Button Classes="voceMenu" Classes.attiva="{Binding ClientiAttivo}" IsVisible="{Binding VedeClienti}"
                   Content="{x:Static r:Testi.NavClienti}" Command="{Binding ApriClientiCommand}" />
           <Button Classes="voceMenu" Classes.attiva="{Binding ImpiantiAttivo}" IsVisible="{Binding VedeImpianti}"
@@ -59,7 +56,7 @@
             </Button>
           </StackPanel>
           <TextBox Classes="ricercaGlobale" Width="520" MinHeight="40" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"
-                   PlaceholderText="{x:Static r:Testi.CercaGlobale}" ToolTip.Tip="{Binding EtichettaM3}"
+                   PlaceholderText="{x:Static r:Testi.CercaGlobale}" ToolTip.Tip="{Binding EtichettaRicerca}"
                    AutomationProperties.Name="{x:Static r:Testi.CercaGlobale}" />
         </DockPanel>
       </Border>

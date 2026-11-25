@@ -1452,4 +1452,61 @@
   <data name="VociPreventivo" xml:space="preserve">
     <value>Voci</value>
   </data>
+  <data name="NessunPreventivoCliente" xml:space="preserve">
+    <value>Nessun preventivo per questo cliente.</value>
+  </data>
+  <data name="InterventoAppuntamento" xml:space="preserve">
+    <value>Intervento dell'appuntamento</value>
+  </data>
+  <data name="NessunInterventoCollegato" xml:space="preserve">
+    <value>Nessuno, lo pianifico dopo</value>
+  </data>
+  <data name="NessunInterventoAperto" xml:space="preserve">
+    <value>Su questo impianto non ci sono interventi aperti: pianificalo dal calendario o dalla scheda impianto.</value>
+  </data>
+  <data name="Buongiorno" xml:space="preserve">
+    <value>Buongiorno, {0}</value>
+  </data>
+  <data name="InterventiDiOggi" xml:space="preserve">
+    <value>Interventi di oggi</value>
+  </data>
+  <data name="NessunInterventoOggi" xml:space="preserve">
+    <value>Nessun intervento in calendario per oggi.</value>
+  </data>
+  <data name="ApriCalendario" xml:space="preserve">
+    <value>Apri il calendario</value>
+  </data>
+  <data name="OggiDaPianificare" xml:space="preserve">
+    <value>{0} interventi da pianificare</value>
+  </data>
+  <data name="OggiUnoDaPianificare" xml:space="preserve">
+    <value>1 intervento da pianificare</value>
+  </data>
+  <data name="TutteLeScadenze" xml:space="preserve">
+    <value>Tutte</value>
+  </data>
+  <data name="VediTutteLeScadenze" xml:space="preserve">
+    <value>Vedi tutte le scadenze</value>
+  </data>
+  <data name="OggiScadenzeSettimana" xml:space="preserve">
+    <value>{0} scadenze scadute o entro 7 giorni</value>
+  </data>
+  <data name="OggiScadenzeConScadute" xml:space="preserve">
+    <value>{0} scadenze scadute o entro 7 giorni, di cui {1} già passate</value>
+  </data>
+  <data name="NessunaScadenzaSettimana" xml:space="preserve">
+    <value>Nessuna scadenza nei prossimi 7 giorni.</value>
+  </data>
+  <data name="ApriPreventivi" xml:space="preserve">
+    <value>Apri</value>
+  </data>
+  <data name="OggiPreventiviInAttesa" xml:space="preserve">
+    <value>{0} emessi in attesa di risposta, di cui {1} con la validità scaduta</value>
+  </data>
+  <data name="OggiInArrivoM4" xml:space="preserve">
+    <value>Rapporti di controllo da trasmettere e bollini in esaurimento compariranno qui con M4.</value>
+  </data>
+  <data name="RicercaGlobaleInArrivo" xml:space="preserve">
+    <value>La ricerca in tutto il gestionale arriverà più avanti: per ora cerca dentro ogni elenco.</value>
+  </data>
 </root>

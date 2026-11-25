@@ -60,6 +60,6 @@ public partial class MainViewModel : ViewModelBase, INavigazione
 
         var shell = new ShellViewModel(_api, profilo.Valore, this, _tema);
         Pagina = shell;
-        await shell.ApriClientiAsync();
+        await shell.ApriOggiAsync();
     }
 }
