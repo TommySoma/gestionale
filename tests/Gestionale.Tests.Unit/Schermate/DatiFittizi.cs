@@ -21,6 +21,11 @@ internal static class DatiFittizi
     public static readonly Guid ScadenzaScaduta = Guid.Parse("019ab000-0000-7000-8000-000000000090");
     public static readonly Guid ScadenzaOggi = Guid.Parse("019ab000-0000-7000-8000-000000000091");
     public static readonly Guid ScadenzaVicina = Guid.Parse("019ab000-0000-7000-8000-000000000092");
+    public static readonly Guid PreventivoBozza = Guid.Parse("019ab000-0000-7000-8000-0000000000a0");
+    public static readonly Guid PreventivoEmesso = Guid.Parse("019ab000-0000-7000-8000-0000000000a1");
+    public static readonly Guid PreventivoAccettato = Guid.Parse("019ab000-0000-7000-8000-0000000000a2");
+    public static readonly Guid VoceManodopera = Guid.Parse("019ab000-0000-7000-8000-0000000000b0");
+    public static readonly Guid VoceVaso = Guid.Parse("019ab000-0000-7000-8000-0000000000b1");
 
     /// <summary>Lunedì della settimana mostrata nelle schermate del calendario.</summary>
     public static readonly DateOnly Settimana = new(2027, 1, 11);
@@ -34,6 +39,12 @@ internal static class DatiFittizi
         if (richiesta.Method == HttpMethod.Post && percorso.EndsWith("/richiami", StringComparison.Ordinal))
         {
             return new { id = Guid.Parse(percorso.Split('/')[3]), versione = 5 };
+        }
+
+        // Passaggi di stato dei preventivi: il server risponde con numero e, dopo la conversione, l'intervento.
+        if (richiesta.Method == HttpMethod.Post && percorso.StartsWith("/api/preventivi/", StringComparison.Ordinal))
+        {
+            return new { id = Guid.Parse(percorso.Split('/')[3]), versione = 5, anno = 2027, numero = 8, interventoId = InterventoDaPianificare };
         }
 
         if (richiesta.Method == HttpMethod.Put)
@@ -59,6 +70,11 @@ internal static class DatiFittizi
             "/api/interventi/tecnici" => new object[] { new { utenteId = TecnicoMarco, nome = "Marco Bianchi" }, new { utenteId = TecnicoSara, nome = "Sara Neri" } },
             "/api/interventi" => ElencoInterventi(richiesta.RequestUri.Query),
             "/api/scadenze" => ElencoScadenze(),
+            "/api/listino" => new { elementi = Listino(), totale = 3, numeroPagina = 1, dimensione = 50 },
+            "/api/preventivi" => new { elementi = ElencoPreventivi(), totale = 3, numeroPagina = 1, dimensione = 50 },
+            _ when percorso == $"/api/preventivi/{PreventivoEmesso}" => SchedaPreventivo(PreventivoEmesso, "emesso", 7, scaduto: true),
+            _ when percorso == $"/api/preventivi/{PreventivoBozza}" => SchedaPreventivo(PreventivoBozza, "bozza", null, scaduto: false),
+            _ when percorso == $"/api/preventivi/{PreventivoAccettato}" => SchedaPreventivo(PreventivoAccettato, "accettato", 6, scaduto: false),
             _ when percorso == $"/api/impianti/{Caldaia}/scadenze" => ScadenzeCaldaia(),
             _ when percorso == $"/api/interventi/{InterventoChiuso}" => SchedaInterventoChiuso(),
             _ when percorso == $"/api/interventi/{InterventoPianificato}" => SchedaIntervento(InterventoPianificato, 13, "riparazione", "pianificato", "2027-01-13T13:30:00Z", "2027-01-13T15:00:00Z", TecnicoSara, "Sara Neri"),
@@ -340,4 +356,82 @@ internal static class DatiFittizi
             statoRichiamo = "fissato", versione = 4, richiami = Array.Empty<object>(),
         },
     ];
+
+    private static object[] Listino() =>
+    [
+        new
+        {
+            voceId = VoceManodopera, codice = "MAN-01", descrizione = "Manodopera tecnico (prova)", tipo = "manodopera", unita = "h", aliquotaIva = 22m,
+            attiva = true, prezzo = 45m, prezzoDal = "2027-01-01", versione = 2,
+        },
+        new
+        {
+            voceId = VoceVaso, codice = "VAS-08", descrizione = "Vaso di espansione 8 l (prova)", tipo = "materiale", unita = "pz", aliquotaIva = 22m,
+            attiva = true, prezzo = 90m, prezzoDal = "2026-06-01", versione = 1,
+        },
+        new
+        {
+            voceId = Guid.Parse("019ab000-0000-7000-8000-0000000000b2"), codice = "TER-02", descrizione = "Termostato di prova", tipo = "materiale", unita = "pz",
+            aliquotaIva = (decimal?)null, attiva = true, prezzo = (decimal?)null, prezzoDal = (string?)null, versione = 1,
+        },
+    ];
+
+    // Dal più recente: una bozza senza numero, un emesso oltre la validità, un accettato che ha già generato l'intervento.
+    private static object[] ElencoPreventivi() =>
+    [
+        new
+        {
+            preventivoId = PreventivoBozza, stato = "bozza", scaduto = false, clienteId = Cliente, cliente = "Rossi Mario",
+            oggetto = "Sostituzione del termostato (prova)", totale = 61.00m, creatoIl = "2027-01-12T15:20:00Z", versione = 3,
+        },
+        new
+        {
+            preventivoId = PreventivoEmesso, anno = 2027, numero = 7, stato = "emesso", scaduto = true, clienteId = Cliente, cliente = "Rossi Mario",
+            oggetto = "Sostituzione del vaso di espansione (prova)", emessoIl = "2026-12-01", scadeIl = "2026-12-31", totale = 192.15m,
+            creatoIl = "2026-12-01T09:00:00Z", versione = 4,
+        },
+        new
+        {
+            preventivoId = PreventivoAccettato, anno = 2027, numero = 6, stato = "accettato", scaduto = false, clienteId = Cliente,
+            cliente = "Condominio Le Querce", oggetto = "Nuova caldaia condominiale (prova)", emessoIl = "2026-11-20", scadeIl = "2027-01-19",
+            totale = 18300.00m, interventoId = InterventoDaPianificare, creatoIl = "2026-11-20T10:00:00Z", versione = 6,
+        },
+    ];
+
+    private static object SchedaPreventivo(Guid id, string stato, int? numero, bool scaduto) => new
+    {
+        preventivoId = id,
+        anno = numero is null ? (int?)null : 2027,
+        numero,
+        stato,
+        scaduto,
+        clienteId = Cliente,
+        cliente = "Rossi Mario",
+        codiceFiscale = "RSSMRA80A01H501U",
+        sedeId = SedeFirenze,
+        indirizzo = "Via dei Platani",
+        civico = "12",
+        cap = "50100",
+        comune = "Firenze",
+        provincia = "FI",
+        impiantoId = Caldaia,
+        tipoImpianto = "Riscaldamento (voce di prova)",
+        oggetto = "Sostituzione del vaso di espansione (prova)",
+        note = "Prezzi validi per lavori in orario ordinario.",
+        validitaGiorni = 30,
+        emessoIl = numero is null ? null : "2026-12-01",
+        scadeIl = numero is null ? null : "2026-12-31",
+        imponibile = 157.50m,
+        iva = 34.65m,
+        totale = 192.15m,
+        accettatoIl = stato == "accettato" ? "2026-12-05T10:00:00Z" : null,
+        interventoId = stato == "accettato" ? InterventoDaPianificare : (Guid?)null,
+        creatoIl = "2026-12-01T09:00:00Z",
+        versione = 4,
+        righe = new object[]
+        {
+            new { posizione = 1, voceId = VoceManodopera, tipo = "manodopera", codice = "MAN-01", descrizione = "Manodopera tecnico (prova)", unita = "h", quantita = 1.5m, prezzoUnitario = 45m, scontoPercentuale = 0m, aliquotaIva = 22m, importo = 67.50m },
+            new { posizione = 2, voceId = VoceVaso, tipo = "materiale", codice = "VAS-08", descrizione = "Vaso di espansione 8 l (prova)", unita = "pz", quantita = 1m, prezzoUnitario = 90m, scontoPercentuale = 0m, aliquotaIva = 22m, importo = 90m },
+        },
+    };
 }

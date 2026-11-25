@@ -179,6 +179,9 @@ public partial class RigaModificabile : ObservableObject
 
     public string Tipo { get; }
 
+    /// <summary>Voce del listino da cui viene la riga (solo nei preventivi).</summary>
+    public Guid? VoceId { get; init; }
+
     public bool Manodopera => Tipo == "manodopera";
 
     public string NomeTipo => Manodopera ? Testi.RigaManodopera : Testi.RigaMateriale;
