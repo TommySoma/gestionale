@@ -51,6 +51,11 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     // Avviare e chiudere: anche il Tecnico, sui propri interventi.
     public bool ScriveInterventi => Profilo.Ha("interventi.scrittura");
 
+    public bool VedeScadenze => Profilo.Ha("scadenze.lettura");
+
+    // Correggere le date e registrare i richiami spetta all'ufficio (il Tecnico ha solo la lettura).
+    public bool GestisceScadenze => Profilo.Ha("scadenze.scrittura");
+
     /// <summary>Data e ora correnti; nei test si fissa per avere schermate ripetibili.</summary>
     public TimeProvider Orologio { get; init; } = TimeProvider.System;
 
@@ -74,12 +79,15 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [ObservableProperty]
     public partial bool InterventiAttivo { get; set; }
 
+    [ObservableProperty]
+    public partial bool ScadenzeAttivo { get; set; }
+
     private VociImpianti? _vociImpianti;
 
     [RelayCommand]
     public async Task ApriClientiAsync()
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (true, false, false);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (true, false, false, false);
         var clienti = new ClientiViewModel(this);
         Contenuto = clienti;
         await clienti.CaricaAsync();
@@ -87,7 +95,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
 
     public async Task ApriClienteAsync(Guid clienteId)
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (true, false, false);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (true, false, false, false);
         var scheda = new SchedaClienteViewModel(this, clienteId);
         Contenuto = scheda;
         await scheda.CaricaAsync();
@@ -96,7 +104,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [RelayCommand]
     public async Task ApriImpiantiAsync()
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (false, true, false);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, true, false, false);
         var impianti = new ImpiantiViewModel(this);
         Contenuto = impianti;
         await impianti.CaricaAsync();
@@ -104,10 +112,19 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
 
     public async Task ApriImpiantoAsync(Guid impiantoId)
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (false, true, false);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, true, false, false);
         var scheda = new SchedaImpiantoViewModel(this, impiantoId);
         Contenuto = scheda;
         await scheda.CaricaAsync();
+    }
+
+    [RelayCommand]
+    public async Task ApriScadenzeAsync()
+    {
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, false, false, true);
+        var scadenze = new ScadenzeViewModel(this);
+        Contenuto = scadenze;
+        await scadenze.CaricaAsync();
     }
 
     [RelayCommand]
@@ -116,7 +133,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     /// <summary>Calendario della settimana che contiene il giorno indicato; senza giorno, oggi.</summary>
     public async Task ApriCalendarioAsync(DateOnly? giorno)
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (false, false, true);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, false, true, false);
         var calendario = new CalendarioViewModel(this, giorno ?? FormatoInterventi.Oggi(Orologio));
         Contenuto = calendario;
         await calendario.CaricaAsync();
@@ -125,7 +142,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     /// <summary>Scheda di un intervento; indietro dice dove tornare (di norma il calendario).</summary>
     public async Task ApriInterventoAsync(Guid interventoId, Func<Task>? indietro = null)
     {
-        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo) = (false, false, true);
+        (ClientiAttivo, ImpiantiAttivo, InterventiAttivo, ScadenzeAttivo) = (false, false, true, false);
         var scheda = new SchedaInterventoViewModel(this, interventoId, indietro);
         Contenuto = scheda;
         await scheda.CaricaAsync();

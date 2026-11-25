@@ -27,6 +27,9 @@
     <DataTemplate DataType="vm:EditorInterventoViewModel"><v:EditorInterventoView /></DataTemplate>
     <DataTemplate DataType="vm:ChiusuraInterventoViewModel"><v:ChiusuraInterventoView /></DataTemplate>
     <DataTemplate DataType="vm:AnnullamentoInterventoViewModel"><v:AnnullamentoInterventoView /></DataTemplate>
+    <DataTemplate DataType="vm:ScadenzeViewModel"><v:ScadenzeView /></DataTemplate>
+    <DataTemplate DataType="vm:RichiamoViewModel"><v:RichiamoView /></DataTemplate>
+    <DataTemplate DataType="vm:DataScadenzaViewModel"><v:DataScadenzaView /></DataTemplate>
     <DataTemplate DataType="vm:ConfermaViewModel"><v:ConfermaView /></DataTemplate>
   </Application.DataTemplates>
 

@@ -114,6 +114,7 @@ public sealed record Impianto(
     string? Responsabile,
     string? Note,
     DateOnly? DismessoIl,
+    int? ManutenzioneMesi,
     int Versione,
     bool IndirizzoDuplicato,
     IReadOnlyList<Generatore> Generatori,
@@ -135,6 +136,7 @@ public sealed record DatiImpianto(
     Guid? ResponsabileClienteId,
     string? Note,
     DateOnly? DismessoIl,
+    int? ManutenzioneMesi,
     int? Versione);
 
 public sealed record DatiGeneratore(
@@ -214,6 +216,7 @@ public sealed record Intervento(
     string Provincia,
     string? Descrizione,
     string? NoteChiusura,
+    bool ControlloEfficienza,
     DateTime? ChiusoIl,
     DateTime? AnnullatoIl,
     string? MotivoAnnullamento,
@@ -243,9 +246,62 @@ public sealed record DatiRiga(
     decimal? ScontoPercentuale,
     decimal? AliquotaIva);
 
-public sealed record DatiChiusura(int Versione, string Esito, string? Note, IReadOnlyList<DatiRiga> Righe);
+public sealed record DatiChiusura(int Versione, string Esito, string? Note, IReadOnlyList<DatiRiga> Righe, bool ControlloEfficienza = false);
 
 public sealed record EsitoScritturaIntervento(Guid Id, int Versione, int Anno, int Numero);
+
+// --- Scadenze ----------------------------------------------------------
+// Le calcola il server: il client le legge, corregge la data e registra i richiami.
+
+/// <summary>Riga della lista da richiamare; GiorniMancanti è negativo per le scadute. Per il Tecnico telefono e richiami sono vuoti.</summary>
+public sealed record ScadenzaInArrivo(
+    Guid ScadenzaId,
+    Guid ImpiantoId,
+    string Tipo,
+    DateOnly DataScadenza,
+    int GiorniMancanti,
+    string StatoRichiamo,
+    int Versione,
+    Guid ClienteId,
+    string Cliente,
+    string Indirizzo,
+    string Comune,
+    string Provincia,
+    string? Telefono,
+    DateTime? UltimoRichiamoIl,
+    string? UltimoEsito,
+    DateOnly? RichiamareIl);
+
+public sealed record Richiamo(
+    Guid RichiamoId,
+    string Canale,
+    DateTime EffettuatoIl,
+    string? EffettuatoDa,
+    string Esito,
+    DateOnly? RichiamareIl,
+    Guid? InterventoId,
+    string? Note);
+
+public sealed record Scadenza(
+    Guid ScadenzaId,
+    Guid ImpiantoId,
+    string Tipo,
+    DateOnly DataScadenza,
+    string Stato,
+    int PeriodicitaMesi,
+    string? Regola,
+    bool RegolaDaVerificare,
+    bool DataManuale,
+    Guid? InterventoOrigineId,
+    Guid? InterventoChiusuraId,
+    DateTime? ChiusaIl,
+    DateTime? AnnullataIl,
+    string? MotivoAnnullamento,
+    string StatoRichiamo,
+    int Versione,
+    IReadOnlyList<Richiamo> Richiami);
+
+public sealed record DatiRichiamo(string Canale, string Esito, DateOnly? RichiamareIl, Guid? InterventoId, string? Note, int Versione);
 
 // --- Documenti ----------------------------------------------------------
 

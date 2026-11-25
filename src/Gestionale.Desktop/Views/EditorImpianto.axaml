@@ -62,6 +62,15 @@
           <TextBox Text="{Binding Pdr}" AutomationProperties.Name="{x:Static r:Testi.Pdr}" />
         </StackPanel>
 
+        <StackPanel>
+          <TextBlock Classes="etichetta">
+            <Run Text="{x:Static r:Testi.ManutenzioneOgniMesi}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+          </TextBlock>
+          <TextBox Text="{Binding ManutenzioneMesi}" MaxLength="3" Width="120" HorizontalAlignment="Left" AutomationProperties.Name="{x:Static r:Testi.ManutenzioneOgniMesi}" />
+          <TextBlock Classes="secondario" FontSize="13" Margin="0,4,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneManutenzioneMesi}" />
+        </StackPanel>
+
         <Grid ColumnDefinitions="*,16,*">
           <StackPanel Grid.Column="0">
             <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Proprietario}" />

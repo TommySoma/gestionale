@@ -34,6 +34,11 @@
           <ComboBox ItemsSource="{Binding Esiti}" SelectedItem="{Binding Esito}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.Esito}" />
         </StackPanel>
 
+        <StackPanel Spacing="4" IsVisible="{Binding PuoSegnareControllo}">
+          <CheckBox IsChecked="{Binding ControlloEfficienza}" Content="{x:Static r:Testi.EseguitoControlloEfficienza}" />
+          <TextBlock Classes="secondario" FontSize="13" Margin="28,0,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneControlloEfficienza}" />
+        </StackPanel>
+
         <StackPanel>
           <TextBlock Classes="etichetta">
             <Run Text="{x:Static r:Testi.Note}" />

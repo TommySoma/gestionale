@@ -99,6 +99,8 @@ internal static class Schermate
         new("documenti.lettura", "tutti"),
         new("documenti.scrittura", "tutti"),
         new("interventi.scrittura", "tutti"),
+        new("scadenze.lettura", "tutti"),
+        new("scadenze.scrittura", "tutti"),
     ];
 
     public static Permesso[] Tecnico { get; } =
@@ -106,6 +108,7 @@ internal static class Schermate
         new("impianti.lettura", "propri"),
         new("interventi.lettura", "propri"),
         new("interventi.scrittura", "propri"),
+        new("scadenze.lettura", "propri"),
     ];
 
     /// <summary>Salva la finestra in chiaro e in scuro; restituisce i testi visibili per i controlli.</summary>

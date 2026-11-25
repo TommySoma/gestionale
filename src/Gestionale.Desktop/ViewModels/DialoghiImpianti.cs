@@ -74,6 +74,7 @@ public partial class EditorImpiantoViewModel : DialogoViewModel
         Anno = esistente?.AnnoInstallazione?.ToString(CultureInfo.InvariantCulture) ?? "";
         Potenza = esistente?.PotenzaUtileKw?.ToString("0.##", CultureInfo.GetCultureInfo("it-IT")) ?? "";
         Pdr = esistente?.Pdr ?? "";
+        ManutenzioneMesi = esistente?.ManutenzioneMesi?.ToString(CultureInfo.InvariantCulture) ?? "";
         Note = esistente?.Note ?? "";
         Proprietario = proprietario;
         Responsabile = responsabile;
@@ -114,6 +115,10 @@ public partial class EditorImpiantoViewModel : DialogoViewModel
 
     [ObservableProperty]
     public partial string Pdr { get; set; }
+
+    /// <summary>Periodicità della manutenzione in mesi, dalle istruzioni del costruttore o dell'installatore; vuota = nessuna scadenza.</summary>
+    [ObservableProperty]
+    public partial string ManutenzioneMesi { get; set; }
 
     [ObservableProperty]
     public partial string Note { get; set; }
@@ -173,6 +178,17 @@ public partial class EditorImpiantoViewModel : DialogoViewModel
             return Testi.PotenzaNonNumerica;
         }
 
+        int? mesi = null;
+        if (!string.IsNullOrWhiteSpace(ManutenzioneMesi))
+        {
+            if (!int.TryParse(ManutenzioneMesi.Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out var valoreMesi) || valoreMesi is < 1 or > 120)
+            {
+                return Testi.ManutenzioneMesiNonValida;
+            }
+
+            mesi = valoreMesi;
+        }
+
         var dati = new DatiImpianto(
             _sedeId,
             tipo,
@@ -185,6 +201,7 @@ public partial class EditorImpiantoViewModel : DialogoViewModel
             Responsabile.Id,
             Vuoto(Note),
             ConDismissione ? FormatoImpianti.DaSelettore(DismessoIl) : null,
+            mesi,
             _esistente?.Versione);
 
         var risposta = _esistente is null
