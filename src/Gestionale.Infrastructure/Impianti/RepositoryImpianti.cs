@@ -64,6 +64,9 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
                 WHERE i.eliminato_il IS NULL AND s.eliminata_il IS NULL AND c.eliminato_il IS NULL
                   AND (@clienteId::uuid IS NULL OR c.cliente_id = @clienteId)
                   AND (@stato::text IS NULL OR i.stato = @stato)
+                  AND (@tecnico::uuid IS NULL OR EXISTS (
+                       SELECT 1 FROM lavoro.interventi x
+                       WHERE x.impianto_id = i.impianto_id AND x.tecnico_utente_id = @tecnico AND x.stato <> 'annullato'))
                   AND (@testo::text IS NULL
                        OR c.nome_ricerca LIKE @modello
                        OR lower(s.indirizzo || ' ' || coalesce(s.civico || ' ', '') || s.comune) LIKE @modello
@@ -78,6 +81,7 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
             {
                 clienteId = filtro.ClienteId,
                 stato = filtro.Stato,
+                tecnico = filtro.TecnicoUtenteId,
                 testo = filtro.Testo,
                 modello = filtro.Testo is null ? null : "%" + EscapeLike(filtro.Testo.ToLowerInvariant()) + "%",
                 pdr = filtro.Testo is null ? null : string.Concat(filtro.Testo.Where(ch => !char.IsWhiteSpace(ch))).ToUpperInvariant(),
@@ -156,6 +160,14 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
 
             return impianto;
         }, ct);
+
+    public Task<bool> AssegnatoAsync(Contesto contesto, Guid impiantoId, CancellationToken ct) =>
+        Esegui(contesto, (c, t) => c.ExecuteScalarAsync<bool>(Comando(
+            """
+            SELECT EXISTS (SELECT 1 FROM lavoro.interventi
+                           WHERE impianto_id = @impiantoId AND tecnico_utente_id = @utenteId AND stato <> 'annullato')
+            """,
+            new { impiantoId, utenteId = contesto.UtenteId }, t, ct)), ct);
 
     public Task<VociImpianti> VociAsync(Contesto contesto, CancellationToken ct) =>
         Esegui(contesto, async (c, t) =>

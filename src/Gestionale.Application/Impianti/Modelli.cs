@@ -152,7 +152,8 @@ public sealed class VoceLookup
 
 public sealed record VociImpianti(IReadOnlyList<VoceLookup> TipiImpianto, IReadOnlyList<VoceLookup> TipiGeneratore, IReadOnlyList<VoceLookup> Combustibili);
 
-public sealed record FiltroImpianti(string? Testo, Guid? ClienteId, string? Stato);
+/// <summary>TecnicoUtenteId limita agli impianti su cui quell'utente ha un intervento non annullato.</summary>
+public sealed record FiltroImpianti(string? Testo, Guid? ClienteId, string? Stato, Guid? TecnicoUtenteId = null);
 
 /// <summary>Esito di una scrittura su impianti, generatori o riferimenti al catasto.</summary>
 public abstract record EsitoImpianto

@@ -3,10 +3,12 @@ using Gestionale.Api.Risorse;
 using Gestionale.Application.Anagrafica;
 using Gestionale.Application.Autenticazione;
 using Gestionale.Application.Impianti;
+using Gestionale.Application.Interventi;
 using Gestionale.Infrastructure.Accessi;
 using Gestionale.Infrastructure.Anagrafica;
 using Gestionale.Infrastructure.Database;
 using Gestionale.Infrastructure.Impianti;
+using Gestionale.Infrastructure.Interventi;
 using Gestionale.Infrastructure.Sicurezza;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -50,6 +52,8 @@ internal static class ConfigurazioneServizi
         servizi.AddSingleton<ServizioClienti>();
         servizi.AddSingleton<IRepositoryImpianti, RepositoryImpianti>();
         servizi.AddSingleton<ServizioImpianti>();
+        servizi.AddSingleton<IRepositoryInterventi, RepositoryInterventi>();
+        servizi.AddSingleton<ServizioInterventi>();
 
         servizi.AddProblemDetails();
 
