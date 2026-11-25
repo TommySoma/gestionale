@@ -7,7 +7,7 @@ BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS pgtap;
 
-SELECT plan(41);
+SELECT plan(42);
 
 -- ---------------------------------------------------------------------------
 -- Dati di prova: due aziende, clienti, sedi e impianti
@@ -124,7 +124,19 @@ SELECT ok(
 SELECT results_eq(
     $$ SELECT imponibile, iva, totale FROM commerciale.preventivi WHERE preventivo_id = '01930000-0000-7000-8000-000000000b01' $$,
     $$ VALUES (90.00::numeric(12,2), 17.10::numeric(12,2), 107.10::numeric(12,2)) $$,
-    'i totali si ricalcolano dalle righe, con l''IVA riga per riga'
+    'i totali si ricalcolano dalle righe, con l''IVA per aliquota'
+);
+
+-- Due righe da 0,15 al 10%: riga per riga sarebbero 0,02 + 0,02; per aliquota è 0,03.
+INSERT INTO commerciale.preventivi (preventivo_id, azienda_id, cliente_id, oggetto) VALUES
+    ('01930000-0000-7000-8000-000000000b05', '01930000-0000-7000-8000-00000000000a', '01930000-0000-7000-8000-0000000000c2', 'Arrotondamenti (prova)');
+SELECT commerciale.salva_righe_preventivo('01930000-0000-7000-8000-000000000b05', 1,
+    '[{"tipo": "materiale", "descrizione": "Minuteria A", "unita": "pz", "quantita": 1, "prezzo_unitario": 0.15, "aliquota_iva": 10},
+      {"tipo": "materiale", "descrizione": "Minuteria B", "unita": "pz", "quantita": 1, "prezzo_unitario": 0.15, "aliquota_iva": 10}]');
+SELECT is(
+    (SELECT iva FROM commerciale.preventivi WHERE preventivo_id = '01930000-0000-7000-8000-000000000b05'),
+    0.03::numeric(12,2),
+    'l''IVA si arrotonda sulla somma di ogni aliquota, non riga per riga'
 );
 
 -- ---------------------------------------------------------------------------

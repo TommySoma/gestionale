@@ -355,7 +355,7 @@ Realizzato in M3 (migrazione 0009, decisioni del 25/11/2026):
 - **Listino.** `listino_voci` (codice unico per azienda senza distinguere le maiuscole, materiale o manodopera in ore, IVA, attiva) e `listino_prezzi`, storico in sola aggiunta con `valido_dal`; `prezzo_voce(voce, data)` dà il prezzo in vigore.
 - **Numerazione all'emissione.** La bozza non ha numero e si può eliminare; `emetti_preventivo` assegna anno e numero con `prossimo_numero`, quindi le bozze scartate non lasciano buchi. Da emesso il preventivo non si cancella e non cambia contenuto: si annulla.
 - **Stati.** `bozza`, `emesso`, `accettato`, `rifiutato`, `annullato`; rifiutato e annullato sono finali, un accettato si annulla solo finché non ha generato l'intervento. La scadenza della validità non è uno stato: `scade_il` = emissione + `validita_giorni`, e un emesso oltre quella data è scaduto.
-- **Righe e totali.** `salva_righe_preventivo` sostituisce le righe della bozza; un trigger ricalcola imponibile, IVA (arrotondata riga per riga) e totale.
+- **Righe e totali.** `salva_righe_preventivo` sostituisce le righe della bozza; un trigger ricalcola imponibile, IVA (per aliquota, arrotondata al centesimo, come nel rapportino) e totale.
 - **Conversione.** `converti_preventivo` crea da un accettato un intervento da pianificare sul suo impianto, con le righe e i prezzi copiati; il preventivo ricorda l'intervento, uno solo.
 
 ### Schema documenti

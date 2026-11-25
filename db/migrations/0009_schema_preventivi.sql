@@ -317,7 +317,9 @@ BEGIN
 END
 $$;
 
--- Totali ricalcolati dalle righe: l'IVA si arrotonda riga per riga.
+-- Totali ricalcolati dalle righe. L'IVA si calcola per aliquota sulla somma
+-- degli importi e si arrotonda al centesimo, come nel rapportino; le righe
+-- senza aliquota non portano IVA.
 CREATE FUNCTION commerciale.ricalcola_totali_preventivo()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -330,10 +332,14 @@ BEGIN
         iva        = t.iva,
         totale     = t.imponibile + t.iva
     FROM (
-        SELECT coalesce(sum(importo), 0) AS imponibile,
-               coalesce(sum(round(importo * coalesce(aliquota_iva, 0) / 100, 2)), 0) AS iva
-        FROM commerciale.preventivi_righe
-        WHERE preventivo_id = v_preventivo_id
+        SELECT coalesce(sum(imponibile), 0) AS imponibile,
+               coalesce(sum(round(imponibile * coalesce(aliquota_iva, 0) / 100, 2)), 0) AS iva
+        FROM (
+            SELECT aliquota_iva, sum(importo) AS imponibile
+            FROM commerciale.preventivi_righe
+            WHERE preventivo_id = v_preventivo_id
+            GROUP BY aliquota_iva
+        ) per_aliquota
     ) t
     WHERE p.preventivo_id = v_preventivo_id
       AND (p.imponibile, p.iva) IS DISTINCT FROM (t.imponibile, t.iva);
