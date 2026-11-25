@@ -116,6 +116,7 @@ Legenda: **L** = lettura, **S** = scrittura (crea e modifica), **F** = firma o v
 | Dichiarazione di conformità | L, S, F | L | L, S, F | L (propri) | L | — |
 | Bollini e invii al catasto | L, S | L, S | L, S | L (propri) | L | — |
 | Registro F-Gas | L, S | L | L, S | L, S (propri) | L | — |
+| Scadenze e richiami (decisione del 25/11/2026) | L, S | L, S | L, S | L (propri) | L | — |
 | Preventivi | L, S | L, S | L | — | L | — |
 | Listino prezzi | L, S | L, S | L | L | — | — |
 | Report economici | L | L | — | — | L | — |
@@ -312,10 +313,18 @@ flowchart TD
 | --- | --- | --- |
 | `interventi` | Numero, impianto, tipo, stato, finestra pianificata (intervallo di tempo), tecnico, esito, note, chiusura | Vincolo di esclusione GiST: un tecnico non ha interventi sovrapposti; numero da funzione |
 | `interventi_righe` | Materiali e manodopera con quantità, ore e prezzi | Prezzi copiati dal listino al momento, per uno storico fedele |
-
-Realizzato in M2 (migrazione 0006): stati `da_pianificare`, `pianificato`, `in_corso`, `completato`, `annullato`, con completato e annullato finali; tipi interni (manutenzione, riparazione, installazione, sopralluogo, altro); finestra `[inizio, fine)` obbligatoria con il tecnico per ciò che è in calendario; numero e anno assegnati da un trigger con `commerciale.prossimo_numero`, creato in anticipo rispetto al resto dello schema commerciale; righe modificabili solo a intervento aperto. Il collegamento ai preventivi e la chiusura delle scadenze arrivano con M3.
 | `scadenze` | Impianto o generatore, tipo, data, stato, regola applicata, intervento di origine e di chiusura, stato del richiamo | Indice su azienda e data per le scadenze aperte; ricalcolate alla chiusura dell'intervento |
 | `richiami` | Tentativi di contatto: canale, data, esito | Alimenta il tasso di richiamo |
+
+Realizzato in M2 (migrazione 0006): stati `da_pianificare`, `pianificato`, `in_corso`, `completato`, `annullato`, con completato e annullato finali; tipi interni (manutenzione, riparazione, installazione, sopralluogo, altro); finestra `[inizio, fine)` obbligatoria con il tecnico per ciò che è in calendario; numero e anno assegnati da un trigger con `commerciale.prossimo_numero`, creato in anticipo rispetto al resto dello schema commerciale; righe modificabili solo a intervento aperto. Il collegamento ai preventivi arriva con M3.
+
+Realizzato in M3 (migrazione 0008, decisioni del 25/11/2026):
+
+- **Due tipi di scadenza.** La manutenzione segue la periodicità in mesi indicata sull'impianto (`manutenzione_mesi`, dalle istruzioni del costruttore o dell'installatore; vuota = nessuna scadenza). Il controllo di efficienza energetica segue `norma.regole_cadenza`, scelta per regione dell'azienda, tipo di impianto, combustibile e fascia di potenza. Per ora si lega all'impianto, non al singolo generatore.
+- **Calcolo.** `ricalcola_scadenze` parte dall'ultimo intervento completato con esito risolto (manutenzione o installazione; per il controllo, manutenzione con il controllo spuntato o installazione). Senza interventi alle spalle la scadenza è da fare subito e l'ufficio ne corregge la data: una data corretta a mano (`data_manuale`) non la sposta più il ricalcolo. Un trigger ricalcola quando cambiano tipo, potenza, combustibile, periodicità, stato o eliminazione dell'impianto. Un impianto dismesso o eliminato ha le scadenze annullate.
+- **Chiusura.** Una manutenzione chiusa con esito risolto chiude la scadenza di manutenzione; se in chiusura si spunta "eseguito il controllo di efficienza" (`interventi.controllo_efficienza`) chiude anche quella di controllo. Con esito da completare o non risolto restano aperte. In M4 la stessa spunta genererà la bozza del rapporto di controllo.
+- **Stati.** Scadenza `aperta`, `chiusa`, `annullata` (finali le ultime due), una sola aperta per impianto e tipo. Richiamo `non_contattato`, `in_attesa`, `fissato`, `rifiutato`, aggiornato da ogni riga di `richiami` (esiti `nessuna_risposta`, `da_richiamare` con data, `appuntamento` con l'intervento, `rifiutato`). I richiami sono in sola aggiunta.
+- **Regole di cadenza.** Solo voci di prova `da_verificare` con periodicità fittizie, da sostituire con i valori del DPR 74/2013 e delle norme regionali vigenti. Un vincolo di esclusione impedisce due regole sovrapposte per periodo e fascia di potenza. Il primo controllo dopo l'installazione non ha una colonna propria finché la regola non è verificata.
 
 ### Schema norma: compliance
 
