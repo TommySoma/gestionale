@@ -102,7 +102,7 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
                        concat_ws(' ', tg.nome, g.marca, g.modello, '(' || g.matricola || ')') AS generatore,
                        c.cliente_id, {NomeCliente} AS cliente,
                        s.indirizzo, s.civico, s.cap, s.comune, s.provincia,
-                       x.descrizione, x.note_chiusura, x.chiuso_il, x.annullato_il, x.motivo_annullamento,
+                       x.descrizione, x.note_chiusura, x.controllo_efficienza, x.chiuso_il, x.annullato_il, x.motivo_annullamento,
                        x.creato_il, x.versione
                 {Origine}
                 LEFT JOIN impianti.generatori g ON g.generatore_id = x.generatore_id
@@ -237,6 +237,12 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
                 return esito;
             }
 
+            // Il controllo di efficienza si esegue durante una manutenzione (vincolo anche nel database).
+            if (dati.ControlloEfficienza && attuale!.Tipo != TipiIntervento.Manutenzione)
+            {
+                return new EsitoIntervento.NonValida([ErroreIntervento.ControlloSoloManutenzione]);
+            }
+
             var righe = JsonSerializer.Serialize(
                 (dati.Righe ?? []).Select(r => new
                 {
@@ -252,8 +258,8 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
                 s_json);
 
             await c.ExecuteAsync(Comando(
-                "SELECT lavoro.chiudi_intervento(@interventoId, @versione, @esito, @note, @righe::jsonb)",
-                new { interventoId, versione, esito = dati.Esito, note = dati.Note, righe }, t, ct));
+                "SELECT lavoro.chiudi_intervento(@interventoId, @versione, @esito, @note, @righe::jsonb, @controllo)",
+                new { interventoId, versione, esito = dati.Esito, note = dati.Note, righe, controllo = dati.ControlloEfficienza }, t, ct));
 
             var riga = await c.QuerySingleAsync<RigaScritta>(Comando(
                 "SELECT intervento_id AS id, versione, anno, numero FROM lavoro.interventi WHERE intervento_id = @interventoId",
@@ -287,7 +293,7 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
     private static Task<StatoAttuale?> BloccaAsync(NpgsqlConnection c, NpgsqlTransaction t, Guid interventoId, Guid? soloTecnico, CancellationToken ct) =>
         c.QuerySingleOrDefaultAsync<StatoAttuale>(Comando(
             """
-            SELECT stato, versione, impianto_id FROM lavoro.interventi
+            SELECT stato, versione, impianto_id, tipo FROM lavoro.interventi
             WHERE intervento_id = @interventoId
               AND (@soloTecnico::uuid IS NULL OR tecnico_utente_id = @soloTecnico)
             FOR UPDATE
@@ -395,6 +401,8 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
         public int Versione { get; init; }
 
         public Guid ImpiantoId { get; init; }
+
+        public string Tipo { get; init; } = "";
     }
 
     private sealed class ControlloRiferimenti

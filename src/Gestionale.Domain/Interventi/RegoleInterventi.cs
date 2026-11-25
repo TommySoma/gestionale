@@ -14,6 +14,7 @@ public enum ErroreIntervento
     EsitoInterventoNonValido,
     MotivoAnnullamentoMancante,
     TroppeRighe,
+    ControlloSoloManutenzione,
     RigaTipoNonValido,
     RigaDescrizioneMancante,
     RigaUnitaMancante,
@@ -43,6 +44,8 @@ public static class StatiIntervento
 
 public static class TipiIntervento
 {
+    public const string Manutenzione = "manutenzione";
+
     public static IReadOnlySet<string> Tutti { get; } = new HashSet<string>(StringComparer.Ordinal)
     {
         "manutenzione", "riparazione", "installazione", "sopralluogo", "altro",
@@ -86,7 +89,8 @@ public sealed record DatiRiga(
     decimal? ScontoPercentuale,
     decimal? AliquotaIva);
 
-public sealed record DatiChiusura(string? Esito, string? Note, IReadOnlyList<DatiRiga>? Righe);
+/// <summary>ControlloEfficienza: in chiusura di una manutenzione è stato eseguito anche il controllo (decisione del 25/11/2026).</summary>
+public sealed record DatiChiusura(string? Esito, string? Note, IReadOnlyList<DatiRiga>? Righe, bool ControlloEfficienza = false);
 
 /// <summary>
 /// Normalizzazione e validazione degli interventi: le stesse regole dei vincoli
@@ -160,7 +164,7 @@ public static class RegoleInterventi
         ArgumentNullException.ThrowIfNull(dati);
 
         var righe = (dati.Righe ?? []).Select(Normalizza).ToList();
-        var normalizzati = new DatiChiusura(Pulisci(dati.Esito)?.ToLowerInvariant(), Pulisci(dati.Note), righe);
+        var normalizzati = new DatiChiusura(Pulisci(dati.Esito)?.ToLowerInvariant(), Pulisci(dati.Note), righe, dati.ControlloEfficienza);
 
         // Un errore compare una volta sola anche se lo ripetono più righe.
         var errori = new List<ErroreIntervento>();

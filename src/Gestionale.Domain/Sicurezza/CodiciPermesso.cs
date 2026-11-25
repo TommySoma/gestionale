@@ -15,6 +15,8 @@ public static class CodiciPermesso
     public const string InterventiScrittura = "interventi.scrittura";
     public const string DocumentiLettura = "documenti.lettura";
     public const string DocumentiScrittura = "documenti.scrittura";
+    public const string ScadenzeLettura = "scadenze.lettura";
+    public const string ScadenzeScrittura = "scadenze.scrittura";
 }
 
 /// <summary>Estensione di un permesso: su tutto o solo sulle attività assegnate all'utente.</summary>

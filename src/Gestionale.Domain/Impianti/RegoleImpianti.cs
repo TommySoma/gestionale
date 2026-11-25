@@ -19,6 +19,7 @@ public enum ErroreImpianto
     CodiceCatastoNonValido,
     CodiceCatastoInUso,
     RegioneGiaRegistrata,
+    PeriodicitaManutenzioneNonValida,
 }
 
 /// <summary>Situazioni sospette che non bloccano il salvataggio: l'API le segnala.</summary>
@@ -57,7 +58,8 @@ public sealed record DatiImpianto(
     Guid? ProprietarioClienteId,
     Guid? ResponsabileClienteId,
     string? Note,
-    DateOnly? DismessoIl);
+    DateOnly? DismessoIl,
+    int? ManutenzioneMesi = null);
 
 public sealed record DatiGeneratore(
     Guid? TipoGeneratoreId,
@@ -126,6 +128,12 @@ public static class RegoleImpianti
         if (!PotenzaValida(normalizzati.PotenzaUtileKw))
         {
             errori.Add(ErroreImpianto.PotenzaNonValida);
+        }
+
+        // Stesso vincolo del database: da 1 a 120 mesi, oppure nessuna scadenza di manutenzione.
+        if (normalizzati.ManutenzioneMesi is { } mesi && mesi is < 1 or > 120)
+        {
+            errori.Add(ErroreImpianto.PeriodicitaManutenzioneNonValida);
         }
 
         return (normalizzati, errori);

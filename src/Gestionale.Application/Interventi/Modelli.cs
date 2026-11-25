@@ -92,6 +92,9 @@ public sealed class Intervento
 
     public string? NoteChiusura { get; init; }
 
+    /// <summary>Chiudendo la manutenzione è stato eseguito anche il controllo di efficienza.</summary>
+    public bool ControlloEfficienza { get; init; }
+
     public DateTime? ChiusoIl { get; init; }
 
     public DateTime? AnnullatoIl { get; init; }

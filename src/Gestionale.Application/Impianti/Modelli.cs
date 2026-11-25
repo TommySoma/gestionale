@@ -83,6 +83,9 @@ public sealed class Impianto
 
     public DateOnly? DismessoIl { get; init; }
 
+    /// <summary>Periodicità della manutenzione in mesi; null = nessuna scadenza di manutenzione.</summary>
+    public int? ManutenzioneMesi { get; init; }
+
     public int Versione { get; init; }
 
     public bool IndirizzoDuplicato { get; init; }

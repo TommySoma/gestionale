@@ -327,4 +327,58 @@
   <data name="EliminazioneDocumentoVietata" xml:space="preserve">
     <value>Puoi caricare foto e documenti sugli impianti dei tuoi interventi, ma eliminarli spetta all'ufficio.</value>
   </data>
+  <data name="PeriodicitaManutenzioneNonValida" xml:space="preserve">
+    <value>la periodicità della manutenzione va da 1 a 120 mesi, oppure lasciala vuota</value>
+  </data>
+  <data name="ControlloSoloManutenzione" xml:space="preserve">
+    <value>il controllo di efficienza si spunta solo chiudendo una manutenzione</value>
+  </data>
+  <data name="ScadenzaNonTrovata" xml:space="preserve">
+    <value>La scadenza o l'impianto richiesto non esiste, è stato eliminato o non è tra i tuoi.</value>
+  </data>
+  <data name="ScadenzaNonAperta" xml:space="preserve">
+    <value>La scadenza è {0}: non si corregge e non si registrano richiami.</value>
+  </data>
+  <data name="StatoScadenza_aperta" xml:space="preserve">
+    <value>aperta</value>
+  </data>
+  <data name="StatoScadenza_chiusa" xml:space="preserve">
+    <value>chiusa</value>
+  </data>
+  <data name="StatoScadenza_annullata" xml:space="preserve">
+    <value>annullata</value>
+  </data>
+  <data name="DatiScadenzaNonValidi" xml:space="preserve">
+    <value>Correggi questi dati: {0}</value>
+  </data>
+  <data name="DataScadenzaMancante" xml:space="preserve">
+    <value>indica la nuova data della scadenza</value>
+  </data>
+  <data name="DataScadenzaFuoriIntervallo" xml:space="preserve">
+    <value>la data deve essere entro dieci anni da oggi, nel passato o nel futuro: controlla l'anno</value>
+  </data>
+  <data name="CanaleRichiamoNonValido" xml:space="preserve">
+    <value>il canale deve essere telefono, email, sms, whatsapp, di_persona o altro</value>
+  </data>
+  <data name="EsitoRichiamoNonValido" xml:space="preserve">
+    <value>l'esito deve essere nessuna_risposta, da_richiamare, appuntamento o rifiutato</value>
+  </data>
+  <data name="RichiamareIlSoloDaRisentire" xml:space="preserve">
+    <value>la data per risentirsi vale solo se il cliente non ha risposto o va richiamato</value>
+  </data>
+  <data name="RichiamareIlNelPassato" xml:space="preserve">
+    <value>la data per risentirsi non può essere già passata</value>
+  </data>
+  <data name="InterventoSoloConAppuntamento" xml:space="preserve">
+    <value>l'intervento si collega solo a un richiamo con appuntamento</value>
+  </data>
+  <data name="InterventoRichiamoNonValido" xml:space="preserve">
+    <value>l'intervento indicato non esiste, è annullato o riguarda un altro impianto</value>
+  </data>
+  <data name="NoteRichiamoTroppoLunghe" xml:space="preserve">
+    <value>le note possono avere al massimo 2000 caratteri</value>
+  </data>
+  <data name="GiorniNonValidi" xml:space="preserve">
+    <value>i giorni devono essere tra 0 e 3650</value>
+  </data>
 </root>
