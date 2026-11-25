@@ -22,7 +22,7 @@ public sealed class GeneratoreRapportino : IGeneratoreRapportino
         var numero = Formato(TestiDocumenti.NumeroIntervento, intervento.Numero, intervento.Anno);
         var pagina = new Impaginatore(TestiDocumenti.Disclaimer);
 
-        Intestazione(pagina, azienda, numero);
+        Intestazione(pagina, azienda, $"{TestiDocumenti.TitoloRapportino} {numero}");
 
         pagina.Sezione(TestiDocumenti.SezioneIntervento);
         var campi = new List<(string, string)>
@@ -75,7 +75,8 @@ public sealed class GeneratoreRapportino : IGeneratoreRapportino
         return pagina.Pdf($"{TestiDocumenti.TitoloRapportino} {numero}", azienda.RagioneSociale);
     }
 
-    private static void Intestazione(Impaginatore pagina, IntestazioneAzienda azienda, string numero)
+    /// <summary>Ragione sociale, recapito e titolo del documento: la stessa testata per rapportini e preventivi.</summary>
+    internal static void Intestazione(Impaginatore pagina, IntestazioneAzienda azienda, string titolo)
     {
         pagina.Testo(azienda.RagioneSociale, 14, grassetto: true);
         var recapito = string.Join(" · ", new[]
@@ -89,7 +90,7 @@ public sealed class GeneratoreRapportino : IGeneratoreRapportino
         }
 
         pagina.Spazio(14);
-        pagina.Testo($"{TestiDocumenti.TitoloRapportino} {numero}", 18, grassetto: true);
+        pagina.Testo(titolo, 18, grassetto: true);
         pagina.Spazio(4);
     }
 

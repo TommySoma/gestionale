@@ -163,10 +163,9 @@ public static class RegoleInterventi
     {
         ArgumentNullException.ThrowIfNull(dati);
 
-        var righe = (dati.Righe ?? []).Select(Normalizza).ToList();
+        var (righe, erroriRighe) = ValidaRighe(dati.Righe);
         var normalizzati = new DatiChiusura(Pulisci(dati.Esito)?.ToLowerInvariant(), Pulisci(dati.Note), righe, dati.ControlloEfficienza);
 
-        // Un errore compare una volta sola anche se lo ripetono più righe.
         var errori = new List<ErroreIntervento>();
 
         if (normalizzati.Esito is null || !EsitiIntervento.Tutti.Contains(normalizzati.Esito))
@@ -174,17 +173,23 @@ public static class RegoleInterventi
             errori.Add(ErroreIntervento.EsitoInterventoNonValido);
         }
 
-        if (righe.Count > RigheMassime)
+        errori.AddRange(erroriRighe);
+        return (normalizzati, errori);
+    }
+
+    /// <summary>Righe di materiali e manodopera, le stesse per interventi e preventivi: un errore compare una volta sola anche se lo ripetono più righe.</summary>
+    public static (IReadOnlyList<DatiRiga> Righe, IReadOnlyList<ErroreIntervento> Errori) ValidaRighe(IEnumerable<DatiRiga>? righe)
+    {
+        var normalizzate = (righe ?? []).Select(Normalizza).ToList();
+        var errori = new List<ErroreIntervento>();
+
+        if (normalizzate.Count > RigheMassime)
         {
             errori.Add(ErroreIntervento.TroppeRighe);
         }
 
-        foreach (var errore in righe.SelectMany(ErroriRiga).Distinct())
-        {
-            errori.Add(errore);
-        }
-
-        return (normalizzati, errori);
+        errori.AddRange(normalizzate.SelectMany(ErroriRiga).Distinct());
+        return (normalizzate, errori);
     }
 
     public static string? MotivoAnnullamento(string? motivo) => Pulisci(motivo);

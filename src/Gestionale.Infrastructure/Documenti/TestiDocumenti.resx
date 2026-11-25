@@ -141,4 +141,67 @@
   <data name="EsitoIntervento_non_risolto" xml:space="preserve">
     <value>Non risolto</value>
   </data>
+  <data name="TitoloPreventivo" xml:space="preserve">
+    <value>Preventivo</value>
+  </data>
+  <data name="NumeroPreventivo" xml:space="preserve">
+    <value>n. {0}/{1}</value>
+  </data>
+  <data name="TitoloBozzaPreventivo" xml:space="preserve">
+    <value>Bozza di preventivo</value>
+  </data>
+  <data name="AvvisoBozza" xml:space="preserve">
+    <value>Bozza: non è ancora un'offerta valida e non ha numero.</value>
+  </data>
+  <data name="AvvisoAnnullato" xml:space="preserve">
+    <value>Preventivo annullato: {0}</value>
+  </data>
+  <data name="AvvisoRifiutato" xml:space="preserve">
+    <value>Preventivo rifiutato dal cliente.</value>
+  </data>
+  <data name="AvvisoScaduto" xml:space="preserve">
+    <value>Validità scaduta: chiedi conferma dei prezzi prima di procedere.</value>
+  </data>
+  <data name="SezionePreventivo" xml:space="preserve">
+    <value>Preventivo</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="NonEmesso" xml:space="preserve">
+    <value>Non ancora emesso</value>
+  </data>
+  <data name="ValidoFinoAl" xml:space="preserve">
+    <value>Valido fino al</value>
+  </data>
+  <data name="ValiditaGiorni" xml:space="preserve">
+    <value>{0} giorni dall'emissione</value>
+  </data>
+  <data name="SezioneCliente" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="CodiceFiscale" xml:space="preserve">
+    <value>Codice fiscale</value>
+  </data>
+  <data name="PartitaIvaCliente" xml:space="preserve">
+    <value>Partita IVA</value>
+  </data>
+  <data name="LuogoLavori" xml:space="preserve">
+    <value>Luogo dei lavori</value>
+  </data>
+  <data name="Oggetto" xml:space="preserve">
+    <value>Oggetto</value>
+  </data>
+  <data name="VociPreventivo" xml:space="preserve">
+    <value>Voci</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="FirmaImpresa" xml:space="preserve">
+    <value>Timbro e firma dell'impresa</value>
+  </data>
+  <data name="FirmaAccettazione" xml:space="preserve">
+    <value>Per accettazione: data e firma del cliente</value>
+  </data>
 </root>
