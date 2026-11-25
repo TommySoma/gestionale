@@ -312,6 +312,8 @@ flowchart TD
 | --- | --- | --- |
 | `interventi` | Numero, impianto, tipo, stato, finestra pianificata (intervallo di tempo), tecnico, esito, note, chiusura | Vincolo di esclusione GiST: un tecnico non ha interventi sovrapposti; numero da funzione |
 | `interventi_righe` | Materiali e manodopera con quantità, ore e prezzi | Prezzi copiati dal listino al momento, per uno storico fedele |
+
+Realizzato in M2 (migrazione 0006): stati `da_pianificare`, `pianificato`, `in_corso`, `completato`, `annullato`, con completato e annullato finali; tipi interni (manutenzione, riparazione, installazione, sopralluogo, altro); finestra `[inizio, fine)` obbligatoria con il tecnico per ciò che è in calendario; numero e anno assegnati da un trigger con `commerciale.prossimo_numero`, creato in anticipo rispetto al resto dello schema commerciale; righe modificabili solo a intervento aperto. Il collegamento ai preventivi e la chiusura delle scadenze arrivano con M3.
 | `scadenze` | Impianto o generatore, tipo, data, stato, regola applicata, intervento di origine e di chiusura, stato del richiamo | Indice su azienda e data per le scadenze aperte; ricalcolate alla chiusura dell'intervento |
 | `richiami` | Tentativi di contatto: canale, data, esito | Alimenta il tasso di richiamo |
 

@@ -6,7 +6,7 @@ Il piano completo è in `docs/piano-di-sviluppo.md`: leggilo prima di lavorare s
 
 ## Stato
 
-M0 completata e unita il 22/11/2026. M1 completata e unita il 23/11/2026: autenticazione (ADR 0002), anagrafiche (ADR 0003), client desktop, anonimizzazione GDPR (ADR 0004) e tema scuro. M2 (impianti e interventi) in corso: schema impianti unito; seconda PR con API impianti e scheda impianto nel client (il Tecnico non vede impianti finché non arrivano gli interventi); le lookup normative (tipi di impianto, di generatore, combustibili) hanno solo voci di prova `da_verificare`, da sostituire con i valori dei moduli ufficiali. Proposta grafica: https://claude.ai/artifact/VU9RMVAS2a8shTESLADN5v Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
+M0 completata e unita il 22/11/2026. M1 completata e unita il 23/11/2026: autenticazione (ADR 0002), anagrafiche (ADR 0003), client desktop, anonimizzazione GDPR (ADR 0004) e tema scuro. M2 (impianti e interventi) in corso: schema impianti unito; seconda PR con API impianti e scheda impianto nel client (il Tecnico non vede impianti finché non arrivano gli interventi); le lookup normative (tipi di impianto, di generatore, combustibili) hanno solo voci di prova `da_verificare`, da sostituire con i valori dei moduli ufficiali. Terza PR: schema interventi (migrazione 0006: `commerciale.contatori` e `prossimo_numero`, `lavoro.interventi` con vincolo di esclusione GiST, `lavoro.interventi_righe`, `lavoro.chiudi_intervento`); poi API, calendario e rapportino PDF. Proposta grafica: https://claude.ai/artifact/VU9RMVAS2a8shTESLADN5v Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
 
 ## Decisioni già prese (non riaprirle senza un motivo)
 
@@ -46,7 +46,7 @@ Titolare, Amministrativo, Responsabile tecnico, Tecnico, Sola lettura, Amministr
 
 ## Convenzioni del database
 
-- `snake_case` in italiano, tabelle al plurale, chiavi `<entità>_id`, vincoli con prefisso `pk_`, `fk_`, `uq_`, `ck_`.
+- `snake_case` in italiano, tabelle al plurale, chiavi `<entità>_id`, vincoli con prefisso `pk_`, `fk_`, `uq_`, `ck_` (`ex_` per i vincoli di esclusione).
 - Chiavi UUID v7 (`uuidv7()`, PostgreSQL 18), `timestamptz`, importi `numeric(12,2)`. Niente ENUM nativi: lookup per ciò che è normativo, `CHECK` per gli stati interni.
 - Ogni tabella di business ha `azienda_id`, `creato_il`, `creato_da`, `modificato_il`, `modificato_da`, `versione`.
 - I documenti normativi non si cancellano: si annullano con uno stato. Dopo la firma un trigger ne blocca la modifica.
