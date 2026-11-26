@@ -32,7 +32,8 @@ Nella guida i campi sono numerati da 1 a 68, ma il 46 manca in entrambe le tabel
 ## Domande aperte, da porre al team SIERT
 
 - Il campo 46 è un refuso della numerazione o una colonna omessa?
-- Il file ha una riga di intestazione?
+- Il file ha una riga di intestazione? Per ora no.
+- Le righe vanno chiuse da CRLF o da LF? Per ora CRLF, in UTF-8 senza BOM: la guida dice solo "UTF8".
 - Il valore ammesso "AD ASSORBIMENTO A FIAMMA DIRETTA CON COMNBUSTIBLE" (tipo 2, campo 32) è scritto così anche nel sistema?
 - Quale potenza si confronta con la fascia del bollino, e gli estremi ("fino a 35 kW", "tra 35 kW e 100 kW") a quale fascia appartengono?
 
@@ -40,5 +41,7 @@ Nella guida i campi sono numerati da 1 a 68, ma il 46 manca in entrambe le tabel
 
 - Il file di invio si può validare riga per riga prima di caricarlo, con gli stessi controlli di struttura della guida.
 - Se la risposta del SIERT cambia il tracciato, basta una migrazione con le nuove righe.
-- Rimandati: bollino congiunto e generatori modulari (suffissi C1, M1 sul numero di bollino), bozza creata alla chiusura dell'intervento, esiti dell'invio riportati sullo stato dei rapporti.
+- La migrazione 0011 aggiunge la bozza precompilata dalle anagrafiche (`norma.crea_rapporto`, senza trasformare i valori), gli esiti del report riportati sui rapporti (importato e importato in bozza: trasmesso; scartato: scartato) e l'annullamento di un invio mai caricato.
+- Annullare un rapporto firmato richiede il permesso di firma: è un documento con valore legale.
+- Rimandati: bollino congiunto e generatori modulari (suffissi C1, M1 sul numero di bollino), bozza creata alla chiusura dell'intervento, PDF del rapporto.
 - Il SIERT non ha un'API pubblica nota: l'invio resta assistito, l'utente carica il file sul portale e poi registra il report.

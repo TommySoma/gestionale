@@ -14,9 +14,9 @@ M0 completata e unita il 22/11/2026. M1 completata e unita il 23/11/2026: autent
 - **Voci di prova:** tipi di impianto, di generatore, combustibili e regole di cadenza hanno solo voci `da_verificare` con valori fittizi, da sostituire con quelli dei testi ufficiali.
 - **Completamento di M3 (PR 23):** pagina Oggi come pagina iniziale (interventi del giorno, scadenze della settimana, preventivi in attesa), preventivi nella scheda cliente, richiamo con appuntamento collegato a un intervento aperto dell'impianto.
 
-- **M4, compliance Toscana (in corso dal 26/11/2026):** perimetro RCEE tipo 1 e 2, bollini e file di import massivo SIERT; dichiarazione di conformità e F-Gas in una milestone successiva. Prima PR `m4/schema-rcee`: migrazione 0010 con tracciato SIERT v3.0 come dati (67 colonne), tipi e importi dei bollini verificati, rapporti con validazione, assegnazione del bollino, convalida, firma e annullamento, invii (ADR 0006). Seguono API con file di invio e PDF, poi le schermate.
+- **M4, compliance Toscana (in corso dal 26/11/2026):** perimetro RCEE tipo 1 e 2, bollini e file di import massivo SIERT; dichiarazione di conformità e F-Gas in una milestone successiva. Prima PR `m4/schema-rcee`: migrazione 0010 con tracciato SIERT v3.0 come dati (67 colonne), tipi e importi dei bollini verificati, rapporti con validazione, assegnazione del bollino, convalida, firma e annullamento, invii (ADR 0006). Seconda PR `m4/api-rcee`: migrazione 0011 (bozza precompilata, esiti del report, annullamento dell'invio), API di rapporti, bollini e invii con file di import. Il Tecnico compila i rapporti suoi o dei suoi interventi, non firma e non vede gli invii.
 
-Prossimo passo: API dei rapporti di controllo e dei bollini, con generazione del file di invio. Proposta grafica: https://claude.ai/artifact/VU9RMVAS2a8shTESLADN5v Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
+Prossimo passo: codice ISTAT, sigla catasto e codice ditta nelle API e nel client, poi le schermate di rapporti, bollini e invii; il PDF del rapporto è da decidere. Proposta grafica: https://claude.ai/artifact/VU9RMVAS2a8shTESLADN5v Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
 
 ## Decisioni già prese (non riaprirle senza un motivo)
 
