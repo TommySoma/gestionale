@@ -2,11 +2,24 @@
 
 Gestionale desktop on-premise (Windows e macOS) per piccole imprese che installano e manutengono caldaie, climatizzatori e pompe di calore. Trasforma gli obblighi normativi in scadenze e documenti già pronti.
 
-> **Stato:** milestone M0 (fondamenta). Nessuna funzione di business è ancora disponibile. Il piano completo è in [docs/piano-di-sviluppo.md](docs/piano-di-sviluppo.md).
+> **Stato:** milestone M0-M4 completate (27/11/2026): accessi con secondo fattore, anagrafiche, impianti, interventi, scadenze, preventivi e compliance Toscana (rapporti di controllo, bollini, file di import per il SIERT). Prossima milestone: M5, chatbot base. Il piano completo è in [docs/piano-di-sviluppo.md](docs/piano-di-sviluppo.md).
+
+## Funzioni
+
+- **Accessi e ruoli:** Titolare, Amministrativo, Responsabile tecnico, Tecnico, Sola lettura, Amministratore di sistema; password Argon2id, TOTP obbligatorio per Titolare e Amministratore di sistema; il Tecnico vede e chiude solo i propri interventi.
+- **Anagrafiche:** clienti, sedi (con codice ISTAT del comune), contatti, consensi privacy, anonimizzazione su richiesta dell'interessato.
+- **Impianti:** generatori con la sigla del catasto, riferimenti al catasto regionale, foto e documenti.
+- **Interventi:** numerazione senza buchi, calendario per tecnico con trascinamento, chiusura con righe di materiali e manodopera, rapportino PDF.
+- **Scadenze:** manutenzione dalla periodicità dell'impianto e controllo di efficienza dalle regole di cadenza, lista da richiamare con i richiami; pagina Oggi come pagina iniziale.
+- **Preventivi:** listino con storico dei prezzi, preventivi numerati all'emissione con PDF, intervento generato da un preventivo accettato.
+- **Compliance Toscana:** rapporti di controllo RCEE tipo 1 e 2 compilati su un modulo costruito dal tracciato SIERT v3.0 e validati contro di esso; registro dei bollini e assegnazione al rapporto; convalida e firma; file di import massivo per il portale SIERT ed esiti del report. La bozza del rapporto nasce anche chiudendo una manutenzione con il controllo di efficienza. Scelte e domande aperte nell'[ADR 0006](docs/adr/0006-rapporti-controllo-e-tracciato-siert.md).
+- **Non ancora presenti:** dichiarazione di conformità, registro F-Gas, PDF del rapporto di controllo, catasto lombardo (CURIT), chatbot. L'invio al SIERT è assistito: il file si carica a mano sul portale, perché non è nota un'API pubblica.
+
+Tipi di impianto, tipi di generatore, combustibili e regole di cadenza contengono per ora solo **voci di prova** con valori fittizi, da sostituire con quelli dei testi ufficiali.
 
 ## Avvertenza
 
-Il software è un **supporto alla compilazione** e non sostituisce la verifica normativa né la responsabilità di chi firma. I documenti generati (rapporti di controllo, dichiarazioni di conformità, registri F-Gas) vanno controllati dall'utente sui testi ufficiali prima della firma e dell'invio. Le regole regionali e nazionali incluse sono ricavate da documenti pubblici e **non sono validate sul campo**. Il software è fornito "così com'è", senza garanzie (vedi [LICENSE](LICENSE)).
+Il software è un **supporto alla compilazione** e non sostituisce la verifica normativa né la responsabilità di chi firma. I documenti generati (rapporti di controllo, file di invio al catasto e, nelle prossime milestone, dichiarazioni di conformità e registri F-Gas) vanno controllati dall'utente sui testi ufficiali prima della firma e dell'invio. Le regole regionali e nazionali incluse sono ricavate da documenti pubblici e **non sono validate sul campo**. Il software è fornito "così com'è", senza garanzie (vedi [LICENSE](LICENSE)).
 
 Tutti i dati presenti nel repository sono **fittizi**.
 
@@ -116,7 +129,7 @@ Il token di accesso dura 15 minuti, la sessione al massimo 12 ore. Dopo 5 errori
 | Sedi e contatti | `/api/clienti/{id}/sedi` e `/api/clienti/{id}/contatti` |
 | Consensi privacy (storico, vale l'ultimo) | `GET` e `POST /api/clienti/{id}/consensi`, `GET /api/finalita-privacy` |
 
-Ogni modifica e cancellazione richiede la `versione` letta: se nel frattempo un collega ha cambiato il dato, l'API risponde 409 invece di sovrascriverlo. Codice fiscale (anche con omocodia) e partita IVA sono controllati con la cifra di controllo. Il Tecnico vede solo i clienti dei propri interventi, che arrivano con M2: fino ad allora il suo elenco è vuoto.
+Ogni modifica e cancellazione richiede la `versione` letta: se nel frattempo un collega ha cambiato il dato, l'API risponde 409 invece di sovrascriverlo. Codice fiscale (anche con omocodia) e partita IVA sono controllati con la cifra di controllo. Il Tecnico per ora non consulta elenco e schede dei clienti: indirizzo e responsabile li trova negli interventi e negli impianti.
 
 **Anonimizzazione (GDPR).** Quando un cliente chiede la cancellazione dei propri dati, il Titolare lo anonimizza con `POST /api/clienti/{id}/anonimizzazione?versione=N`: nominativo, codici fiscali, PEC, note e contatti spariscono per sempre; restano gli indirizzi delle sedi (servono ai documenti degli impianti) e lo storico dei consensi senza note. Non si annulla. Scelte e limiti nell'[ADR 0004](docs/adr/0004-anonimizzazione-clienti.md).
 
@@ -131,6 +144,11 @@ Alla prima apertura indica l'indirizzo del server (ad esempio `http://localhost:
 - **Accesso:** email e password, poi il codice dell'app di autenticazione. Titolare e Amministratore di sistema configurano il secondo fattore al primo accesso (codice QR, chiave manuale, codici di recupero).
 - **Sessione:** il token di accesso resta in memoria e si rinnova da solo; il token di rinnovo sta solo nel portachiavi del sistema (Windows Credential Manager, portachiavi di macOS), così riaprendo l'app nella stessa giornata non serve accedere di nuovo. Le preferenze non segrete (server, ultima email, tema) sono in `impostazioni.json` nella cartella dei dati dell'utente.
 - **Anagrafiche:** elenco con ricerca, filtri e pagine; scheda con sedi, contatti e consensi; creazione e modifica con i messaggi d'errore dell'API; anonimizzazione per il Titolare, con una parola da scrivere per confermare.
+- **Impianti, interventi e scadenze:** scheda dell'impianto con generatori, catasto, documenti, interventi, scadenze e rapporti; calendario settimanale per tecnico; chiusura dell'intervento con righe, esito e, per una manutenzione, controllo di efficienza e bozza del rapporto.
+- **Preventivi e listino:** elenco con filtri, editor con le voci del listino, PDF, conversione in intervento.
+- **Rapporti di controllo:** elenco con il termine di trasmissione, scheda con il modulo del tracciato SIERT, errori sotto ogni campo, bollino, convalida, firma e annullamento.
+- **Bollini e invii al SIERT:** registro dei bollini con i disponibili per tipo; preparazione del file di import, scarico, caricamento sul portale ed esiti del report.
+- **Dati aziendali:** intestazione dei documenti e codice ditta SIERT, modificabili dal Titolare.
 - **Tema:** chiaro, scuro o come il sistema, dal menu utente. I colori sono in `src/Gestionale.Desktop/Tema/Stili.axaml`, con le due varianti e contrasti almeno AA.
 - **Testi:** tutti in `src/Gestionale.Desktop/Risorse/Testi.resx`.
 
