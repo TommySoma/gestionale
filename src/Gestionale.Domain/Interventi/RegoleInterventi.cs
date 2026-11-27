@@ -23,6 +23,9 @@ public enum ErroreIntervento
     RigaScontoNonValido,
     RigaIvaNonValida,
     ManodoperaNonInOre,
+    BozzaSenzaControllo,
+    ModelloBozzaNonValido,
+    GeneratoreBozzaNonValido,
 }
 
 /// <summary>Stati interni, come nel vincolo ck_interventi_stato. Completato e annullato sono finali.</summary>
@@ -89,8 +92,15 @@ public sealed record DatiRiga(
     decimal? ScontoPercentuale,
     decimal? AliquotaIva);
 
-/// <summary>ControlloEfficienza: in chiusura di una manutenzione è stato eseguito anche il controllo (decisione del 25/11/2026).</summary>
-public sealed record DatiChiusura(string? Esito, string? Note, IReadOnlyList<DatiRiga>? Righe, bool ControlloEfficienza = false);
+/// <summary>ControlloEfficienza: in chiusura di una manutenzione è stato eseguito anche il controllo (decisione del 25/11/2026).
+/// Con ModelloRapporto la chiusura crea anche la bozza del rapporto, sul GeneratoreRapporto o su quello dell'intervento (M4).</summary>
+public sealed record DatiChiusura(
+    string? Esito,
+    string? Note,
+    IReadOnlyList<DatiRiga>? Righe,
+    bool ControlloEfficienza = false,
+    string? ModelloRapporto = null,
+    Guid? GeneratoreRapporto = null);
 
 /// <summary>
 /// Normalizzazione e validazione degli interventi: le stesse regole dei vincoli
@@ -164,13 +174,21 @@ public static class RegoleInterventi
         ArgumentNullException.ThrowIfNull(dati);
 
         var (righe, erroriRighe) = ValidaRighe(dati.Righe);
-        var normalizzati = new DatiChiusura(Pulisci(dati.Esito)?.ToLowerInvariant(), Pulisci(dati.Note), righe, dati.ControlloEfficienza);
+        var normalizzati = new DatiChiusura(
+            Pulisci(dati.Esito)?.ToLowerInvariant(), Pulisci(dati.Note), righe, dati.ControlloEfficienza,
+            Pulisci(dati.ModelloRapporto)?.ToLowerInvariant(), dati.GeneratoreRapporto == Guid.Empty ? null : dati.GeneratoreRapporto);
 
         var errori = new List<ErroreIntervento>();
 
         if (normalizzati.Esito is null || !EsitiIntervento.Tutti.Contains(normalizzati.Esito))
         {
             errori.Add(ErroreIntervento.EsitoInterventoNonValido);
+        }
+
+        // La bozza del rapporto documenta il controllo di efficienza: senza controllo non ha senso.
+        if (normalizzati.ModelloRapporto is not null && !normalizzati.ControlloEfficienza)
+        {
+            errori.Add(ErroreIntervento.BozzaSenzaControllo);
         }
 
         errori.AddRange(erroriRighe);

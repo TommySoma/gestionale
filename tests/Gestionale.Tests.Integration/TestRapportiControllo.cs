@@ -285,6 +285,58 @@ public sealed class TestRapportiControllo(ApiFixture api) : IClassFixture<ApiFix
             new { azienda.RagioneSociale, azienda.PartitaIva, codiceDittaSiert = CodiceDitta, versione = azienda.Versione - 1 }, Ct)).StatusCode);
     }
 
+    [Fact]
+    public async Task La_chiusura_con_il_controllo_crea_la_bozza()
+    {
+        using var titolare = api.Client(await api.TokenTitolareAsync());
+        var (impiantoId, generatoreId) = await ImpiantoAsync(titolare, "Via della Chiusura", "5", "0123456784");
+        var email = "tecnico.chiusura@alfa.example";
+        await api.CreaUtenteAsync(email, PasswordProva, "tecnico");
+        var tecnicoId = await UtenteAsync(email);
+
+        async Task<RispostaScritturaIntervento> ManutenzioneAsync(int oreFa) =>
+            await LeggiAsync<RispostaScritturaIntervento>(await titolare.PostAsJsonAsync("/api/interventi", new
+            {
+                impiantoId,
+                generatoreId,
+                tipo = "manutenzione",
+                inizio = DateTimeOffset.UtcNow.AddHours(-oreFa),
+                fine = DateTimeOffset.UtcNow.AddHours(-oreFa + 1),
+                tecnicoUtenteId = tecnicoId,
+            }, Ct));
+
+        // Il modello senza la spunta del controllo non ha senso; un modello sconosciuto nemmeno.
+        var prima = await ManutenzioneAsync(30);
+        Assert.Equal(HttpStatusCode.BadRequest, (await titolare.PostAsJsonAsync($"/api/interventi/{prima.Id}/chiusura",
+            new { versione = prima.Versione, esito = "risolto", righe = Array.Empty<object>(), modelloRapporto = "tipo_1" }, Ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await titolare.PostAsJsonAsync($"/api/interventi/{prima.Id}/chiusura",
+            new { versione = prima.Versione, esito = "risolto", righe = Array.Empty<object>(), controlloEfficienza = true, modelloRapporto = "tipo_9" }, Ct)).StatusCode);
+
+        // Chi non compila rapporti chiude, ma senza bozza.
+        var amministrativo = await api.CreaUtenteAsync("amm.chiusura@alfa.example", PasswordProva, "amministrativo");
+        using var ufficio = api.Client(await api.TokenAsync(amministrativo, PasswordProva));
+        Assert.Equal(HttpStatusCode.Forbidden, (await ufficio.PostAsJsonAsync($"/api/interventi/{prima.Id}/chiusura",
+            new { versione = prima.Versione, esito = "risolto", righe = Array.Empty<object>(), controlloEfficienza = true, modelloRapporto = "tipo_1" }, Ct)).StatusCode);
+
+        // Il tecnico chiude il proprio intervento e trova la bozza, sua, del giorno dell'intervento.
+        using var tecnico = api.Client(await api.TokenAsync(email, PasswordProva));
+        var chiuso = await LeggiAsync<RispostaScritturaIntervento>(await tecnico.PostAsJsonAsync($"/api/interventi/{prima.Id}/chiusura",
+            new { versione = prima.Versione, esito = "risolto", righe = Array.Empty<object>(), controlloEfficienza = true, modelloRapporto = "tipo_1" }, Ct));
+        Assert.NotNull(chiuso.RapportoId);
+        var bozza = (await tecnico.GetFromJsonAsync<RapportoControllo>($"/api/rapporti-controllo/{chiuso.RapportoId}", Ct))!;
+        Assert.Equal((prima.Id, generatoreId, tecnicoId, "bozza"), (bozza.InterventoId, bozza.GeneratoreId, bozza.TecnicoId, bozza.Stato));
+        Assert.Equal(DateOnly.FromDateTime(TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow.AddHours(-30), s_fuso).DateTime), bozza.DataControllo);
+        Assert.Equal("GT01", Testo(bozza.Dati, "gruppo"));
+
+        // Senza modello la chiusura resta quella di prima.
+        var seconda = await ManutenzioneAsync(20);
+        var senzaBozza = await LeggiAsync<RispostaScritturaIntervento>(await titolare.PostAsJsonAsync($"/api/interventi/{seconda.Id}/chiusura",
+            new { versione = seconda.Versione, esito = "risolto", righe = Array.Empty<object>(), controlloEfficienza = true }, Ct));
+        Assert.Null(senzaBozza.RapportoId);
+    }
+
+    private static readonly TimeZoneInfo s_fuso = TimeZoneInfo.FindSystemTimeZoneById("Europe/Rome");
+
     private static string? Testo(JsonObject dati, string chiave) => dati[chiave]?.GetValue<string>();
 
     // Cliente, sede con codice ISTAT, impianto con codice catasto, generatore con la sigla; codice ditta all'azienda.

@@ -243,6 +243,34 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
                 return new EsitoIntervento.NonValida([ErroreIntervento.ControlloSoloManutenzione]);
             }
 
+            // La bozza del rapporto vuole un modello in vigore e un generatore attivo dell'impianto.
+            if (dati.ModelloRapporto is { } modello)
+            {
+                var modelloValido = await c.ExecuteScalarAsync<bool>(Comando(
+                    """
+                    SELECT EXISTS (SELECT 1 FROM norma.modelli_rapporto
+                                   WHERE codice = @modello AND valido_dal <= current_date
+                                     AND (valido_al IS NULL OR valido_al >= current_date))
+                    """,
+                    new { modello }, t, ct));
+                if (!modelloValido)
+                {
+                    return new EsitoIntervento.NonValida([ErroreIntervento.ModelloBozzaNonValido]);
+                }
+
+                var generatore = dati.GeneratoreRapporto ?? attuale!.GeneratoreId;
+                var generatoreValido = generatore is not null && await c.ExecuteScalarAsync<bool>(Comando(
+                    """
+                    SELECT EXISTS (SELECT 1 FROM impianti.generatori
+                                   WHERE generatore_id = @generatore AND impianto_id = @impianto AND dismesso_il IS NULL)
+                    """,
+                    new { generatore, impianto = attuale!.ImpiantoId }, t, ct));
+                if (!generatoreValido)
+                {
+                    return new EsitoIntervento.NonValida([ErroreIntervento.GeneratoreBozzaNonValido]);
+                }
+            }
+
             var righe = JsonSerializer.Serialize(
                 (dati.Righe ?? []).Select(r => new
                 {
@@ -258,14 +286,33 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
                 s_json);
 
             await c.ExecuteAsync(Comando(
-                "SELECT lavoro.chiudi_intervento(@interventoId, @versione, @esito, @note, @righe::jsonb, @controllo)",
-                new { interventoId, versione, esito = dati.Esito, note = dati.Note, righe, controllo = dati.ControlloEfficienza }, t, ct));
+                "SELECT lavoro.chiudi_intervento(@interventoId, @versione, @esito, @note, @righe::jsonb, @controllo, @modello::text, @generatore::uuid)",
+                new
+                {
+                    interventoId,
+                    versione,
+                    esito = dati.Esito,
+                    note = dati.Note,
+                    righe,
+                    controllo = dati.ControlloEfficienza,
+                    modello = dati.ModelloRapporto,
+                    generatore = dati.GeneratoreRapporto,
+                }, t, ct));
 
             var riga = await c.QuerySingleAsync<RigaScritta>(Comando(
                 "SELECT intervento_id AS id, versione, anno, numero FROM lavoro.interventi WHERE intervento_id = @interventoId",
                 new { interventoId }, t, ct));
 
-            return riga.Esito();
+            // La bozza creata ora, o quella che l'intervento aveva già per lo stesso generatore.
+            var rapporto = dati.ModelloRapporto is null ? null : await c.ExecuteScalarAsync<Guid?>(Comando(
+                """
+                SELECT rapporto_controllo_id FROM norma.rapporti_controllo
+                WHERE intervento_id = @interventoId AND stato <> 'annullato'
+                ORDER BY creato_il DESC LIMIT 1
+                """,
+                new { interventoId }, t, ct));
+
+            return new EsitoIntervento.Riuscita(riga.Id, riga.Versione, riga.Anno, riga.Numero, rapporto);
         }, ct);
 
     public Task<EsitoIntervento> AnnullaAsync(Contesto contesto, Guid interventoId, int versione, string motivo, CancellationToken ct) =>
@@ -293,7 +340,7 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
     private static Task<StatoAttuale?> BloccaAsync(NpgsqlConnection c, NpgsqlTransaction t, Guid interventoId, Guid? soloTecnico, CancellationToken ct) =>
         c.QuerySingleOrDefaultAsync<StatoAttuale>(Comando(
             """
-            SELECT stato, versione, impianto_id, tipo FROM lavoro.interventi
+            SELECT stato, versione, impianto_id, generatore_id, tipo FROM lavoro.interventi
             WHERE intervento_id = @interventoId
               AND (@soloTecnico::uuid IS NULL OR tecnico_utente_id = @soloTecnico)
             FOR UPDATE
@@ -401,6 +448,8 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
         public int Versione { get; init; }
 
         public Guid ImpiantoId { get; init; }
+
+        public Guid? GeneratoreId { get; init; }
 
         public string Tipo { get; init; } = "";
     }
