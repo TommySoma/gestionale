@@ -31,6 +31,9 @@
         <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
           <TextBlock Text="{Binding Errore}" />
         </Border>
+        <Border Classes="avvisoSuccesso" IsVisible="{Binding BozzaRapportoCreata}">
+          <TextBlock TextWrapping="Wrap" Text="{x:Static r:Testi.BozzaRapportoCreata}" />
+        </Border>
         <Border Classes="avvisoSuccesso" IsVisible="{Binding HaAvviso}">
           <DockPanel>
             <Path Classes="icona" Data="{StaticResource IconaOk}" DockPanel.Dock="Left" Margin="0,0,12,0" VerticalAlignment="Top" />

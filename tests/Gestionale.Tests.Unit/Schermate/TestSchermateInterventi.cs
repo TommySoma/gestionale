@@ -196,7 +196,7 @@ public sealed class TestSchermateInterventi
 
         // La scheda è di un intervento chiuso; il dialogo si prova comunque con i suoi dati.
         var intervento = (await shell.Api.InterventoAsync(DatiFittizi.InterventoChiuso)).Valore!;
-        var chiusura = new ChiusuraInterventoViewModel(shell, intervento, () => { });
+        var chiusura = new ChiusuraInterventoViewModel(shell, intervento, _ => { });
         chiusura.AggiungiManodoperaCommand.Execute(null);
         chiusura.Righe[0].Quantita = "1,5";
         chiusura.Righe[0].Prezzo = "40";

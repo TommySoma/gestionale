@@ -195,13 +195,31 @@ public partial class SchedaInterventoViewModel(ShellViewModel shell, Guid interv
     }
 
     [RelayCommand]
-    private void Chiudi()
+    private async Task ChiudiAsync()
     {
-        if (_intervento is { } intervento)
+        if (_intervento is not { } intervento)
         {
-            shell.MostraDialogo(new ChiusuraInterventoViewModel(shell, intervento, () => _ = CaricaAsync()));
+            return;
         }
+
+        // A chi compila i rapporti la chiusura propone la bozza: servono i generatori attivi dell'impianto.
+        IReadOnlyList<Generatore> generatori = [];
+        if (intervento.Tipo == "manutenzione" && shell.Profilo.Ha("rapporti_controllo.scrittura")
+            && (await shell.Api.ImpiantoAsync(intervento.ImpiantoId)).Valore is { } impianto)
+        {
+            generatori = [.. impianto.Generatori.Where(g => g.DismessoIl is null)];
+        }
+
+        shell.MostraDialogo(new ChiusuraInterventoViewModel(shell, intervento, rapportoId =>
+        {
+            BozzaRapportoCreata = rapportoId is not null;
+            _ = CaricaAsync();
+        }, generatori));
     }
+
+    /// <summary>Dopo la chiusura con il controllo: la bozza del rapporto è pronta da completare.</summary>
+    [ObservableProperty]
+    public partial bool BozzaRapportoCreata { get; set; }
 
     [RelayCommand]
     private void AnnullaIntervento()

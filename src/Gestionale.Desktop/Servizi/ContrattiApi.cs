@@ -273,9 +273,16 @@ public sealed record DatiRiga(
     decimal? ScontoPercentuale,
     decimal? AliquotaIva);
 
-public sealed record DatiChiusura(int Versione, string Esito, string? Note, IReadOnlyList<DatiRiga> Righe, bool ControlloEfficienza = false);
+public sealed record DatiChiusura(
+    int Versione,
+    string Esito,
+    string? Note,
+    IReadOnlyList<DatiRiga> Righe,
+    bool ControlloEfficienza = false,
+    string? ModelloRapporto = null,
+    Guid? GeneratoreRapporto = null);
 
-public sealed record EsitoScritturaIntervento(Guid Id, int Versione, int Anno, int Numero);
+public sealed record EsitoScritturaIntervento(Guid Id, int Versione, int Anno, int Numero, Guid? RapportoId = null);
 
 // --- Scadenze ----------------------------------------------------------
 // Le calcola il server: il client le legge, corregge la data e registra i richiami.

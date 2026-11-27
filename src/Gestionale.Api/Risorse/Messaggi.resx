@@ -348,6 +348,18 @@
   <data name="ControlloSoloManutenzione" xml:space="preserve">
     <value>il controllo di efficienza si spunta solo chiudendo una manutenzione</value>
   </data>
+  <data name="BozzaSenzaControllo" xml:space="preserve">
+    <value>la bozza del rapporto si crea solo spuntando il controllo di efficienza</value>
+  </data>
+  <data name="ModelloBozzaNonValido" xml:space="preserve">
+    <value>il modello di rapporto scelto non esiste o non è in vigore</value>
+  </data>
+  <data name="GeneratoreBozzaNonValido" xml:space="preserve">
+    <value>scegli un generatore attivo dell'impianto per la bozza del rapporto</value>
+  </data>
+  <data name="BozzaRapportoVietata" xml:space="preserve">
+    <value>Non hai il permesso di compilare i rapporti di controllo: chiudi l'intervento senza scegliere il modello.</value>
+  </data>
   <data name="ScadenzaNonTrovata" xml:space="preserve">
     <value>La scadenza o l'impianto richiesto non esiste, è stato eliminato o non è tra i tuoi.</value>
   </data>

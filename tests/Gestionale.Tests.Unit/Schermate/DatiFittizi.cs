@@ -35,9 +35,18 @@ internal static class DatiFittizi
     /// <summary>Corpo dell'ultima modifica inviata (PUT): i test dello spostamento lo controllano.</summary>
     public static string? UltimaModifica { get; private set; }
 
+    /// <summary>Corpo dell'ultima chiusura di un intervento: i test della bozza del rapporto lo controllano.</summary>
+    public static string? UltimaChiusura { get; private set; }
+
     public static object? Rispondi(HttpRequestMessage richiesta)
     {
         var percorso = richiesta.RequestUri!.AbsolutePath;
+        if (richiesta.Method == HttpMethod.Post && percorso.EndsWith("/chiusura", StringComparison.Ordinal))
+        {
+            UltimaChiusura = richiesta.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
+            return new { id = Guid.Parse(percorso.Split('/')[3]), versione = 4, anno = 2027, numero = 12, rapportoId = Guid.Parse("019ab000-0000-7000-8000-0000000000e1") };
+        }
+
         if (richiesta.Method == HttpMethod.Post && percorso.EndsWith("/richiami", StringComparison.Ordinal))
         {
             return new { id = Guid.Parse(percorso.Split('/')[3]), versione = 5 };

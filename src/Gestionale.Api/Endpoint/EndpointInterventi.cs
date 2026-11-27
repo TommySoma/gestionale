@@ -31,11 +31,18 @@ public sealed record RichiestaRiga(
     decimal? ScontoPercentuale,
     decimal? AliquotaIva);
 
-public sealed record RichiestaChiusura(int? Versione, string? Esito, string? Note, IReadOnlyList<RichiestaRiga>? Righe, bool? ControlloEfficienza = null);
+public sealed record RichiestaChiusura(
+    int? Versione,
+    string? Esito,
+    string? Note,
+    IReadOnlyList<RichiestaRiga>? Righe,
+    bool? ControlloEfficienza = null,
+    string? ModelloRapporto = null,
+    Guid? GeneratoreRapporto = null);
 
 public sealed record RichiestaAnnullamento(int? Versione, string? Motivo);
 
-public sealed record RispostaScritturaIntervento(Guid Id, int Versione, int Anno, int Numero);
+public sealed record RispostaScritturaIntervento(Guid Id, int Versione, int Anno, int Numero, Guid? RapportoId = null);
 
 /// <summary>
 /// Interventi e calendario. Ogni modifica richiede la versione letta. Gli
@@ -103,6 +110,9 @@ internal static class EndpointInterventi
         Guid interventoId, RichiestaChiusura richiesta, ClaimsPrincipal utente, ServizioInterventi servizio, CancellationToken ct) =>
         richiesta.Versione is not { } versione
             ? Problemi.RichiestaNonValida(Messaggi.VersioneMancante)
+            // La bozza del rapporto la crea solo chi può compilare i rapporti di controllo.
+            : !string.IsNullOrWhiteSpace(richiesta.ModelloRapporto) && utente.AmbitoPermesso(CodiciPermesso.RapportiScrittura) is null
+                ? Problemi.Vietato(Messaggi.BozzaRapportoVietata)
             : Risposta(await servizio.ChiudiAsync(Contesto(utente), AmbitoScrittura(utente), interventoId, versione, Dati(richiesta), ct));
 
     private static async Task<IResult> AnnullaAsync(
@@ -128,7 +138,7 @@ internal static class EndpointInterventi
 
     private static DatiChiusura Dati(RichiestaChiusura r) =>
         new(r.Esito, r.Note, r.Righe?.Select(x => new DatiRiga(
-            x.Tipo, x.Codice, x.Descrizione, x.Unita, x.Quantita, x.PrezzoUnitario, x.ScontoPercentuale, x.AliquotaIva)).ToList(), r.ControlloEfficienza ?? false);
+            x.Tipo, x.Codice, x.Descrizione, x.Unita, x.Quantita, x.PrezzoUnitario, x.ScontoPercentuale, x.AliquotaIva)).ToList(), r.ControlloEfficienza ?? false, r.ModelloRapporto, r.GeneratoreRapporto);
 
     private static IResult Risposta(EsitoIntervento esito, bool creato = false) => esito switch
     {
@@ -144,7 +154,7 @@ internal static class EndpointInterventi
         _ => NonTrovato(),
     };
 
-    private static RispostaScritturaIntervento Scrittura(EsitoIntervento.Riuscita r) => new(r.Id, r.Versione, r.Anno, r.Numero);
+    private static RispostaScritturaIntervento Scrittura(EsitoIntervento.Riuscita r) => new(r.Id, r.Versione, r.Anno, r.Numero, r.RapportoId);
 
     private static IResult NonTrovato() =>
         Results.Problem(detail: Messaggi.InterventoNonTrovato, statusCode: StatusCodes.Status404NotFound, title: Messaggi.TitoloNonTrovato);

@@ -152,7 +152,8 @@ public sealed record FiltroInterventi(
 /// <summary>Esito di una scrittura su un intervento.</summary>
 public abstract record EsitoIntervento
 {
-    public sealed record Riuscita(Guid Id, int Versione, int Anno, int Numero) : EsitoIntervento;
+    /// <summary>RapportoId: la bozza del rapporto di controllo creata alla chiusura, se c'è.</summary>
+    public sealed record Riuscita(Guid Id, int Versione, int Anno, int Numero, Guid? RapportoId = null) : EsitoIntervento;
 
     public sealed record NonValida(IReadOnlyList<ErroreIntervento> Errori) : EsitoIntervento;
 

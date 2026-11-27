@@ -75,4 +75,37 @@ public sealed class TestSchermateSiert
         Assert.Null(editor.Errore);
         Assert.Contains("\"codiceIstatComune\":\"048017\"", DatiFittizi.UltimaModifica, StringComparison.Ordinal);
     });
+
+    [Fact]
+    public Task Chiusura_con_la_bozza_del_rapporto() => Schermate.Esegui(async () =>
+    {
+        var (shell, finestra) = await Schermate.ApriAsync([.. Schermate.ResponsabileTecnico, new("rapporti_controllo.scrittura", "tutti")]);
+        var intervento = (await shell.Api.InterventoAsync(DatiFittizi.InterventoChiuso)).Valore! with { Tipo = "manutenzione", GeneratoreId = null };
+        var generatori = (await shell.Api.ImpiantoAsync(DatiFittizi.Caldaia)).Valore!.Generatori.Where(g => g.DismessoIl is null).ToList();
+
+        var chiusura = new ChiusuraInterventoViewModel(shell, intervento, _ => { }, generatori);
+        Assert.True(chiusura.PuoCreareBozza);
+        Assert.False(chiusura.MostraBozza);
+        chiusura.ControlloEfficienza = true;
+        chiusura.Modello = chiusura.Modelli.Single(m => m.Codice == "tipo_1");
+        shell.MostraDialogo(chiusura);
+        Schermate.Attendi();
+        var testi = Schermate.Salva(finestra, "32-chiusura-con-bozza");
+
+        Assert.True(chiusura.MostraBozza);
+        Assert.Contains(Testi.BozzaRapportoModello, testi);
+
+        // Con più generatori e nessuno sull'intervento, la scelta spetta a chi chiude.
+        if (generatori.Count > 1)
+        {
+            Assert.Null(chiusura.Generatore);
+            await chiusura.SalvaCommand.ExecuteAsync(null);
+            Assert.Equal(Testi.ScegliGeneratoreRapporto, chiusura.Errore);
+        }
+
+        chiusura.Generatore = chiusura.Generatori[0];
+        await chiusura.SalvaCommand.ExecuteAsync(null);
+        Assert.Null(chiusura.Errore);
+        Assert.Contains("\"modelloRapporto\":\"tipo_1\"", DatiFittizi.UltimaChiusura, StringComparison.Ordinal);
+    });
 }

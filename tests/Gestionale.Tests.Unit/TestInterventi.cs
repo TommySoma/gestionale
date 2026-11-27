@@ -87,6 +87,18 @@ public sealed class TestRegoleInterventi
 
         Assert.Contains(ErroreIntervento.TroppeRighe, RegoleInterventi.Valida(new DatiChiusura("risolto", null, righe)).Errori);
     }
+
+    [Fact]
+    public void La_bozza_del_rapporto_vuole_il_controllo_di_efficienza()
+    {
+        var senzaControllo = RegoleInterventi.Valida(new DatiChiusura("risolto", null, [], ModelloRapporto: " TIPO_1 ")).Errori;
+        Assert.Equal([ErroreIntervento.BozzaSenzaControllo], senzaControllo);
+
+        var (dati, errori) = RegoleInterventi.Valida(new DatiChiusura("risolto", null, [], true, " TIPO_1 ", Guid.Empty));
+        Assert.Empty(errori);
+        Assert.Equal(("tipo_1", (Guid?)null), (dati.ModelloRapporto, dati.GeneratoreRapporto));
+    }
+
 }
 
 public sealed class TestServizioInterventi
