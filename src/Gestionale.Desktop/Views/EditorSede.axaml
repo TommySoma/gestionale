@@ -6,7 +6,7 @@
              x:DataType="vm:EditorSedeViewModel">
   <DockPanel>
     <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
-      <TextBlock Text="{x:Static r:Testi.TitoloNuovaSede}" FontSize="20" FontWeight="Bold" />
+      <TextBlock Text="{Binding Titolo}" FontSize="20" FontWeight="Bold" />
     </Border>
     <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
       <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
@@ -50,6 +50,14 @@
             <TextBox Text="{Binding Provincia}" MaxLength="2" AutomationProperties.Name="{x:Static r:Testi.Provincia}" />
           </StackPanel>
         </Grid>
+        <StackPanel>
+          <TextBlock Classes="etichetta">
+            <Run Text="{x:Static r:Testi.CodiceIstatComune}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+          </TextBlock>
+          <TextBox Text="{Binding CodiceIstat}" MaxLength="6" HorizontalAlignment="Left" Width="160" AutomationProperties.Name="{x:Static r:Testi.CodiceIstatComune}" />
+          <TextBlock Classes="secondario" FontSize="13" Margin="0,4,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneCodiceIstat}" />
+        </StackPanel>
         <StackPanel>
           <TextBlock Classes="etichetta">
             <Run Text="{x:Static r:Testi.Note}" />

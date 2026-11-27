@@ -243,6 +243,48 @@ public sealed class TestRapportiControllo(ApiFixture api) : IClassFixture<ApiFix
         return dati;
     }
 
+    [Fact]
+    public async Task Codice_istat_sigla_e_codice_ditta_passano_dall_api()
+    {
+        using var titolare = api.Client(await api.TokenTitolareAsync());
+        var (impiantoId, generatoreId) = await ImpiantoAsync(titolare, "Via delle Sigle", "3", "0123456783");
+
+        var impianto = (await titolare.GetFromJsonAsync<Impianto>($"/api/impianti/{impiantoId}", Ct))!;
+        Assert.Equal("GT01", impianto.Generatori.Single(g => g.GeneratoreId == generatoreId).SiglaCatasto);
+        var azienda = (await titolare.GetFromJsonAsync<Azienda>("/api/azienda", Ct))!;
+        Assert.Equal((CodiceDitta, "toscana"), (azienda.CodiceDittaSiert, azienda.Regione));
+
+        // Formati sbagliati: ISTAT di 6 cifre, sigla di due lettere e due cifre, codice ditta positivo.
+        var cliente = await LeggiAsync<RispostaScrittura>(await titolare.PostAsJsonAsync("/api/clienti",
+            new { tipo = "privato", nome = "Fittizio", cognome = "Istat" }, Ct));
+        Assert.Equal(HttpStatusCode.BadRequest, (await titolare.PostAsJsonAsync($"/api/clienti/{cliente.Id}/sedi",
+            new { indirizzo = "Via Corta", cap = "50100", comune = "Firenze", provincia = "FI", codiceIstatComune = "48017" }, Ct)).StatusCode);
+        var voci = (await titolare.GetFromJsonAsync<VociImpianti>("/api/impianti/voci", Ct))!;
+        Assert.Equal(HttpStatusCode.BadRequest, (await titolare.PostAsJsonAsync($"/api/impianti/{impiantoId}/generatori",
+            new { tipoGeneratoreId = voci.TipiGeneratore[0].Id, siglaCatasto = "G01" }, Ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await titolare.PutAsJsonAsync("/api/azienda",
+            new { azienda.RagioneSociale, codiceDittaSiert = 0, azienda.Versione }, Ct)).StatusCode);
+
+        // Due generatori dello stesso impianto non hanno la stessa sigla.
+        var doppione = await titolare.PostAsJsonAsync($"/api/impianti/{impiantoId}/generatori",
+            new { tipoGeneratoreId = voci.TipiGeneratore[0].Id, siglaCatasto = "GT01" }, Ct);
+        Assert.Equal(HttpStatusCode.Conflict, doppione.StatusCode);
+
+        // I dati aziendali li legge il Responsabile tecnico, li modifica solo il Titolare; il Tecnico non li vede.
+        var responsabile = await api.CreaUtenteAsync("resp.dati.azienda@alfa.example", PasswordProva, "responsabile_tecnico");
+        using var clientResponsabile = api.Client(await api.TokenAsync(responsabile, PasswordProva));
+        Assert.Equal(HttpStatusCode.OK, (await clientResponsabile.GetAsync("/api/azienda", Ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden, (await clientResponsabile.PutAsJsonAsync("/api/azienda",
+            new { azienda.RagioneSociale, codiceDittaSiert = 99, azienda.Versione }, Ct)).StatusCode);
+        var tecnico = await api.CreaUtenteAsync("tecnico.dati.azienda@alfa.example", PasswordProva, "tecnico");
+        using var clientTecnico = api.Client(await api.TokenAsync(tecnico, PasswordProva));
+        Assert.Equal(HttpStatusCode.Forbidden, (await clientTecnico.GetAsync("/api/azienda", Ct)).StatusCode);
+
+        // Una versione superata non sovrascrive il lavoro di un collega.
+        Assert.Equal(HttpStatusCode.Conflict, (await titolare.PutAsJsonAsync("/api/azienda",
+            new { azienda.RagioneSociale, azienda.PartitaIva, codiceDittaSiert = CodiceDitta, versione = azienda.Versione - 1 }, Ct)).StatusCode);
+    }
+
     private static string? Testo(JsonObject dati, string chiave) => dati[chiave]?.GetValue<string>();
 
     // Cliente, sede con codice ISTAT, impianto con codice catasto, generatore con la sigla; codice ditta all'azienda.
@@ -252,28 +294,28 @@ public sealed class TestRapportiControllo(ApiFixture api) : IClassFixture<ApiFix
         var cliente = await LeggiAsync<RispostaScrittura>(await client.PostAsJsonAsync("/api/clienti",
             new { tipo = "privato", nome = "Fittizio", cognome = "Rapporti" }, Ct));
         var sede = await LeggiAsync<RispostaScrittura>(await client.PostAsJsonAsync($"/api/clienti/{cliente.Id}/sedi",
-            new { indirizzo, civico, cap = "50100", comune = "Firenze", provincia = "FI" }, Ct));
+            new { indirizzo, civico, cap = "50100", comune = "Firenze", provincia = "FI", codiceIstatComune = "048017" }, Ct));
         var impianto = await LeggiAsync<RispostaScritturaImpianto>(await client.PostAsJsonAsync("/api/impianti",
             new { sedeId = sede.Id, tipoImpiantoId = voci.TipiImpianto[0].Id, potenzaUtileKw = 24.5m }, Ct));
         var generatore = await LeggiAsync<RispostaScritturaImpianto>(await client.PostAsJsonAsync($"/api/impianti/{impianto.Id}/generatori",
-            new { tipoGeneratoreId = voci.TipiGeneratore[0].Id, marca = "Marca di prova", modello = "Modello di prova", matricola = "PROVA-0001", potenzaKw = 24.5m, installatoIl = "2018-03-15" }, Ct));
+            new { tipoGeneratoreId = voci.TipiGeneratore[0].Id, marca = "Marca di prova", modello = "Modello di prova", matricola = "PROVA-0001", potenzaKw = 24.5m, installatoIl = "2018-03-15", siglaCatasto = "gt01" }, Ct));
         await LeggiAsync<RispostaScritturaImpianto>(await client.PostAsJsonAsync($"/api/impianti/{impianto.Id}/riferimenti-catasto",
             new { regione = "toscana", codice = codiceCatasto }, Ct));
 
-        // Codice ISTAT, sigla del generatore e codice ditta non hanno ancora un'API: si scrivono come app_owner.
-        await using var connessione = new NpgsqlConnection(api.StringaConnessioneOwner);
-        await connessione.OpenAsync(Ct);
-        await using var comando = new NpgsqlCommand(
-            """
-            UPDATE anagrafica.sedi SET codice_istat_comune = '048017' WHERE sede_id = @sede;
-            UPDATE impianti.generatori SET sigla_catasto = 'GT01' WHERE generatore_id = @generatore;
-            UPDATE sec.aziende SET codice_ditta_siert = @ditta;
-            """,
-            connessione);
-        comando.Parameters.AddWithValue("sede", sede.Id);
-        comando.Parameters.AddWithValue("generatore", generatore.Id);
-        comando.Parameters.AddWithValue("ditta", CodiceDitta);
-        await comando.ExecuteNonQueryAsync(Ct);
+        var azienda = (await client.GetFromJsonAsync<Azienda>("/api/azienda", Ct))!;
+        await LeggiAsync<RispostaScrittura>(await client.PutAsJsonAsync("/api/azienda",
+            new
+            {
+                azienda.RagioneSociale,
+                azienda.PartitaIva,
+                azienda.CodiceFiscale,
+                azienda.Indirizzo,
+                azienda.Cap,
+                azienda.Comune,
+                azienda.Provincia,
+                codiceDittaSiert = CodiceDitta,
+                azienda.Versione,
+            }, Ct));
 
         return (impianto.Id, generatore.Id);
     }

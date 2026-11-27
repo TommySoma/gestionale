@@ -26,6 +26,8 @@
                   Content="{x:Static r:Testi.NavPreventivi}" Command="{Binding ApriPreventiviCommand}" />
           <Button Classes="voceMenu" Classes.attiva="{Binding ListinoAttivo}" IsVisible="{Binding VedeListino}"
                   Content="{x:Static r:Testi.NavListino}" Command="{Binding ApriListinoCommand}" />
+          <Button Classes="voceMenu" Classes.attiva="{Binding AziendaAttivo}" IsVisible="{Binding VedeAzienda}"
+                  Content="{x:Static r:Testi.NavDatiAziendali}" Command="{Binding ApriDatiAziendaliCommand}" />
         </StackPanel>
       </Border>
 

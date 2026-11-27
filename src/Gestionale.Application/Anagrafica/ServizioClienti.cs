@@ -93,6 +93,11 @@ public sealed class ServizioClienti(IRepositoryClienti repository)
             ? Task.FromResult<IReadOnlyList<VoceStoricoConsenso>?>(null)
             : repository.StoricoConsensiAsync(contesto, clienteId, ct);
 
+    public Task<Azienda> AziendaAsync(Contesto contesto, CancellationToken ct) => repository.AziendaAsync(contesto, ct);
+
+    public Task<EsitoScrittura> AggiornaAziendaAsync(Contesto contesto, int versione, DatiAzienda dati, CancellationToken ct) =>
+        Valida(RegoleAnagrafica.Valida(dati), d => repository.AggiornaAziendaAsync(contesto, versione, d, ct));
+
     private static async Task<EsitoScrittura> Valida<T>((T Dati, IReadOnlyList<ErroreAnagrafica> Errori) validazione, Func<T, Task<EsitoScrittura>> scrivi) =>
         validazione.Errori.Count > 0
             ? new EsitoScrittura.NonValida(validazione.Errori)

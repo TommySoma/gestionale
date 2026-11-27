@@ -26,6 +26,8 @@ public static class CodiciPermesso
     public const string RapportiFirma = "rapporti_controllo.firma";
     public const string BolliniLettura = "bollini.lettura";
     public const string BolliniScrittura = "bollini.scrittura";
+    public const string AziendaLettura = "azienda.lettura";
+    public const string AziendaScrittura = "azienda.scrittura";
 }
 
 /// <summary>Estensione di un permesso: su tutto o solo sulle attività assegnate all'utente.</summary>

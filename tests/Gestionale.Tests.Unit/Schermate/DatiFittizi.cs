@@ -30,6 +30,8 @@ internal static class DatiFittizi
     /// <summary>Lunedì della settimana mostrata nelle schermate del calendario.</summary>
     public static readonly DateOnly Settimana = new(2027, 1, 11);
 
+    public static readonly Guid Azienda = Guid.Parse("019ab000-0000-7000-8000-0000000000e0");
+
     /// <summary>Corpo dell'ultima modifica inviata (PUT): i test dello spostamento lo controllano.</summary>
     public static string? UltimaModifica { get; private set; }
 
@@ -50,6 +52,11 @@ internal static class DatiFittizi
         if (richiesta.Method == HttpMethod.Put)
         {
             UltimaModifica = richiesta.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
+            if (percorso == "/api/azienda")
+            {
+                return new { id = Azienda, versione = 3 };
+            }
+
             return new { id = Guid.Parse(percorso[(percorso.LastIndexOf('/') + 1)..]), versione = 3, anno = 2027, numero = 13 };
         }
 
@@ -61,6 +68,20 @@ internal static class DatiFittizi
                 token = new { tokenAccesso = "a", accessoScadeIl = DateTimeOffset.UtcNow.AddMinutes(15), tokenRinnovo = "r", rinnovoScadeIl = DateTimeOffset.UtcNow.AddHours(12) },
             },
             "/api/impianti/voci" => Voci(),
+            "/api/azienda" => new
+            {
+                aziendaId = Azienda,
+                ragioneSociale = "Termoidraulica Prova Srl (fittizia)",
+                partitaIva = "01234567897",
+                codiceFiscale = (string?)null,
+                indirizzo = "Via delle Prove 1",
+                cap = "50100",
+                comune = "Firenze",
+                provincia = "FI",
+                regione = "toscana",
+                codiceDittaSiert = (int?)null,
+                versione = 2,
+            },
             "/api/impianti" => new { elementi = Elenco(), totale = 3, numeroPagina = 1, dimensione = 25 },
             "/api/finalita-privacy" => new object[]
             {
@@ -183,7 +204,7 @@ internal static class DatiFittizi
         versione = 1,
         sedi = new object[]
         {
-            new { sedeId = SedeFirenze, indirizzo = "Via dei Platani", civico = "12", cap = "50100", comune = "Firenze", provincia = "FI", versione = 1 },
+            new { sedeId = SedeFirenze, indirizzo = "Via dei Platani", civico = "12", cap = "50100", comune = "Firenze", provincia = "FI", codiceIstatComune = "048017", versione = 1 },
             new { sedeId = SedeLivorno, descrizione = "Casa al mare", indirizzo = "Via del Mare", civico = "3", cap = "57100", comune = "Livorno", provincia = "LI", versione = 1 },
             new { sedeId = Guid.Parse("019ab000-0000-7000-8000-000000000040"), indirizzo = "Via Nuova", civico = "1", cap = "50100", comune = "Firenze", provincia = "FI", versione = 1 },
         },

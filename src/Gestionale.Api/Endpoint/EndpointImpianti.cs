@@ -33,7 +33,8 @@ public sealed record RichiestaGeneratore(
     DateOnly? InstallatoIl,
     DateOnly? DismessoIl,
     string? Note,
-    int? Versione);
+    int? Versione,
+    string? SiglaCatasto = null);
 
 public sealed record RichiestaRiferimentoCatasto(string? Regione, string? Codice, DateOnly? RegistratoIl, int? Versione);
 
@@ -141,7 +142,7 @@ internal static class EndpointImpianti
             r.ProprietarioClienteId, r.ResponsabileClienteId, r.Note, r.DismessoIl, r.ManutenzioneMesi);
 
     private static DatiGeneratore Dati(RichiestaGeneratore r) =>
-        new(r.TipoGeneratoreId, r.Marca, r.Modello, r.Matricola, r.PotenzaKw, r.CombustibileId, r.InstallatoIl, r.DismessoIl, r.Note);
+        new(r.TipoGeneratoreId, r.Marca, r.Modello, r.Matricola, r.PotenzaKw, r.CombustibileId, r.InstallatoIl, r.DismessoIl, r.Note, r.SiglaCatasto);
 
     private static DatiRiferimentoCatasto Dati(RichiestaRiferimentoCatasto r) => new(r.Regione, null, r.Codice, r.RegistratoIl);
 

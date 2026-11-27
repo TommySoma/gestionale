@@ -73,7 +73,7 @@ public sealed class RepositoryClienti(Database.Database db) : IRepositoryClienti
 
             cliente.Sedi = [.. await c.QueryAsync<Sede>(Comando(
                 """
-                SELECT sede_id, descrizione, indirizzo, civico, cap, comune, provincia, note_accesso, latitudine, longitudine, versione
+                SELECT sede_id, descrizione, indirizzo, civico, cap, comune, provincia, note_accesso, latitudine, longitudine, codice_istat_comune, versione
                 FROM anagrafica.sedi
                 WHERE cliente_id = @clienteId AND eliminata_il IS NULL
                 ORDER BY creato_il, sede_id
@@ -136,9 +136,9 @@ public sealed class RepositoryClienti(Database.Database db) : IRepositoryClienti
         Scrivi(contesto, (c, t) => c.QuerySingleOrDefaultAsync<RigaScritta>(Comando(
             """
             INSERT INTO anagrafica.sedi (azienda_id, cliente_id, descrizione, indirizzo, civico, cap, comune, provincia,
-                                         note_accesso, latitudine, longitudine, creato_da)
+                                         note_accesso, latitudine, longitudine, codice_istat_comune, creato_da)
             SELECT c.azienda_id, c.cliente_id, @Descrizione, @Indirizzo, @Civico, @Cap, @Comune, @Provincia,
-                   @NoteAccesso, @Latitudine, @Longitudine, @utenteId
+                   @NoteAccesso, @Latitudine, @Longitudine, @CodiceIstatComune, @utenteId
             FROM anagrafica.clienti c
             WHERE c.cliente_id = @clienteId AND c.eliminato_il IS NULL
             RETURNING sede_id AS id, versione
@@ -152,7 +152,7 @@ public sealed class RepositoryClienti(Database.Database db) : IRepositoryClienti
             UPDATE anagrafica.sedi
             SET descrizione = @Descrizione, indirizzo = @Indirizzo, civico = @Civico, cap = @Cap, comune = @Comune,
                 provincia = @Provincia, note_accesso = @NoteAccesso, latitudine = @Latitudine, longitudine = @Longitudine,
-                modificato_da = @utenteId
+                codice_istat_comune = @CodiceIstatComune, modificato_da = @utenteId
             WHERE sede_id = @sedeId AND cliente_id = @clienteId AND versione = @versione AND eliminata_il IS NULL
             RETURNING sede_id AS id, versione
             """,
@@ -249,6 +249,29 @@ public sealed class RepositoryClienti(Database.Database db) : IRepositoryClienti
                 """,
                 new { clienteId }, t, ct))];
         }, ct);
+
+    public Task<Azienda> AziendaAsync(Contesto contesto, CancellationToken ct) =>
+        Esegui(contesto, (c, t) => c.QuerySingleAsync<Azienda>(Comando(
+            """
+            SELECT azienda_id, ragione_sociale, partita_iva, codice_fiscale, indirizzo, cap, comune, provincia, regione,
+                   codice_ditta_siert, versione
+            FROM sec.aziende
+            WHERE azienda_id = @aziendaId
+            """,
+            new { contesto.AziendaId }, t, ct)), ct);
+
+    public Task<EsitoScrittura> AggiornaAziendaAsync(Contesto contesto, int versione, DatiAzienda dati, CancellationToken ct) =>
+        Scrivi(contesto, (c, t) => c.QuerySingleOrDefaultAsync<RigaScritta>(Comando(
+            """
+            UPDATE sec.aziende
+            SET ragione_sociale = @RagioneSociale, partita_iva = @PartitaIva, codice_fiscale = @CodiceFiscale,
+                indirizzo = @Indirizzo, cap = @Cap, comune = @Comune, provincia = @Provincia,
+                codice_ditta_siert = @CodiceDittaSiert, modificato_da = @utenteId
+            WHERE azienda_id = @aziendaId AND versione = @versione
+            RETURNING azienda_id AS id, versione
+            """,
+            new DynamicParameters(dati).Con(new { aziendaId = contesto.AziendaId, versione, utenteId = contesto.UtenteId }), t, ct)),
+            (_, _, _) => Task.FromResult(true), ct);
 
     private delegate Task<bool> Esistenza(NpgsqlConnection connessione, NpgsqlTransaction transazione, CancellationToken ct);
 

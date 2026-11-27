@@ -76,6 +76,19 @@ public sealed class TestRegoleImpianti
     }
 
     [Theory]
+    [InlineData(" gt01 ", "GT01", true)]
+    [InlineData("GF12", "GF12", true)]
+    [InlineData("G01", "G01", false)]
+    [InlineData("GT1A", "GT1A", false)]
+    public void La_sigla_del_catasto_ha_due_lettere_e_due_cifre(string sigla, string normalizzata, bool valida)
+    {
+        var (dati, errori) = RegoleImpianti.Valida(new DatiGeneratore(s_tipo, null, null, null, null, null, null, null, null, sigla));
+
+        Assert.Equal(normalizzata, dati.SiglaCatasto);
+        Assert.Equal(valida, !errori.Contains(ErroreImpianto.SiglaCatastoNonValida));
+    }
+
+    [Theory]
     [InlineData("Toscana", "siert")]
     [InlineData(" LOMBARDIA ", "curit")]
     public void Il_sistema_del_catasto_dipende_dalla_regione(string regione, string sistema)

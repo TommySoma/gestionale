@@ -31,6 +31,7 @@
     <DataTemplate DataType="vm:RichiamoViewModel"><v:RichiamoView /></DataTemplate>
     <DataTemplate DataType="vm:DataScadenzaViewModel"><v:DataScadenzaView /></DataTemplate>
     <DataTemplate DataType="vm:ListinoViewModel"><v:ListinoView /></DataTemplate>
+    <DataTemplate DataType="vm:DatiAziendaliViewModel"><v:DatiAziendaliView /></DataTemplate>
     <DataTemplate DataType="vm:EditorVoceViewModel"><v:EditorVoceView /></DataTemplate>
     <DataTemplate DataType="vm:PrezzoVoceViewModel"><v:PrezzoVoceView /></DataTemplate>
     <DataTemplate DataType="vm:PreventiviViewModel"><v:PreventiviView /></DataTemplate>

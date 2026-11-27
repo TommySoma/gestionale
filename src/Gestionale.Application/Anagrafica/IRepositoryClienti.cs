@@ -34,4 +34,8 @@ public interface IRepositoryClienti
     Task<EsitoScrittura> RegistraConsensoAsync(Contesto contesto, Guid clienteId, DatiConsenso dati, CancellationToken ct);
 
     Task<IReadOnlyList<VoceStoricoConsenso>?> StoricoConsensiAsync(Contesto contesto, Guid clienteId, CancellationToken ct);
+
+    Task<Azienda> AziendaAsync(Contesto contesto, CancellationToken ct);
+
+    Task<EsitoScrittura> AggiornaAziendaAsync(Contesto contesto, int versione, DatiAzienda dati, CancellationToken ct);
 }

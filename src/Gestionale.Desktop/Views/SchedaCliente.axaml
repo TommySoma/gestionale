@@ -44,6 +44,9 @@
                       <Button DockPanel.Dock="Right" Classes="collegamento" Foreground="{DynamicResource Errore}" Content="{x:Static r:Testi.Elimina}"
                               IsVisible="{Binding $parent[UserControl].((vm:SchedaClienteViewModel)DataContext).PuoModificare}"
                               Command="{Binding $parent[UserControl].((vm:SchedaClienteViewModel)DataContext).EliminaSedeCommand}" CommandParameter="{Binding}" />
+                      <Button DockPanel.Dock="Right" Classes="collegamento" Margin="0,0,16,0" Content="{x:Static r:Testi.Modifica}"
+                              IsVisible="{Binding $parent[UserControl].((vm:SchedaClienteViewModel)DataContext).PuoModificare}"
+                              Command="{Binding $parent[UserControl].((vm:SchedaClienteViewModel)DataContext).ModificaSedeCommand}" CommandParameter="{Binding}" />
                       <Path DockPanel.Dock="Left" Classes="icona" Data="{StaticResource IconaLuogo}" VerticalAlignment="Top" Margin="0,2,16,0" />
                       <StackPanel Spacing="4">
                         <TextBlock Text="{Binding Indirizzo}" FontSize="14" FontWeight="SemiBold" />

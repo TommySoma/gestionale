@@ -28,6 +28,18 @@ public sealed record RichiestaSede(
     string? NoteAccesso,
     decimal? Latitudine,
     decimal? Longitudine,
+    int? Versione,
+    string? CodiceIstatComune = null);
+
+public sealed record RichiestaAzienda(
+    string RagioneSociale,
+    string? PartitaIva,
+    string? CodiceFiscale,
+    string? Indirizzo,
+    string? Cap,
+    string? Comune,
+    string? Provincia,
+    int? CodiceDittaSiert,
     int? Versione);
 
 public sealed record RichiestaContatto(string Tipo, string Valore, string? Etichetta, bool Principale, int? Versione);
@@ -65,6 +77,10 @@ internal static class EndpointClienti
         clienti.MapPost("/{clienteId:guid}/consensi", RegistraConsensoAsync).RichiedePermesso(CodiciPermesso.ClientiScrittura);
 
         api.MapGet("/finalita-privacy", FinalitaAsync).RichiedePermesso(CodiciPermesso.ClientiLettura);
+
+        // Dati dell'impresa corrente: il codice ditta serve al file di import SIERT.
+        api.MapGet("/azienda", AziendaAsync).RichiedePermesso(CodiciPermesso.AziendaLettura);
+        api.MapPut("/azienda", AggiornaAziendaAsync).RichiedePermesso(CodiciPermesso.AziendaScrittura);
     }
 
     private static async Task<IResult> CercaAsync(
@@ -152,7 +168,18 @@ internal static class EndpointClienti
         new(r.Tipo, r.Denominazione, r.Nome, r.Cognome, r.CodiceFiscale, r.PartitaIva, r.Pec, r.Note);
 
     private static DatiSede Dati(RichiestaSede r) =>
-        new(r.Descrizione, r.Indirizzo, r.Civico, r.Cap, r.Comune, r.Provincia, r.NoteAccesso, r.Latitudine, r.Longitudine);
+        new(r.Descrizione, r.Indirizzo, r.Civico, r.Cap, r.Comune, r.Provincia, r.NoteAccesso, r.Latitudine, r.Longitudine, r.CodiceIstatComune);
+
+    private static async Task<IResult> AziendaAsync(ClaimsPrincipal utente, ServizioClienti servizio, CancellationToken ct) =>
+        Results.Ok(await servizio.AziendaAsync(Contesto(utente), ct));
+
+    private static async Task<IResult> AggiornaAziendaAsync(
+        RichiestaAzienda richiesta, ClaimsPrincipal utente, ServizioClienti servizio, CancellationToken ct) =>
+        richiesta.Versione is not { } versione
+            ? Problemi.RichiestaNonValida(Messaggi.VersioneMancante)
+            : Risposta(await servizio.AggiornaAziendaAsync(Contesto(utente), versione,
+                new DatiAzienda(richiesta.RagioneSociale, richiesta.PartitaIva, richiesta.CodiceFiscale, richiesta.Indirizzo,
+                    richiesta.Cap, richiesta.Comune, richiesta.Provincia, richiesta.CodiceDittaSiert), ct));
 
     private static DatiContatto Dati(RichiestaContatto r) => new(r.Tipo, r.Valore, r.Etichetta, r.Principale);
 

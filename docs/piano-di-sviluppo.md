@@ -122,6 +122,7 @@ Legenda: **L** = lettura, **S** = scrittura (crea e modifica), **F** = firma o v
 | Report economici | L | L | — | — | L | — |
 | Documenti | L, S | L, S | L, S | L, S (propri: carica, non elimina) | L | — |
 | Chatbot | S | S | S | S | — | — |
+| Dati aziendali e codice ditta del catasto (decisione del 27/11/2026) | L, S | L | L | — | — | — |
 | Utenti e ruoli | L, S | — | — | — | — | L, S |
 | Registro attività (audit) | L | — | — | — | — | L |
 | Backup, aggiornamenti, configurazione | — | — | — | — | — | L, S |

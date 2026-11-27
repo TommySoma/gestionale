@@ -1509,4 +1509,49 @@
   <data name="RicercaGlobaleInArrivo" xml:space="preserve">
     <value>La ricerca in tutto il gestionale arriverà più avanti: per ora cerca dentro ogni elenco.</value>
   </data>
+  <data name="NavDatiAziendali" xml:space="preserve">
+    <value>Dati aziendali</value>
+  </data>
+  <data name="DatiAziendaliTitolo" xml:space="preserve">
+    <value>Dati aziendali</value>
+  </data>
+  <data name="DatiAziendaliSpiegazione" xml:space="preserve">
+    <value>Compaiono nell'intestazione di rapportini e preventivi. Solo il Titolare li può modificare.</value>
+  </data>
+  <data name="DatiAziendaliSalvati" xml:space="preserve">
+    <value>Dati aziendali salvati.</value>
+  </data>
+  <data name="Impresa" xml:space="preserve">
+    <value>Impresa</value>
+  </data>
+  <data name="RagioneSociale" xml:space="preserve">
+    <value>Ragione sociale</value>
+  </data>
+  <data name="CatastoImpianti" xml:space="preserve">
+    <value>Catasto degli impianti</value>
+  </data>
+  <data name="CodiceDittaSiert" xml:space="preserve">
+    <value>Codice ditta SIERT</value>
+  </data>
+  <data name="SpiegazioneCodiceDitta" xml:space="preserve">
+    <value>È l'ID_DITTA_MANUTENTORE assegnato dal SIERT, visibile nell'area di import massivo del portale. Entra in ogni riga del file di invio dei rapporti di controllo.</value>
+  </data>
+  <data name="CodiceDittaMancante" xml:space="preserve">
+    <value>Manca il codice ditta SIERT: senza, i rapporti di controllo non si possono convalidare.</value>
+  </data>
+  <data name="CodiceDittaNumerico" xml:space="preserve">
+    <value>Il codice ditta SIERT è un numero intero, senza lettere né spazi.</value>
+  </data>
+  <data name="TitoloModificaSede" xml:space="preserve">
+    <value>Modifica sede</value>
+  </data>
+  <data name="CodiceIstatComune" xml:space="preserve">
+    <value>Codice ISTAT del comune</value>
+  </data>
+  <data name="SpiegazioneCodiceIstat" xml:space="preserve">
+    <value>Sei cifre, ad esempio 048017 per Firenze. Serve al file di invio dei rapporti di controllo al SIERT.</value>
+  </data>
+  <data name="SiglaCatasto" xml:space="preserve">
+    <value>Sigla del catasto</value>
+  </data>
 </root>

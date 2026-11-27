@@ -162,6 +162,15 @@ public sealed class ClientApi : IDisposable
     public Task<Risposta<EsitoScrittura>> CreaSedeAsync(Guid clienteId, DatiSede dati, CancellationToken ct = default) =>
         AutenticataAsync<EsitoScrittura>(HttpMethod.Post, $"api/clienti/{clienteId}/sedi", dati, ct);
 
+    public Task<Risposta<EsitoScrittura>> AggiornaSedeAsync(Guid clienteId, Guid sedeId, DatiSede dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScrittura>(HttpMethod.Put, $"api/clienti/{clienteId}/sedi/{sedeId}", dati, ct);
+
+    public Task<Risposta<Azienda>> AziendaAsync(CancellationToken ct = default) =>
+        AutenticataAsync<Azienda>(HttpMethod.Get, "api/azienda", null, ct);
+
+    public Task<Risposta<EsitoScrittura>> AggiornaAziendaAsync(DatiAzienda dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScrittura>(HttpMethod.Put, "api/azienda", dati, ct);
+
     public Task<Risposta<object>> EliminaSedeAsync(Guid clienteId, Guid sedeId, int versione, CancellationToken ct = default) =>
         AutenticataAsync<object>(HttpMethod.Delete, $"api/clienti/{clienteId}/sedi/{sedeId}?versione={versione}", null, ct);
 

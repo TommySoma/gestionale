@@ -138,6 +138,15 @@
   <data name="CoordinateNonValide" xml:space="preserve">
     <value>indica sia la latitudine (da -90 a 90) sia la longitudine (da -180 a 180), oppure nessuna delle due</value>
   </data>
+  <data name="CodiceIstatNonValido" xml:space="preserve">
+    <value>il codice ISTAT del comune deve avere 6 cifre</value>
+  </data>
+  <data name="RagioneSocialeMancante" xml:space="preserve">
+    <value>manca la ragione sociale</value>
+  </data>
+  <data name="CodiceDittaNonValido" xml:space="preserve">
+    <value>il codice ditta del catasto è un numero intero positivo</value>
+  </data>
   <data name="TipoContattoNonValido" xml:space="preserve">
     <value>il tipo di contatto deve essere telefono, cellulare o email</value>
   </data>
@@ -204,6 +213,9 @@
   <data name="DateGeneratoreNonValide" xml:space="preserve">
     <value>la data di dismissione non può precedere quella di installazione</value>
   </data>
+  <data name="SiglaCatastoNonValida" xml:space="preserve">
+    <value>la sigla del catasto ha due lettere e due cifre, ad esempio GT01</value>
+  </data>
   <data name="RegioneNonValida" xml:space="preserve">
     <value>la regione deve essere toscana (SIERT) o lombardia (CURIT)</value>
   </data>
@@ -215,6 +227,9 @@
   </data>
   <data name="RegioneGiaRegistrata" xml:space="preserve">
     <value>L'impianto ha già un riferimento al catasto di questa regione: modifica quello esistente.</value>
+  </data>
+  <data name="SiglaCatastoInUso" xml:space="preserve">
+    <value>Un altro generatore dell'impianto ha già questa sigla del catasto.</value>
   </data>
   <data name="InterventoNonTrovato" xml:space="preserve">
     <value>L'intervento richiesto non esiste o non è assegnato a te.</value>

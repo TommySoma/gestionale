@@ -54,7 +54,14 @@
           </StackPanel>
         </Grid>
 
-        <Grid ColumnDefinitions="*,16,*">
+        <Grid ColumnDefinitions="*,16,*,16,*">
+          <StackPanel Grid.Column="4">
+            <TextBlock Classes="etichetta">
+              <Run Text="{x:Static r:Testi.SiglaCatasto}" />
+              <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+            </TextBlock>
+            <TextBox Text="{Binding SiglaCatasto}" MaxLength="4" PlaceholderText="GT01" AutomationProperties.Name="{x:Static r:Testi.SiglaCatasto}" />
+          </StackPanel>
           <StackPanel Grid.Column="0">
             <TextBlock Classes="etichetta" Text="{x:Static r:Testi.InstallatoIl}" />
             <CalendarDatePicker SelectedDate="{Binding InstallatoIl}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.InstallatoIl}" />
