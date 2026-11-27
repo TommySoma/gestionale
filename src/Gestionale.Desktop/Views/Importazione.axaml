@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.ImportazioneView"
+             x:DataType="vm:ImportazioneViewModel">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="20" MaxWidth="960" HorizontalAlignment="Left">
+      <Button Classes="collegamento" HorizontalAlignment="Left" Content="{x:Static r:Testi.TornaAiClienti}" Command="{Binding IndietroCommand}" />
+      <StackPanel>
+        <TextBlock Classes="titolo2" Text="{x:Static r:Testi.ImportazioneTitolo}" />
+        <TextBlock Classes="secondario" FontSize="14" Margin="0,4,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneImportazione}" />
+      </StackPanel>
+
+      <WrapPanel Orientation="Horizontal">
+        <Button Classes="primario" Margin="0,0,8,8" Content="{x:Static r:Testi.ScegliFileCsv}" Click="ScegliFile_Click" IsEnabled="{Binding !InCorso}" />
+        <Button Classes="secondario" Margin="0,0,8,8" Content="{x:Static r:Testi.ScaricaModelloCsv}" Click="ScaricaModello_Click" />
+      </WrapPanel>
+
+      <TextBlock FontSize="14" IsVisible="{Binding HaFile}" Text="{Binding NomeFile}" FontWeight="SemiBold" />
+
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+      </Border>
+      <Border Classes="avvisoSuccesso" IsVisible="{Binding HaAvviso}">
+        <TextBlock Text="{Binding Avviso}" TextWrapping="Wrap" />
+      </Border>
+
+      <Border Classes="scheda" Padding="20" IsVisible="{Binding HaAnteprima}">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.AnteprimaImportazione}" />
+          <ItemsControl ItemsSource="{Binding Riepilogo}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:CampoScheda">
+                <StackPanel Margin="0,0,32,8" MinWidth="110">
+                  <TextBlock Classes="secondario" FontSize="12" Text="{Binding Etichetta}" />
+                  <TextBlock FontSize="20" FontWeight="SemiBold" Text="{Binding Valore}" />
+                </StackPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <Button Classes="primario" HorizontalAlignment="Left" Content="{x:Static r:Testi.ImportaDati}" Command="{Binding ImportaCommand}"
+                  IsVisible="{Binding PuoImportare}" IsEnabled="{Binding !InCorso}" />
+          <TextBlock Classes="secondario" FontSize="13" TextWrapping="Wrap" IsVisible="{Binding HaErroriRighe}" Text="{x:Static r:Testi.CorreggiIlFile}" />
+        </StackPanel>
+      </Border>
+
+      <Border Classes="scheda" IsVisible="{Binding HaErroriRighe}">
+        <StackPanel>
+          <TextBlock Classes="titoloSezione" Margin="20,12" Foreground="{DynamicResource Errore}" Text="{x:Static r:Testi.ErroriDelFile}" />
+          <Border Height="1" Background="{DynamicResource Divisore}" />
+          <ItemsControl ItemsSource="{Binding Errori}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:RigaSegnalazione">
+                <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="20,8">
+                  <Grid ColumnDefinitions="110,*">
+                    <TextBlock Grid.Column="0" FontWeight="SemiBold" Text="{Binding Riga}" />
+                    <TextBlock Grid.Column="1" Text="{Binding Messaggio}" TextWrapping="Wrap" />
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <Border Classes="scheda" IsVisible="{Binding HaAvvisiRighe}">
+        <StackPanel>
+          <TextBlock Classes="titoloSezione" Margin="20,12" Text="{x:Static r:Testi.AvvisiDelFile}" />
+          <Border Height="1" Background="{DynamicResource Divisore}" />
+          <ItemsControl ItemsSource="{Binding Avvisi}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:RigaSegnalazione">
+                <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="20,8">
+                  <Grid ColumnDefinitions="110,*">
+                    <TextBlock Grid.Column="0" Classes="secondario" Text="{Binding Riga}" />
+                    <TextBlock Grid.Column="1" Text="{Binding Messaggio}" TextWrapping="Wrap" />
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

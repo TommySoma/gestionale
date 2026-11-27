@@ -2010,4 +2010,73 @@
   <data name="ApriRapporti" xml:space="preserve">
     <value>Apri i rapporti</value>
   </data>
+  <data name="ImportaDaCsv" xml:space="preserve">
+    <value>Importa da CSV</value>
+  </data>
+  <data name="ImportazioneTitolo" xml:space="preserve">
+    <value>Importa clienti e impianti</value>
+  </data>
+  <data name="SpiegazioneImportazione" xml:space="preserve">
+    <value>Un file CSV con una riga per impianto: cliente, sede, impianto e, se vuoi, il primo generatore e il codice del catasto. I clienti già presenti, con lo stesso codice fiscale o partita IVA, si usano senza modificarli. Si importa solo un file senza errori: prima vedi l'anteprima.</value>
+  </data>
+  <data name="ScegliFileCsv" xml:space="preserve">
+    <value>Scegli il file CSV</value>
+  </data>
+  <data name="ScaricaModelloCsv" xml:space="preserve">
+    <value>Scarica il modello</value>
+  </data>
+  <data name="AnteprimaImportazione" xml:space="preserve">
+    <value>Anteprima</value>
+  </data>
+  <data name="ImportaDati" xml:space="preserve">
+    <value>Importa</value>
+  </data>
+  <data name="CorreggiIlFile" xml:space="preserve">
+    <value>Correggi gli errori nel file e sceglilo di nuovo: si importa solo un file senza errori.</value>
+  </data>
+  <data name="ErroriDelFile" xml:space="preserve">
+    <value>Errori da correggere</value>
+  </data>
+  <data name="AvvisiDelFile" xml:space="preserve">
+    <value>Avvisi</value>
+  </data>
+  <data name="RigheLette" xml:space="preserve">
+    <value>Righe</value>
+  </data>
+  <data name="ClientiNuovi" xml:space="preserve">
+    <value>Clienti nuovi</value>
+  </data>
+  <data name="ClientiGiaPresenti" xml:space="preserve">
+    <value>Clienti già presenti</value>
+  </data>
+  <data name="SediNuove" xml:space="preserve">
+    <value>Sedi nuove</value>
+  </data>
+  <data name="ImpiantiNuovi" xml:space="preserve">
+    <value>Impianti nuovi</value>
+  </data>
+  <data name="ImpiantiSaltati" xml:space="preserve">
+    <value>Impianti già presenti</value>
+  </data>
+  <data name="GeneratoriNuovi" xml:space="preserve">
+    <value>Generatori</value>
+  </data>
+  <data name="Intestazione" xml:space="preserve">
+    <value>Intestazione</value>
+  </data>
+  <data name="RigaNumero" xml:space="preserve">
+    <value>Riga {0}</value>
+  </data>
+  <data name="ImportazioneCompletata" xml:space="preserve">
+    <value>Importazione completata: i dati sono nei clienti e negli impianti.</value>
+  </data>
+  <data name="FileImportazioneTroppoGrande" xml:space="preserve">
+    <value>«{0}» supera i 5 MB ammessi.</value>
+  </data>
+  <data name="ModelloImportazioneSalvato" xml:space="preserve">
+    <value>Modello salvato in {0}.</value>
+  </data>
+  <data name="FileCsv" xml:space="preserve">
+    <value>File CSV</value>
+  </data>
 </root>

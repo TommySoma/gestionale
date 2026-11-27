@@ -32,6 +32,7 @@
     <DataTemplate DataType="vm:DataScadenzaViewModel"><v:DataScadenzaView /></DataTemplate>
     <DataTemplate DataType="vm:ListinoViewModel"><v:ListinoView /></DataTemplate>
     <DataTemplate DataType="vm:DatiAziendaliViewModel"><v:DatiAziendaliView /></DataTemplate>
+    <DataTemplate DataType="vm:ImportazioneViewModel"><v:ImportazioneView /></DataTemplate>
     <DataTemplate DataType="vm:RapportiViewModel"><v:RapportiView /></DataTemplate>
     <DataTemplate DataType="vm:SchedaRapportoViewModel"><v:SchedaRapportoView /></DataTemplate>
     <DataTemplate DataType="vm:MotivoViewModel"><v:MotivoView /></DataTemplate>

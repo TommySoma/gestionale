@@ -178,3 +178,21 @@ internal static partial class DatiFittizi
         versione = 2,
     };
 }
+
+/// <summary>Anteprima fittizia di un'importazione da CSV con un errore e un avviso.</summary>
+internal static partial class DatiFittizi
+{
+    private static object AnteprimaImportazione() => new
+    {
+        importata = false,
+        righe = 3,
+        clientiNuovi = 2,
+        clientiEsistenti = 1,
+        sediNuove = 2,
+        impiantiNuovi = 2,
+        impiantiSaltati = 1,
+        generatori = 1,
+        errori = new[] { new { riga = 3, codice = "TipoImpiantoSconosciuto", messaggio = "tipo di impianto sconosciuto: usa il codice o il nome di una voce in vigore: stufa" } },
+        avvisi = new[] { new { riga = 4, codice = "ImpiantoGiaPresentePdr", messaggio = "impianto già presente con questo PDR: la riga lo salta: PDR-PROVA" } },
+    };
+}
