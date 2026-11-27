@@ -406,7 +406,7 @@ La logica transazionale vive in funzioni, chiamate da Dapper; ognuna ha test pgT
 
 ## Piano di sviluppo a milestone
 
-L'MVP richiede circa 20 settimane a tempo parziale (da M0 a M6); Fase 2, Fase 3 e la seconda regione ne aggiungono altre 11. Le durate sono stime e dipendono dall'esperienza con lo stack scelto. Le date partono da lunedì 23 novembre 2026.
+L'MVP richiede circa 24 settimane a tempo parziale (da M0 a M6, con M4b aggiunta il 27/11/2026: ADR 0007); Fase 2, Fase 3 e la seconda regione ne aggiungono altre 11. Le durate sono stime e dipendono dall'esperienza con lo stack scelto. Le date partono da lunedì 23 novembre 2026.
 
 | Milestone | Contenuto | Settimane | Periodo |
 | --- | --- | --- | --- |
@@ -415,17 +415,19 @@ L'MVP richiede circa 20 settimane a tempo parziale (da M0 a M6); Fase 2, Fase 3 
 | M2 | Impianti e interventi | 4 | 21 dic 2026 – 18 gen 2027 |
 | M3 | Scadenze e preventivi | 3 | 18 gen – 8 feb 2027 |
 | M4 | Compliance Toscana | 4 | 8 feb – 8 mar 2027 |
-| M5 | Chatbot base | 3 | 8 mar – 29 mar 2027 |
-| M6 | Rilascio MVP | 2 | 29 mar – 12 apr 2027 |
-| MVP pronto | | | 12 apr 2027 |
-| Fase 2 | Campo e manuali | 5 | 12 apr – 17 mag 2027 |
-| Fase 3 | Server del cliente | 3 | 17 mag – 7 giu 2027 |
-| Fase 3 | Adattatore Lombardia | 3 | 7 giu – 28 giu 2027 |
+| M4b | Importazione, promemoria email, registro F-Gas, dichiarazione di conformità | 4 | 8 mar – 5 apr 2027 |
+| M5 | Chatbot base | 3 | 5 apr – 26 apr 2027 |
+| M6 | Rilascio MVP | 2 | 26 apr – 10 mag 2027 |
+| MVP pronto | | | 10 mag 2027 |
+| Fase 2 | Campo e manuali | 5 | 10 mag – 14 giu 2027 |
+| Fase 3 | Server del cliente | 3 | 14 giu – 5 lug 2027 |
+| Fase 3 | Adattatore Lombardia | 3 | 5 lug – 26 lug 2027 |
 
 **Criteri di uscita:**
 
 - **M1:** login con secondo fattore e ruoli funzionanti, con test automatici.
-- **M4:** un rapporto di controllo completo, con bollino e file di invio, generato e validato contro la specifica SIERT. Perimetro deciso il 26/11/2026: RCEE tipo 1 e 2, bollini e file di import; dichiarazione di conformità e registro F-Gas passano a una milestone successiva. Realizzato con le PR 25-29: schema e tracciato come dati, API, dati aziendali, bozza alla chiusura dell'intervento e schermate di rapporti, bollini e invii; il PDF del rapporto è rimandato.
+- **M4:** un rapporto di controllo completo, con bollino e file di invio, generato e validato contro la specifica SIERT. Perimetro deciso il 26/11/2026: RCEE tipo 1 e 2, bollini e file di import; dichiarazione di conformità e registro F-Gas passano a M4b. Realizzato con le PR 25-29: schema e tracciato come dati, API, dati aziendali, bozza alla chiusura dell'intervento e schermate di rapporti, bollini e invii; il PDF del rapporto è rimandato.
+- **M4b:** clienti, sedi e impianti importati da CSV con anteprima degli errori; promemoria email delle scadenze inviati solo a chi ha il consenso e registrati; registro F-Gas e bozza della dichiarazione di conformità con le regole verificate sui testi ufficiali (Reg. UE 2024/573, DPR 146/2018, DM 37/08) e caricate come dati. Ordine: importazione, promemoria, F-Gas, dichiarazione (ADR 0007).
 - **M6:** installazione pulita su Windows e macOS contro un server di prova, ripristino da backup verificato, README e demo pronti.
 
 ## Rischi e decisioni aperte
