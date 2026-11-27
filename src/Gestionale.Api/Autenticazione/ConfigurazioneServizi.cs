@@ -1,6 +1,7 @@
 using System.Threading.RateLimiting;
 using Gestionale.Api.Risorse;
 using Gestionale.Application.Anagrafica;
+using Gestionale.Application.Importazione;
 using Gestionale.Application.Commerciale;
 using Gestionale.Application.Autenticazione;
 using Gestionale.Application.Documenti;
@@ -10,6 +11,7 @@ using Gestionale.Application.Rapporti;
 using Gestionale.Application.Scadenze;
 using Gestionale.Infrastructure.Accessi;
 using Gestionale.Infrastructure.Anagrafica;
+using Gestionale.Infrastructure.Importazione;
 using Gestionale.Infrastructure.Commerciale;
 using Gestionale.Infrastructure.Database;
 using Gestionale.Infrastructure.Documenti;
@@ -58,6 +60,8 @@ internal static class ConfigurazioneServizi
         servizi.AddSingleton<ServizioAutenticazione>();
         servizi.AddSingleton<IRepositoryClienti, RepositoryClienti>();
         servizi.AddSingleton<ServizioClienti>();
+        servizi.AddSingleton<IRepositoryImportazione, RepositoryImportazione>();
+        servizi.AddSingleton<ServizioImportazione>();
         servizi.AddSingleton<IRepositoryImpianti, RepositoryImpianti>();
         servizi.AddSingleton<ServizioImpianti>();
         servizi.AddSingleton<IRepositoryInterventi, RepositoryInterventi>();

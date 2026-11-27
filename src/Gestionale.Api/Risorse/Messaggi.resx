@@ -636,4 +636,73 @@
   <data name="NessunRapportoDaInviare" xml:space="preserve">
     <value>nessun rapporto firmato è pronto per l'invio: controlla errori bloccanti e codice ditta SIERT</value>
   </data>
+  <data name="ImportazioneVietata" xml:space="preserve">
+    <value>L'importazione scrive clienti e impianti di tutta l'azienda: serve il permesso di modificarli su tutti, non solo sui propri.</value>
+  </data>
+  <data name="FileTroppoGrande" xml:space="preserve">
+    <value>il file supera i 5 MB ammessi</value>
+  </data>
+  <data name="FileVuoto" xml:space="preserve">
+    <value>il file non ha righe oltre all'intestazione</value>
+  </data>
+  <data name="TroppeRigheFile" xml:space="preserve">
+    <value>il file supera il numero massimo di righe</value>
+  </data>
+  <data name="VirgoletteNonChiuse" xml:space="preserve">
+    <value>un campo tra virgolette non è chiuso: controlla le virgolette doppie</value>
+  </data>
+  <data name="ColonnaObbligatoriaMancante" xml:space="preserve">
+    <value>manca una colonna obbligatoria</value>
+  </data>
+  <data name="ColonnaRipetuta" xml:space="preserve">
+    <value>la stessa colonna compare due volte</value>
+  </data>
+  <data name="NumeroNonValido" xml:space="preserve">
+    <value>numero non valido</value>
+  </data>
+  <data name="DataNonValida" xml:space="preserve">
+    <value>data non valida: usa gg/mm/aaaa</value>
+  </data>
+  <data name="TipoClienteSconosciuto" xml:space="preserve">
+    <value>tipo di cliente sconosciuto: usa privato, condominio o azienda</value>
+  </data>
+  <data name="EmailClienteNonValida" xml:space="preserve">
+    <value>email non valida</value>
+  </data>
+  <data name="TelefonoNonValido" xml:space="preserve">
+    <value>telefono non valido</value>
+  </data>
+  <data name="TipoImpiantoSconosciuto" xml:space="preserve">
+    <value>tipo di impianto sconosciuto: usa il codice o il nome di una voce in vigore</value>
+  </data>
+  <data name="CombustibileSconosciuto" xml:space="preserve">
+    <value>combustibile sconosciuto: usa il codice o il nome di una voce in vigore</value>
+  </data>
+  <data name="TipoGeneratoreSconosciuto" xml:space="preserve">
+    <value>tipo di generatore sconosciuto: usa il codice o il nome di una voce in vigore</value>
+  </data>
+  <data name="PdrRipetutoNelFile" xml:space="preserve">
+    <value>questo PDR è già su un'altra riga del file</value>
+  </data>
+  <data name="CodiceCatastoRipetutoNelFile" xml:space="preserve">
+    <value>questo codice del catasto è già su un'altra riga del file</value>
+  </data>
+  <data name="GeneratoreSenzaTipo" xml:space="preserve">
+    <value>i dati del generatore richiedono il tipo di generatore</value>
+  </data>
+  <data name="ClienteDiversoNelFile" xml:space="preserve">
+    <value>stesso cliente della riga indicata, ma con dati diversi</value>
+  </data>
+  <data name="ColonnaSconosciuta" xml:space="preserve">
+    <value>colonna non riconosciuta, sarà ignorata</value>
+  </data>
+  <data name="ImpiantoGiaPresentePdr" xml:space="preserve">
+    <value>impianto già presente con questo PDR: la riga lo salta</value>
+  </data>
+  <data name="ImpiantoGiaPresenteCatasto" xml:space="preserve">
+    <value>impianto già presente con questo codice del catasto: la riga lo salta</value>
+  </data>
+  <data name="ClienteSenzaCodici" xml:space="preserve">
+    <value>cliente senza codice fiscale né partita IVA: si crea nuovo anche se esiste già con lo stesso nome</value>
+  </data>
 </root>
