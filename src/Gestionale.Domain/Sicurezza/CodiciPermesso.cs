@@ -21,6 +21,11 @@ public static class CodiciPermesso
     public const string ListinoScrittura = "listino.scrittura";
     public const string PreventiviLettura = "preventivi.lettura";
     public const string PreventiviScrittura = "preventivi.scrittura";
+    public const string RapportiLettura = "rapporti_controllo.lettura";
+    public const string RapportiScrittura = "rapporti_controllo.scrittura";
+    public const string RapportiFirma = "rapporti_controllo.firma";
+    public const string BolliniLettura = "bollini.lettura";
+    public const string BolliniScrittura = "bollini.scrittura";
 }
 
 /// <summary>Estensione di un permesso: su tutto o solo sulle attività assegnate all'utente.</summary>

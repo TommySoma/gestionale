@@ -468,4 +468,145 @@
   <data name="TipoInterventoPreventivoNonValido" xml:space="preserve">
     <value>scegli il tipo dell'intervento: manutenzione, riparazione, installazione, sopralluogo o altro</value>
   </data>
+  <data name="RapportoNonTrovato" xml:space="preserve">
+    <value>Il rapporto di controllo richiesto non esiste.</value>
+  </data>
+  <data name="BollinoNonTrovato" xml:space="preserve">
+    <value>Il bollino richiesto non esiste.</value>
+  </data>
+  <data name="InvioNonTrovato" xml:space="preserve">
+    <value>L'invio al catasto richiesto non esiste.</value>
+  </data>
+  <data name="ModelloTracciatoNonTrovato" xml:space="preserve">
+    <value>Il modello di rapporto richiesto non ha un tracciato in vigore: i modelli sono tipo_1 e tipo_2.</value>
+  </data>
+  <data name="DatiRapportoNonValidi" xml:space="preserve">
+    <value>I dati del rapporto di controllo non sono validi: {0}</value>
+  </data>
+  <data name="RapportoConErroriBloccanti" xml:space="preserve">
+    <value>Il rapporto ha errori che ne bloccherebbero l'invio: {0}.</value>
+  </data>
+  <data name="OperazioneRapportoNonConsentita" xml:space="preserve">
+    <value>Operazione non consentita: {0}.</value>
+  </data>
+  <data name="InviiSoloAmbitoCompleto" xml:space="preserve">
+    <value>Gli invii al catasto riguardano tutti i rapporti dell'azienda: non sono disponibili con un accesso limitato ai propri.</value>
+  </data>
+  <data name="StatoRapporto_bozza" xml:space="preserve">
+    <value>il rapporto è in bozza</value>
+  </data>
+  <data name="StatoRapporto_convalidato" xml:space="preserve">
+    <value>il rapporto è convalidato: riaprilo per modificarlo</value>
+  </data>
+  <data name="StatoRapporto_firmato" xml:space="preserve">
+    <value>il rapporto è firmato</value>
+  </data>
+  <data name="StatoRapporto_trasmesso" xml:space="preserve">
+    <value>il rapporto è già trasmesso al catasto</value>
+  </data>
+  <data name="StatoRapporto_scartato" xml:space="preserve">
+    <value>il rapporto è stato scartato dal catasto</value>
+  </data>
+  <data name="StatoRapporto_annullato" xml:space="preserve">
+    <value>il rapporto è annullato</value>
+  </data>
+  <data name="StatoRapporto_con_bollino" xml:space="preserve">
+    <value>il rapporto ha già un bollino: liberalo prima di assegnarne un altro</value>
+  </data>
+  <data name="StatoRapporto_senza_bollino" xml:space="preserve">
+    <value>il rapporto non ha un bollino</value>
+  </data>
+  <data name="StatoRapporto_bollino_assegnato" xml:space="preserve">
+    <value>il bollino è assegnato a un rapporto</value>
+  </data>
+  <data name="StatoRapporto_bollino_usato" xml:space="preserve">
+    <value>il bollino è già usato</value>
+  </data>
+  <data name="StatoRapporto_bollino_annullato" xml:space="preserve">
+    <value>il bollino è annullato</value>
+  </data>
+  <data name="StatoRapporto_invio_preparato" xml:space="preserve">
+    <value>l'invio non è ancora caricato sul portale</value>
+  </data>
+  <data name="StatoRapporto_invio_caricato" xml:space="preserve">
+    <value>l'invio è già caricato sul portale</value>
+  </data>
+  <data name="StatoRapporto_invio_elaborato" xml:space="preserve">
+    <value>l'invio è già elaborato</value>
+  </data>
+  <data name="StatoRapporto_invio_annullato" xml:space="preserve">
+    <value>l'invio è annullato</value>
+  </data>
+  <data name="ModelloRapportoNonValido" xml:space="preserve">
+    <value>il modello deve essere tipo_1 (gruppi termici) o tipo_2 (gruppi frigo)</value>
+  </data>
+  <data name="DataControlloMancante" xml:space="preserve">
+    <value>serve la data del controllo</value>
+  </data>
+  <data name="DataControlloFutura" xml:space="preserve">
+    <value>la data del controllo non può essere futura</value>
+  </data>
+  <data name="ImpiantoRapportoNonValido" xml:space="preserve">
+    <value>l'impianto non esiste o non è attivo</value>
+  </data>
+  <data name="GeneratoreRapportoNonValido" xml:space="preserve">
+    <value>il generatore non esiste, non è dell'impianto o è dismesso</value>
+  </data>
+  <data name="InterventoRapportoNonValido" xml:space="preserve">
+    <value>l'intervento non esiste, non è dell'impianto, è annullato o non è assegnato a te</value>
+  </data>
+  <data name="InterventoRapportoObbligatorio" xml:space="preserve">
+    <value>indica l'intervento che ti è assegnato</value>
+  </data>
+  <data name="RapportoGiaPresente" xml:space="preserve">
+    <value>per questo generatore e questo intervento c'è già un rapporto</value>
+  </data>
+  <data name="DatiRapportoNonOggetto" xml:space="preserve">
+    <value>i dati devono essere un oggetto JSON</value>
+  </data>
+  <data name="ChiaveDatiSconosciuta" xml:space="preserve">
+    <value>alcuni campi non sono nel tracciato in vigore</value>
+  </data>
+  <data name="ValoreDatiNonValido" xml:space="preserve">
+    <value>alcuni valori non sono testo o numero, oppure superano i 500 caratteri</value>
+  </data>
+  <data name="MotivoAnnullamentoRapportoMancante" xml:space="preserve">
+    <value>serve il motivo, al massimo 500 caratteri</value>
+  </data>
+  <data name="TipoBollinoNonValido" xml:space="preserve">
+    <value>scegli un tipo di bollino in vigore</value>
+  </data>
+  <data name="TipoBollinoNonDelModello" xml:space="preserve">
+    <value>il tipo di bollino non è della categoria del rapporto (GT per il tipo 1, GF per il tipo 2)</value>
+  </data>
+  <data name="BollinoNonDisponibile" xml:space="preserve">
+    <value>non ci sono bollini disponibili del tipo scelto</value>
+  </data>
+  <data name="CodiciBolliniMancanti" xml:space="preserve">
+    <value>indica da 1 a 500 codici di bollino</value>
+  </data>
+  <data name="CodiceBollinoNonValido" xml:space="preserve">
+    <value>un codice di bollino ha 13 cifre e inizia con l'anno</value>
+  </data>
+  <data name="CodiceBollinoGiaRegistrato" xml:space="preserve">
+    <value>alcuni bollini sono già registrati</value>
+  </data>
+  <data name="DataAcquistoBollinoNonValida" xml:space="preserve">
+    <value>serve la data di acquisto, non futura</value>
+  </data>
+  <data name="NoteBollinoTroppoLunghe" xml:space="preserve">
+    <value>le note sono al massimo 500 caratteri</value>
+  </data>
+  <data name="EsitoInvioNonValido" xml:space="preserve">
+    <value>serve un esito per ogni rapporto dell'invio: importato, importato_bozza o scartato</value>
+  </data>
+  <data name="CausaScartoMancante" xml:space="preserve">
+    <value>per un rapporto scartato serve la causa riportata nel report</value>
+  </data>
+  <data name="RapportoNonNellInvio" xml:space="preserve">
+    <value>alcuni rapporti non sono in questo invio</value>
+  </data>
+  <data name="NessunRapportoDaInviare" xml:space="preserve">
+    <value>nessun rapporto firmato è pronto per l'invio: controlla errori bloccanti e codice ditta SIERT</value>
+  </data>
 </root>

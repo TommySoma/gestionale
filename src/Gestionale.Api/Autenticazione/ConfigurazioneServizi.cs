@@ -6,6 +6,7 @@ using Gestionale.Application.Autenticazione;
 using Gestionale.Application.Documenti;
 using Gestionale.Application.Impianti;
 using Gestionale.Application.Interventi;
+using Gestionale.Application.Rapporti;
 using Gestionale.Application.Scadenze;
 using Gestionale.Infrastructure.Accessi;
 using Gestionale.Infrastructure.Anagrafica;
@@ -14,6 +15,7 @@ using Gestionale.Infrastructure.Database;
 using Gestionale.Infrastructure.Documenti;
 using Gestionale.Infrastructure.Impianti;
 using Gestionale.Infrastructure.Interventi;
+using Gestionale.Infrastructure.Rapporti;
 using Gestionale.Infrastructure.Scadenze;
 using Gestionale.Infrastructure.Sicurezza;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -75,6 +77,12 @@ internal static class ConfigurazioneServizi
         servizi.AddSingleton<IRepositoryPreventivi, RepositoryPreventivi>();
         servizi.AddSingleton<IGeneratorePreventivo, GeneratorePreventivo>();
         servizi.AddSingleton<ServizioPreventivi>();
+        servizi.AddSingleton<IRepositoryRapporti, RepositoryRapporti>();
+        servizi.AddSingleton<ServizioRapporti>();
+        servizi.AddSingleton<IRepositoryBollini, RepositoryBollini>();
+        servizi.AddSingleton<ServizioBollini>();
+        servizi.AddSingleton<IRepositoryInvii, RepositoryInvii>();
+        servizi.AddSingleton<ServizioInvii>();
 
         servizi.AddProblemDetails();
 
