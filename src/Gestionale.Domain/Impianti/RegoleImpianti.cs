@@ -20,6 +20,8 @@ public enum ErroreImpianto
     CodiceCatastoInUso,
     RegioneGiaRegistrata,
     PeriodicitaManutenzioneNonValida,
+    SiglaCatastoNonValida,
+    SiglaCatastoInUso,
 }
 
 /// <summary>Situazioni sospette che non bloccano il salvataggio: l'API le segnala.</summary>
@@ -70,7 +72,8 @@ public sealed record DatiGeneratore(
     Guid? CombustibileId,
     DateOnly? InstallatoIl,
     DateOnly? DismessoIl,
-    string? Note);
+    string? Note,
+    string? SiglaCatasto = null);
 
 public sealed record DatiRiferimentoCatasto(string? Regione, string? Sistema, string? Codice, DateOnly? RegistratoIl);
 
@@ -149,6 +152,7 @@ public static class RegoleImpianti
             Modello = Pulisci(dati.Modello),
             Matricola = Pulisci(dati.Matricola),
             Note = Pulisci(dati.Note),
+            SiglaCatasto = Pulisci(dati.SiglaCatasto)?.ToUpperInvariant(),
         };
 
         var errori = new List<ErroreImpianto>();
@@ -166,6 +170,12 @@ public static class RegoleImpianti
         if (normalizzati is { InstallatoIl: { } installato, DismessoIl: { } dismesso } && dismesso < installato)
         {
             errori.Add(ErroreImpianto.DateGeneratoreNonValide);
+        }
+
+        // Gruppo termico o frigo assegnato dal catasto: due lettere e due cifre (GT01, GF01).
+        if (normalizzati.SiglaCatasto is { } sigla && !SiglaCatastoValida(sigla))
+        {
+            errori.Add(ErroreImpianto.SiglaCatastoNonValida);
         }
 
         return (normalizzati, errori);
@@ -201,6 +211,10 @@ public static class RegoleImpianti
     }
 
     private static bool PotenzaValida(decimal? potenza) => potenza is null or (> 0 and <= PotenzaMassimaKw);
+
+    private static bool SiglaCatastoValida(string sigla) =>
+        sigla.Length == 4 && char.IsAsciiLetterUpper(sigla[0]) && char.IsAsciiLetterUpper(sigla[1])
+        && char.IsAsciiDigit(sigla[2]) && char.IsAsciiDigit(sigla[3]);
 
     private static string? Pulisci(string? valore) => string.IsNullOrWhiteSpace(valore) ? null : valore.Trim();
 }

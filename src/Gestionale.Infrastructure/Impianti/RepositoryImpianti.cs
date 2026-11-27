@@ -139,7 +139,7 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
             impianto.Generatori = [.. await c.QueryAsync<Generatore>(Comando(
                 $"""
                 SELECT g.generatore_id, g.tipo_generatore_id, tg.nome AS tipo_generatore, g.marca, g.modello, g.matricola,
-                       g.potenza_kw, g.combustibile_id, cb.nome AS combustibile, g.installato_il, g.dismesso_il, g.note, g.versione,
+                       g.potenza_kw, g.combustibile_id, cb.nome AS combustibile, g.installato_il, g.dismesso_il, g.note, g.sigla_catasto, g.versione,
                        {MatricolaDuplicata} AS matricola_duplicata
                 FROM impianti.generatori g
                 JOIN impianti.tipi_generatore tg ON tg.tipo_generatore_id = g.tipo_generatore_id
@@ -273,9 +273,9 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
             var riga = await c.QuerySingleAsync<RigaScritta>(Comando(
                 """
                 INSERT INTO impianti.generatori (azienda_id, impianto_id, tipo_generatore_id, marca, modello, matricola, potenza_kw,
-                                                 combustibile_id, installato_il, dismesso_il, note, creato_da)
+                                                 combustibile_id, installato_il, dismesso_il, note, sigla_catasto, creato_da)
                 VALUES (@aziendaId, @impiantoId, @TipoGeneratoreId, @Marca, @Modello, @Matricola, @PotenzaKw,
-                        @CombustibileId, @InstallatoIl, @DismessoIl, @Note, @utenteId)
+                        @CombustibileId, @InstallatoIl, @DismessoIl, @Note, @SiglaCatasto, @utenteId)
                 RETURNING generatore_id AS id, versione
                 """,
                 new DynamicParameters(dati).Con(new { aziendaId = contesto.AziendaId, impiantoId, utenteId = contesto.UtenteId }), t, ct));
@@ -310,7 +310,7 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
                 UPDATE impianti.generatori
                 SET tipo_generatore_id = @TipoGeneratoreId, marca = @Marca, modello = @Modello, matricola = @Matricola,
                     potenza_kw = @PotenzaKw, combustibile_id = @CombustibileId, installato_il = @InstallatoIl,
-                    dismesso_il = @DismessoIl, note = @Note, modificato_da = @utenteId
+                    dismesso_il = @DismessoIl, note = @Note, sigla_catasto = @SiglaCatasto, modificato_da = @utenteId
                 WHERE generatore_id = @generatoreId AND impianto_id = @impiantoId AND versione = @versione
                 RETURNING generatore_id AS id, versione
                 """,
@@ -492,6 +492,7 @@ public sealed class RepositoryImpianti(Database.Database db) : IRepositoryImpian
         "uq_impianti_azienda_pdr_attivi" => ErroreImpianto.PdrInUso,
         "uq_riferimenti_catasto_codice" => ErroreImpianto.CodiceCatastoInUso,
         "uq_riferimenti_catasto_impianto_regione" => ErroreImpianto.RegioneGiaRegistrata,
+        "uq_generatori_impianto_sigla_catasto" => ErroreImpianto.SiglaCatastoInUso,
         _ => null,
     };
 

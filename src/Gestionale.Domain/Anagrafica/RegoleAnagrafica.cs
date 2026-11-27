@@ -16,6 +16,9 @@ public enum ErroreAnagrafica
     CapNonValido,
     ProvinciaNonValida,
     CoordinateNonValide,
+    CodiceIstatNonValido,
+    RagioneSocialeMancante,
+    CodiceDittaNonValido,
     TipoContattoNonValido,
     ValoreContattoNonValido,
     FinalitaSconosciuta,
@@ -63,9 +66,21 @@ public sealed record DatiSede(
     string Provincia,
     string? NoteAccesso,
     decimal? Latitudine,
-    decimal? Longitudine);
+    decimal? Longitudine,
+    string? CodiceIstatComune = null);
 
 public sealed record DatiContatto(string Tipo, string Valore, string? Etichetta, bool Principale);
+
+/// <summary>Dati dell'impresa: stampati sui documenti; il codice ditta entra nel file di import SIERT.</summary>
+public sealed record DatiAzienda(
+    string RagioneSociale,
+    string? PartitaIva,
+    string? CodiceFiscale,
+    string? Indirizzo,
+    string? Cap,
+    string? Comune,
+    string? Provincia,
+    int? CodiceDittaSiert);
 
 /// <summary>
 /// Normalizzazione e validazione dei dati anagrafici. Le stesse regole di
@@ -145,6 +160,7 @@ public static partial class RegoleAnagrafica
             Comune = Pulisci(dati.Comune) ?? "",
             Provincia = (Pulisci(dati.Provincia) ?? "").ToUpperInvariant(),
             NoteAccesso = Pulisci(dati.NoteAccesso),
+            CodiceIstatComune = Pulisci(dati.CodiceIstatComune),
         };
 
         var errori = new List<ErroreAnagrafica>();
@@ -178,6 +194,62 @@ public static partial class RegoleAnagrafica
         if (!coordinateValide)
         {
             errori.Add(ErroreAnagrafica.CoordinateNonValide);
+        }
+
+        // Il codice ISTAT del comune serve al tracciato SIERT: facoltativo, ma di 6 cifre.
+        if (normalizzati.CodiceIstatComune is { } istat && !CodiceIstat().IsMatch(istat))
+        {
+            errori.Add(ErroreAnagrafica.CodiceIstatNonValido);
+        }
+
+        return (normalizzati, errori);
+    }
+
+    public static (DatiAzienda Dati, IReadOnlyList<ErroreAnagrafica> Errori) Valida(DatiAzienda dati)
+    {
+        ArgumentNullException.ThrowIfNull(dati);
+
+        var normalizzati = dati with
+        {
+            RagioneSociale = Pulisci(dati.RagioneSociale) ?? "",
+            PartitaIva = Pulisci(dati.PartitaIva)?.Replace(" ", "", StringComparison.Ordinal),
+            CodiceFiscale = Pulisci(dati.CodiceFiscale) is { } cf ? CodiceFiscale.Normalizza(cf) : null,
+            Indirizzo = Pulisci(dati.Indirizzo),
+            Cap = Pulisci(dati.Cap),
+            Comune = Pulisci(dati.Comune),
+            Provincia = Pulisci(dati.Provincia)?.ToUpperInvariant(),
+        };
+
+        var errori = new List<ErroreAnagrafica>();
+
+        if (normalizzati.RagioneSociale.Length == 0)
+        {
+            errori.Add(ErroreAnagrafica.RagioneSocialeMancante);
+        }
+
+        if (normalizzati.PartitaIva is not null && !PartitaIva.Valida(normalizzati.PartitaIva))
+        {
+            errori.Add(ErroreAnagrafica.PartitaIvaNonValida);
+        }
+
+        if (normalizzati.CodiceFiscale is not null && !CodiceFiscale.Valido(normalizzati.CodiceFiscale))
+        {
+            errori.Add(ErroreAnagrafica.CodiceFiscaleNonValido);
+        }
+
+        if (normalizzati.Cap is not null && !Cap().IsMatch(normalizzati.Cap))
+        {
+            errori.Add(ErroreAnagrafica.CapNonValido);
+        }
+
+        if (normalizzati.Provincia is not null && !Provincia().IsMatch(normalizzati.Provincia))
+        {
+            errori.Add(ErroreAnagrafica.ProvinciaNonValida);
+        }
+
+        if (normalizzati.CodiceDittaSiert is <= 0)
+        {
+            errori.Add(ErroreAnagrafica.CodiceDittaNonValido);
         }
 
         return (normalizzati, errori);
@@ -218,4 +290,7 @@ public static partial class RegoleAnagrafica
 
     [GeneratedRegex(@"^[A-Z]{2}$")]
     private static partial Regex Provincia();
+
+    [GeneratedRegex(@"^[0-9]{6}$")]
+    private static partial Regex CodiceIstat();
 }

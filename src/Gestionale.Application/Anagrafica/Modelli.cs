@@ -75,6 +75,8 @@ public sealed class Sede
 
     public decimal? Longitudine { get; init; }
 
+    public string? CodiceIstatComune { get; init; }
+
     public int Versione { get; init; }
 }
 
@@ -143,4 +145,30 @@ public abstract record EsitoScrittura
     public sealed record VersioneSuperata : EsitoScrittura;
 
     public sealed record Duplicata(ErroreAnagrafica Motivo) : EsitoScrittura;
+}
+
+/// <summary>Dati dell'impresa corrente; la regione si legge ma non si cambia dall'API.</summary>
+public sealed class Azienda
+{
+    public Guid AziendaId { get; init; }
+
+    public string RagioneSociale { get; init; } = "";
+
+    public string? PartitaIva { get; init; }
+
+    public string? CodiceFiscale { get; init; }
+
+    public string? Indirizzo { get; init; }
+
+    public string? Cap { get; init; }
+
+    public string? Comune { get; init; }
+
+    public string? Provincia { get; init; }
+
+    public string Regione { get; init; } = "";
+
+    public int? CodiceDittaSiert { get; init; }
+
+    public int Versione { get; init; }
 }

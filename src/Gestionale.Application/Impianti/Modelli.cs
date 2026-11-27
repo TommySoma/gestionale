@@ -121,6 +121,8 @@ public sealed class Generatore
 
     public string? Note { get; init; }
 
+    public string? SiglaCatasto { get; init; }
+
     public int Versione { get; init; }
 
     public bool MatricolaDuplicata { get; init; }

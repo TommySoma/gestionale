@@ -117,6 +117,33 @@ public sealed class TestRegoleAnagrafica
     }
 
     [Theory]
+    [InlineData(" 048017 ", true)]
+    [InlineData("48017", false)]
+    [InlineData("04801A", false)]
+    public void Il_codice_istat_della_sede_ha_sei_cifre(string codice, bool valido)
+    {
+        var (dati, errori) = RegoleAnagrafica.Valida(new DatiSede(null, "Via dei Platani", null, "50100", "Firenze", "FI", null, null, null, codice));
+
+        Assert.Equal(codice.Trim(), dati.CodiceIstatComune);
+        Assert.Equal(valido, errori.Count == 0);
+    }
+
+    [Fact]
+    public void I_dati_aziendali_vengono_normalizzati_e_validati()
+    {
+        var (dati, errori) = RegoleAnagrafica.Valida(new DatiAzienda(" Termoidraulica Prova Srl ", "01234567897", null, null, "50100", "Firenze", "fi", 4321));
+
+        Assert.Empty(errori);
+        Assert.Equal(("Termoidraulica Prova Srl", "FI"), (dati.RagioneSociale, dati.Provincia));
+
+        var sbagliati = RegoleAnagrafica.Valida(new DatiAzienda(" ", "01234567890", "XYZ", null, "501", "Firenze", "Firenze", 0)).Errori;
+        Assert.Equal(
+            [ErroreAnagrafica.RagioneSocialeMancante, ErroreAnagrafica.PartitaIvaNonValida, ErroreAnagrafica.CodiceFiscaleNonValido,
+             ErroreAnagrafica.CapNonValido, ErroreAnagrafica.ProvinciaNonValida, ErroreAnagrafica.CodiceDittaNonValido],
+            sbagliati);
+    }
+
+    [Theory]
     [InlineData("cellulare", "+39 333 000 0000", true)]
     [InlineData("telefono", "055/000000", true)]
     [InlineData("email", "Giulia@Esempio.example", true)]
