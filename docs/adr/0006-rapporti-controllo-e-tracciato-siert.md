@@ -45,3 +45,5 @@ Nella guida i campi sono numerati da 1 a 68, ma il 46 manca in entrambe le tabel
 - Annullare un rapporto firmato richiede il permesso di firma: è un documento con valore legale.
 - Rimandati: bollino congiunto e generatori modulari (suffissi C1, M1 sul numero di bollino), bozza creata alla chiusura dell'intervento, PDF del rapporto.
 - Il SIERT non ha un'API pubblica nota: l'invio resta assistito, l'utente carica il file sul portale e poi registra il report.
+- La migrazione 0012 rende modificabili dall'API i dati aziendali con il codice ditta (permesso `azienda.scrittura`, solo il Titolare; in lettura anche Amministrativo e Responsabile tecnico), con audit e senza poter cambiare la regione. Codice ISTAT della sede e sigla catasto del generatore passano da API e client: sono facoltativi, ma senza di loro la validazione del rapporto segnala i campi mancanti.
+- Decisione del 27/11/2026: il PDF del rapporto resta fuori da M4, la bozza creata alla chiusura dell'intervento entra in M4.
