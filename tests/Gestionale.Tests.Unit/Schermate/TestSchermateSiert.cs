@@ -69,7 +69,7 @@ public sealed class TestSchermateSiert
         var editor = Assert.IsType<EditorSedeViewModel>(shell.Dialogo);
         Assert.Equal(("048017", "Via dei Platani"), (editor.CodiceIstat, editor.Indirizzo));
         Assert.Contains(Testi.TitoloModificaSede, testi);
-        Assert.Contains(testi, t => t.Contains(Testi.CodiceIstatComune, StringComparison.Ordinal));
+        Assert.Contains(Testi.SpiegazioneCodiceIstat, testi);
 
         await editor.SalvaCommand.ExecuteAsync(null);
         Assert.Null(editor.Errore);
