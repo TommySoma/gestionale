@@ -126,6 +126,37 @@
             </StackPanel>
           </Border>
 
+          <!-- Rapporti di controllo dell'impianto -->
+          <Border Classes="scheda" IsVisible="{Binding VedeRapporti}">
+            <StackPanel>
+              <DockPanel Margin="20,12">
+                <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.NuovoRapporto}" IsVisible="{Binding PuoCreareRapporti}" Command="{Binding NuovoRapportoCommand}" />
+                <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.RapportiTitolo}" VerticalAlignment="Center" />
+              </DockPanel>
+              <Border Height="1" Background="{DynamicResource Divisore}" />
+              <TextBlock Classes="secondario" FontSize="14" Margin="20,16" IsVisible="{Binding SenzaRapporti}" Text="{x:Static r:Testi.NessunRapportoImpianto}" />
+              <ItemsControl ItemsSource="{Binding Rapporti}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:RigaStoricoIntervento">
+                    <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="20,12" MinHeight="44" CornerRadius="0"
+                            BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1"
+                            Command="{Binding $parent[UserControl].((vm:SchedaImpiantoViewModel)DataContext).ApriRapportoCommand}" CommandParameter="{Binding Id}">
+                      <DockPanel>
+                        <Border DockPanel.Dock="Right" Classes="distintivo" VerticalAlignment="Center">
+                          <TextBlock Text="{Binding Stato}" />
+                        </Border>
+                        <StackPanel Spacing="2">
+                          <TextBlock Text="{Binding Titolo}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource Accento}" />
+                          <TextBlock Classes="secondario" FontSize="13" TextTrimming="CharacterEllipsis" Text="{Binding Dettaglio}" />
+                        </StackPanel>
+                      </DockPanel>
+                    </Button>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
           <!-- Interventi, dal più recente -->
           <Border Classes="scheda" IsVisible="{Binding VedeInterventi}">
             <StackPanel>

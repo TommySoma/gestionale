@@ -32,6 +32,16 @@
     <DataTemplate DataType="vm:DataScadenzaViewModel"><v:DataScadenzaView /></DataTemplate>
     <DataTemplate DataType="vm:ListinoViewModel"><v:ListinoView /></DataTemplate>
     <DataTemplate DataType="vm:DatiAziendaliViewModel"><v:DatiAziendaliView /></DataTemplate>
+    <DataTemplate DataType="vm:RapportiViewModel"><v:RapportiView /></DataTemplate>
+    <DataTemplate DataType="vm:SchedaRapportoViewModel"><v:SchedaRapportoView /></DataTemplate>
+    <DataTemplate DataType="vm:MotivoViewModel"><v:MotivoView /></DataTemplate>
+    <DataTemplate DataType="vm:AssegnaBollinoViewModel"><v:AssegnaBollinoView /></DataTemplate>
+    <DataTemplate DataType="vm:NuovoRapportoViewModel"><v:NuovoRapportoView /></DataTemplate>
+    <DataTemplate DataType="vm:BolliniViewModel"><v:BolliniView /></DataTemplate>
+    <DataTemplate DataType="vm:RegistraBolliniViewModel"><v:RegistraBolliniView /></DataTemplate>
+    <DataTemplate DataType="vm:InviiViewModel"><v:InviiView /></DataTemplate>
+    <DataTemplate DataType="vm:SchedaInvioViewModel"><v:SchedaInvioView /></DataTemplate>
+    <DataTemplate DataType="vm:EsitiInvioViewModel"><v:EsitiInvioView /></DataTemplate>
     <DataTemplate DataType="vm:EditorVoceViewModel"><v:EditorVoceView /></DataTemplate>
     <DataTemplate DataType="vm:PrezzoVoceViewModel"><v:PrezzoVoceView /></DataTemplate>
     <DataTemplate DataType="vm:PreventiviViewModel"><v:PreventiviView /></DataTemplate>

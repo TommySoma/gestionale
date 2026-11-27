@@ -63,6 +63,15 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
 
     public bool SenzaScadenze => Caricato && Scadenze.Count == 0;
 
+    /// <summary>Rapporti di controllo dell'impianto, dal più recente.</summary>
+    public ObservableCollection<RigaStoricoIntervento> Rapporti { get; } = [];
+
+    public bool VedeRapporti => shell.VedeRapporti;
+
+    public bool PuoCreareRapporti => shell.CreaRapportiLiberi && !Dismesso;
+
+    public bool SenzaRapporti => Caricato && Rapporti.Count == 0;
+
     public ObservableCollection<RigaDocumento> Documenti { get; } = [];
 
     public bool VedeDocumenti => shell.Profilo.Ha("documenti.lettura");
@@ -181,6 +190,7 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
         await CaricaScadenzeAsync();
         await CaricaInterventiAsync();
         await CaricaDocumentiAsync();
+        await CaricaRapportiAsync();
 
         Caricato = true;
         OnPropertyChanged(nameof(SenzaGeneratori));
@@ -188,6 +198,8 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
         OnPropertyChanged(nameof(SenzaInterventi));
         OnPropertyChanged(nameof(SenzaDocumenti));
         OnPropertyChanged(nameof(SenzaScadenze));
+        OnPropertyChanged(nameof(SenzaRapporti));
+        OnPropertyChanged(nameof(PuoCreareRapporti));
     }
 
     [RelayCommand]
@@ -282,6 +294,38 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
             shell, riga.Dati.ScadenzaId, riga.Dati.Versione, riga.Dati.DataScadenza, $"{riga.Tipo} · {Cliente}", () => _ = CaricaAsync()));
 
     // Solo le aperte: sono la prossima azione. Lo storico resta sul server per i report.
+    private async Task CaricaRapportiAsync()
+    {
+        Rapporti.Clear();
+        if (!VedeRapporti)
+        {
+            return;
+        }
+
+        var risposta = await shell.Api.CercaRapportiAsync(null, false, impiantoId, null, 1, 20);
+        foreach (var r in risposta.Valore?.Elementi ?? [])
+        {
+            Rapporti.Add(new RigaStoricoIntervento(
+                r.RapportoControlloId,
+                $"{FormatoRapporti.ModelloBreve(r.Modello)} · {FormatoImpianti.Data(r.DataControllo)}",
+                r.CodiceBollino ?? Testi.SenzaBollino,
+                FormatoRapporti.Stato(r.Stato)));
+        }
+    }
+
+    [RelayCommand]
+    private Task ApriRapportoAsync(Guid rapportoId) => shell.ApriRapportoAsync(rapportoId);
+
+    [RelayCommand]
+    private void NuovoRapporto()
+    {
+        if (_impianto is { } impianto)
+        {
+            shell.MostraDialogo(new NuovoRapportoViewModel(
+                shell, impiantoId, [.. impianto.Generatori.Where(g => g.DismessoIl is null)], id => _ = shell.ApriRapportoAsync(id)));
+        }
+    }
+
     private async Task CaricaScadenzeAsync()
     {
         Scadenze.Clear();

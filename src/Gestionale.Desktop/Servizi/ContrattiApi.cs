@@ -1,3 +1,5 @@
+using System.Text.Json.Nodes;
+
 namespace Gestionale.Desktop.Servizi;
 
 // Copie dei contratti JSON dell'API. Il client non referenzia i progetti del
@@ -454,3 +456,103 @@ public sealed record ModuloFile(byte[] Dati, string Nome, string? Descrizione);
 
 /// <summary>Risposta di errore dell'API (RFC 9457): il campo detail è già un messaggio per l'utente.</summary>
 internal sealed record ProblemaApi(string? Title, string? Detail, int? Status);
+
+// --- Rapporti di controllo, bollini e invii al SIERT (M4) ---------------
+// I dati del rapporto sono nella codifica del tracciato: chiavi di norma.tracciati_campi, valori testo o numero.
+
+public sealed record RiepilogoRapporto(
+    Guid RapportoControlloId,
+    Guid ImpiantoId,
+    Guid GeneratoreId,
+    Guid? InterventoId,
+    string Modello,
+    DateOnly DataControllo,
+    DateOnly? TermineTrasmissione,
+    string Stato,
+    string? Cliente,
+    string? Indirizzo,
+    string? Comune,
+    string? CodiceBollino,
+    int Versione);
+
+public sealed record ErroreValidazione(string? Campo, string Messaggio, bool Bloccante);
+
+public sealed record RapportoControllo(
+    Guid RapportoControlloId,
+    Guid ImpiantoId,
+    Guid GeneratoreId,
+    Guid? InterventoId,
+    string Modello,
+    Guid? TecnicoId,
+    string? Tecnico,
+    DateOnly DataControllo,
+    DateOnly? TermineTrasmissione,
+    string Stato,
+    JsonObject Dati,
+    Guid? BollinoId,
+    string? CodiceBollino,
+    string? TipoBollino,
+    DateTime? ConvalidatoIl,
+    DateTime? FirmatoIl,
+    DateTime? AnnullatoIl,
+    string? MotivoAnnullamento,
+    DateTime CreatoIl,
+    int Versione,
+    IReadOnlyList<ErroreValidazione> Errori);
+
+public sealed record CampoTracciato(
+    int Posizione,
+    int NumeroCampo,
+    string Nome,
+    string Tipo,
+    int? Lunghezza,
+    bool Obbligatorio,
+    IReadOnlyList<string>? ValoriAmmessi,
+    string? Formato,
+    string Origine,
+    string Chiave);
+
+public sealed record DatiNuovoRapporto(Guid ImpiantoId, Guid GeneratoreId, Guid? InterventoId, string Modello, DateOnly DataControllo);
+
+public sealed record DatiBozzaRapporto(DateOnly DataControllo, JsonObject Dati, int Versione);
+
+public sealed record EsitoScritturaRapporto(Guid Id, int Versione);
+
+public sealed record TipoBollino(Guid TipoBollinoId, string Codice, string Categoria, string Nome, decimal Importo, int Disponibili);
+
+public sealed record Bollino(
+    Guid BollinoId,
+    string Codice,
+    Guid TipoBollinoId,
+    string TipoBollino,
+    string Categoria,
+    decimal Importo,
+    DateOnly AcquistatoIl,
+    string Stato,
+    Guid? RapportoControlloId,
+    string? Note,
+    int Versione);
+
+public sealed record DatiAcquistoBollini(Guid TipoBollinoId, DateOnly AcquistatoIl, IReadOnlyList<string> Codici, string? Note);
+
+public sealed record EsitoBolliniRegistrati(int Numero);
+
+public sealed record RiepilogoInvio(
+    Guid InvioCatastoId,
+    string Modello,
+    string NomeFile,
+    string VersioneTracciato,
+    string Stato,
+    int Righe,
+    DateTime? CaricatoIl,
+    DateTime? ElaboratoIl,
+    DateTime CreatoIl,
+    int Versione);
+
+public sealed record RigaInvio(int Riga, Guid RapportoControlloId, Guid ImpiantoId, DateOnly DataControllo, string? Cliente, string Esito, string? Causa);
+
+public sealed record InvioCatasto(RiepilogoInvio Invio, IReadOnlyList<RigaInvio> Rapporti);
+
+public sealed record EsitoInvioPreparato(Guid Id, int Versione, int Righe, IReadOnlyList<Guid> Esclusi);
+
+public sealed record EsitoRigaInvio(Guid RapportoControlloId, string Esito, string? Causa);

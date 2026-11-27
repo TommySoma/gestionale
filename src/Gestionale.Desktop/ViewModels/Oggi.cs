@@ -33,6 +33,20 @@ public partial class OggiViewModel(ShellViewModel shell) : ViewModelBase
 
     public bool VedePreventivi => shell.VedePreventivi;
 
+    public bool VedeRapporti => shell.VedeRapporti;
+
+    /// <summary>Rapporti non ancora trasmessi al SIERT, dalla bozza allo scartato.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ConteggioRapporti))]
+    public partial int RapportiDaTrasmettere { get; set; }
+
+    public string ConteggioRapporti => RapportiDaTrasmettere == 1
+        ? Testi.OggiUnRapportoDaTrasmettere
+        : string.Format(CultureInfo.CurrentCulture, Testi.OggiRapportiDaTrasmettere, RapportiDaTrasmettere);
+
+    [RelayCommand]
+    private Task ApriRapportiAsync() => shell.ApriRapportiAsync();
+
     public bool PianificaInterventi => shell.PianificaInterventi;
 
     public string Data => FormatoInterventi.Oggi(shell.Orologio).ToString("dddd d MMMM yyyy", s_italiano);
@@ -127,6 +141,11 @@ public partial class OggiViewModel(ShellViewModel shell) : ViewModelBase
         {
             PreventiviInAttesa = (await shell.Api.CercaPreventiviAsync(null, "emesso", null, 1, 1)).Valore?.Totale ?? 0;
             PreventiviScaduti = (await shell.Api.CercaPreventiviAsync(null, "scaduto", null, 1, 1)).Valore?.Totale ?? 0;
+        }
+
+        if (VedeRapporti)
+        {
+            RapportiDaTrasmettere = (await shell.Api.CercaRapportiAsync(null, true, null, null, 1, 1)).Valore?.Totale ?? 0;
         }
 
         Caricato = true;
