@@ -1,0 +1,11 @@
+# Al build dell'immagine dell'API servono solo i sorgenti e le migrazioni.
+**/bin/
+**/obj/
+.git/
+.github/
+TestResults/
+tests/
+docs/
+deploy/.env
+src/Gestionale.Api/dati/
+src/Gestionale.Desktop/

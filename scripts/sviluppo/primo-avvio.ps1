@@ -6,7 +6,7 @@
 
 $ErrorActionPreference = 'Stop'
 $radice = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-$progettoApi = Join-Path $radice 'src\Gestionale.Api'
+$fileEnv = Join-Path $radice 'deploy\.env'
 $server = 'http://localhost:5225'
 
 function Read-ConPredefinito([string] $domanda, [string] $predefinito) {
@@ -21,8 +21,9 @@ if (-not $stato.daInizializzare) {
     return
 }
 
-$segreti = (dotnet user-secrets list --project $progettoApi) -join "`n"
-if ($segreti -notmatch 'Autenticazione:TokenInstallazione = (\S+)') {
+# Il token lo genera avvia.ps1 in deploy/.env, da dove lo legge anche il container dell'API.
+$righe = if (Test-Path $fileEnv) { (Get-Content $fileEnv) -join "`n" } else { '' }
+if ($righe -notmatch '(?m)^API_TOKEN_INSTALLAZIONE=(\S+)') {
     throw 'Token di installazione non trovato: esegui prima .\scripts\sviluppo\avvia.ps1'
 }
 $token = $Matches[1]

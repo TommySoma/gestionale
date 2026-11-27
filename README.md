@@ -62,14 +62,23 @@ tests/
 
 ## Avvio in sviluppo
 
-**Percorso rapido su Windows.** Lo script prepara tutto la prima volta (password e chiavi casuali in `deploy/.env` e nei user secrets, database, migrazioni) e avvia l'API; il secondo crea l'azienda e il Titolare, chiedendo i dati nel terminale:
+**Percorso rapido su Windows.** Il primo script prepara tutto (password e chiavi casuali in `deploy/.env`) e avvia in Docker database, migrazioni e API su `http://localhost:5225`; il secondo, da eseguire una volta sola, crea l'azienda e il Titolare chiedendo i dati nel terminale:
 
 ```
 powershell -ExecutionPolicy Bypass -File .\scripts\sviluppo\avvia.ps1
 powershell -ExecutionPolicy Bypass -File .\scripts\sviluppo\primo-avvio.ps1
 ```
 
-Poi `dotnet run --project src/Gestionale.Desktop` e accedi con il Titolare. I passi a mano, per capire cosa fanno gli script:
+Poi `dotnet run --project src/Gestionale.Desktop` e accedi con il Titolare. API e migrazioni girano in container Linux (profilo `api` del compose, immagine da `deploy/api.Dockerfile`): così Smart App Control di Windows non blocca i file appena compilati. Per lo stesso motivo, in Debug su Windows client, API e migrazioni partono da `dotnet.exe` senza il lanciatore `.exe`. Log e arresto:
+
+```
+docker compose -f deploy/docker-compose.yml --profile api logs -f api
+docker compose -f deploy/docker-compose.yml --profile api down
+```
+
+Se Docker non riesce a pubblicare la porta del database, controlla le porte che Windows riserva (`netsh interface ipv4 show excludedportrange protocol=tcp`) e scegline una libera per `DB_PORTA` in `deploy/.env`.
+
+I passi a mano, per avviare l'API direttamente con `dotnet run` e capire cosa fanno gli script:
 
 1. Copia `deploy/.env.example` in `deploy/.env` e scegli password robuste (il file `.env` non va mai nel repository).
 2. Avvia il database:
@@ -81,7 +90,7 @@ Poi `dotnet run --project src/Gestionale.Desktop` e accedi con il Titolare. I pa
 3. Applica le migrazioni come `app_owner` (porta e password come in `deploy/.env`):
 
    ```
-   dotnet run --project src/Gestionale.Migrator -- "Host=localhost;Port=55432;Database=gestionale;Username=app_owner;Password=<password>"
+   dotnet run --project src/Gestionale.Migrator -- "Host=localhost;Port=15432;Database=gestionale;Username=app_owner;Password=<password>"
    ```
 
    In alternativa imposta la variabile d'ambiente `GESTIONALE_DB_MIGRAZIONI`.
