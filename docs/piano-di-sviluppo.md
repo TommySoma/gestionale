@@ -425,7 +425,7 @@ L'MVP richiede circa 20 settimane a tempo parziale (da M0 a M6); Fase 2, Fase 3 
 **Criteri di uscita:**
 
 - **M1:** login con secondo fattore e ruoli funzionanti, con test automatici.
-- **M4:** un rapporto di controllo completo, con bollino e file di invio, generato e validato contro la specifica SIERT. Perimetro deciso il 26/11/2026: RCEE tipo 1 e 2, bollini e file di import; dichiarazione di conformità e registro F-Gas passano a una milestone successiva.
+- **M4:** un rapporto di controllo completo, con bollino e file di invio, generato e validato contro la specifica SIERT. Perimetro deciso il 26/11/2026: RCEE tipo 1 e 2, bollini e file di import; dichiarazione di conformità e registro F-Gas passano a una milestone successiva. Realizzato con le PR 25-29: schema e tracciato come dati, API, dati aziendali, bozza alla chiusura dell'intervento e schermate di rapporti, bollini e invii; il PDF del rapporto è rimandato.
 - **M6:** installazione pulita su Windows e macOS contro un server di prova, ripristino da backup verificato, README e demo pronti.
 
 ## Rischi e decisioni aperte

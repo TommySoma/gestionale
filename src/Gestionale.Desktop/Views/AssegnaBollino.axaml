@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.AssegnaBollinoView"
+             x:DataType="vm:AssegnaBollinoViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <TextBlock Text="{x:Static r:Testi.AssegnaBollino}" FontSize="20" FontWeight="Bold" />
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+        <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+        <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.AssegnaBollino}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+      </StackPanel>
+    </Border>
+    <StackPanel Margin="24" Spacing="20">
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+      </Border>
+      <TextBlock FontSize="14" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneAssegnaBollino}" />
+      <Border Classes="avvisoAttenzione" IsVisible="{Binding SenzaTipi}">
+        <TextBlock TextWrapping="Wrap" Text="{x:Static r:Testi.NessunTipoBollino}" />
+      </Border>
+      <StackPanel IsVisible="{Binding !SenzaTipi}">
+        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.TipoBollino}" />
+        <ComboBox ItemsSource="{Binding Tipi}" SelectedItem="{Binding Tipo}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.TipoBollino}" />
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</UserControl>

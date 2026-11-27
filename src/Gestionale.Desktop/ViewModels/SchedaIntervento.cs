@@ -126,6 +126,11 @@ public partial class SchedaInterventoViewModel(ShellViewModel shell, Guid interv
         }
 
         Totale = FormatoInterventi.Importo(intervento.Totale);
+
+        // Il rapporto di controllo nato da questo intervento, se chi guarda può vederlo.
+        RapportoId = shell.VedeRapporti
+            ? (await shell.Api.CercaRapportiAsync(null, false, null, interventoId, 1, 1)).Valore?.Elementi.FirstOrDefault()?.RapportoControlloId
+            : null;
         OnPropertyChanged(nameof(SenzaRighe));
         OnPropertyChanged(nameof(PuoScaricareRapportino));
 
@@ -216,6 +221,15 @@ public partial class SchedaInterventoViewModel(ShellViewModel shell, Guid interv
             _ = CaricaAsync();
         }, generatori));
     }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HaRapporto))]
+    public partial Guid? RapportoId { get; set; }
+
+    public bool HaRapporto => RapportoId is not null;
+
+    [RelayCommand]
+    private Task ApriRapportoAsync() => RapportoId is { } id ? shell.ApriRapportoAsync(id) : Task.CompletedTask;
 
     /// <summary>Dopo la chiusura con il controllo: la bozza del rapporto è pronta da completare.</summary>
     [ObservableProperty]

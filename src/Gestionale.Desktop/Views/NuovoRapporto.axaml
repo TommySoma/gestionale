@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.NuovoRapportoView"
+             x:DataType="vm:NuovoRapportoViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <TextBlock Text="{x:Static r:Testi.NuovoRapporto}" FontSize="20" FontWeight="Bold" />
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+        <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+        <Button Classes="primario" IsDefault="True" Content="{x:Static r:Testi.CreaBozza}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+      </StackPanel>
+    </Border>
+    <StackPanel Margin="24" Spacing="20">
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+      </Border>
+      <TextBlock FontSize="14" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneNuovoRapporto}" />
+      <StackPanel>
+        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.BozzaRapportoGeneratore}" />
+        <ComboBox ItemsSource="{Binding Generatori}" SelectedItem="{Binding Generatore}" HorizontalAlignment="Stretch"
+                  AutomationProperties.Name="{x:Static r:Testi.BozzaRapportoGeneratore}" />
+      </StackPanel>
+      <Grid ColumnDefinitions="2*,16,*">
+        <StackPanel Grid.Column="0">
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.ModelloRapporto}" />
+          <ComboBox ItemsSource="{Binding Modelli}" SelectedItem="{Binding Modello}" HorizontalAlignment="Stretch"
+                    AutomationProperties.Name="{x:Static r:Testi.ModelloRapporto}" />
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.DataControllo}" />
+          <CalendarDatePicker SelectedDate="{Binding DataControllo}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.DataControllo}" />
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </DockPanel>
+</UserControl>

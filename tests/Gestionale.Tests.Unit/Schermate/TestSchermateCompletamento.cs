@@ -29,7 +29,6 @@ public sealed class TestSchermateCompletamento
         Assert.Contains(Testi.OggiUnoDaPianificare, testi);
         Assert.Contains("3 scadenze scadute o entro 7 giorni, di cui 1 già passate", testi);
         Assert.Contains("Scaduta da 3 giorni", testi);
-        Assert.Contains(Testi.OggiInArrivoM4, testi);
     });
 
     [Fact]

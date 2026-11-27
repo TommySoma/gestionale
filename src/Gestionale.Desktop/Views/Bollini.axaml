@@ -1,0 +1,104 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.BolliniView"
+             x:DataType="vm:BolliniViewModel">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="16" Margin="0,0,0,16">
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Classes="primario" VerticalAlignment="Center" Content="{x:Static r:Testi.RegistraBollini}"
+                Command="{Binding RegistraCommand}" IsVisible="{Binding GestisceBollini}" />
+        <StackPanel>
+          <TextBlock Classes="titolo2" Text="{x:Static r:Testi.BolliniTitolo}" />
+          <TextBlock Classes="secondario" FontSize="14" Margin="0,4,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneBollini}" />
+        </StackPanel>
+      </DockPanel>
+
+      <ItemsControl ItemsSource="{Binding Tipi}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel Orientation="Horizontal" />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:RiepilogoTipoBollino">
+            <Border Classes="scheda" Padding="16,12" Margin="0,0,12,12" Width="230">
+              <StackPanel Spacing="4">
+                <TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding Nome}" TextWrapping="Wrap" />
+                <TextBlock Classes="secondario" FontSize="13" Text="{Binding Importo}" />
+                <TextBlock FontSize="13" Text="{Binding Disponibili}" Foreground="{DynamicResource Errore}" IsVisible="{Binding Esaurito}" />
+                <TextBlock FontSize="13" Text="{Binding Disponibili}" IsVisible="{Binding !Esaurito}" />
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <DockPanel>
+        <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+          <ToggleButton Classes="filtro" Margin="0,0,8,0" Content="{x:Static r:Testi.FiltroTutti}" IsChecked="{Binding FiltroTutti}" />
+          <ToggleButton Classes="filtro" Margin="0,0,8,0" Content="{x:Static r:Testi.FiltroDisponibili}" IsChecked="{Binding FiltroDisponibili}" />
+          <ToggleButton Classes="filtro" Margin="0,0,8,0" Content="{x:Static r:Testi.FiltroAssegnati}" IsChecked="{Binding FiltroAssegnati}" />
+          <ToggleButton Classes="filtro" Margin="0,0,8,0" Content="{x:Static r:Testi.FiltroUsati}" IsChecked="{Binding FiltroUsati}" />
+          <ToggleButton Classes="filtro" Content="{x:Static r:Testi.FiltroAnnullati}" IsChecked="{Binding FiltroAnnullati}" />
+        </WrapPanel>
+        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,16,0">
+          <TextBox Text="{Binding Codice}" Width="260" PlaceholderText="{x:Static r:Testi.CercaBollino}" AutomationProperties.Name="{x:Static r:Testi.CercaBollino}" />
+          <Button Classes="secondario" Content="{x:Static r:Testi.Cerca}" Command="{Binding CercaCommand}" />
+        </StackPanel>
+      </DockPanel>
+
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+      </Border>
+      <Border Classes="avvisoSuccesso" IsVisible="{Binding HaAvviso}">
+        <TextBlock Text="{Binding Avviso}" TextWrapping="Wrap" />
+      </Border>
+    </StackPanel>
+
+    <DockPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+        <Button Classes="secondario" Content="{x:Static r:Testi.Precedente}" IsEnabled="{Binding PuoPrecedente}" Command="{Binding PrecedenteCommand}" />
+        <Button Classes="secondario" Content="{x:Static r:Testi.Successiva}" IsEnabled="{Binding PuoSuccessiva}" Command="{Binding SuccessivaCommand}" />
+      </StackPanel>
+      <TextBlock Classes="secondario" FontSize="14" VerticalAlignment="Center" Text="{Binding Intervallo}" />
+    </DockPanel>
+
+    <Border Classes="scheda">
+      <DockPanel>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="1.6*,2.4*,1.4*,1.2*,Auto" Margin="16,12">
+          <TextBlock Grid.Column="0" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColCodice}" />
+          <TextBlock Grid.Column="1" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.TipoBollino}" />
+          <TextBlock Grid.Column="2" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColAcquistato}" />
+          <TextBlock Grid.Column="3" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColStato}" />
+          <TextBlock Grid.Column="4" Width="90" />
+        </Grid>
+        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource Bordo}" />
+        <Panel>
+          <TextBlock Classes="secondario" FontSize="14" Margin="16,24" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"
+                     IsVisible="{Binding Vuoto}" Text="{x:Static r:Testi.NessunBollino}" />
+          <ItemsControl ItemsSource="{Binding Righe}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:RigaBollino">
+                <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="16,10" MinHeight="44">
+                  <Grid ColumnDefinitions="1.6*,2.4*,1.4*,1.2*,Auto">
+                    <TextBlock Grid.Column="0" Text="{Binding Codice}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{Binding Tipo}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Column="2" Text="{Binding Acquistato}" VerticalAlignment="Center" />
+                    <Border Grid.Column="3" Classes="distintivo" HorizontalAlignment="Left">
+                      <TextBlock Text="{Binding Stato}" />
+                    </Border>
+                    <Button Grid.Column="4" Width="90" Classes="collegamento" Foreground="{DynamicResource Errore}" Content="{x:Static r:Testi.AnnullaBollino}"
+                            IsVisible="{Binding Annullabile}"
+                            Command="{Binding $parent[UserControl].((vm:BolliniViewModel)DataContext).AnnullaCommand}" CommandParameter="{Binding}" />
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Panel>
+      </DockPanel>
+    </Border>
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.MotivoView"
+             x:DataType="vm:MotivoViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <TextBlock Text="{Binding Titolo}" FontSize="20" FontWeight="Bold" />
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+        <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+        <Button Classes="pericolo" Content="{Binding Pulsante}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+      </StackPanel>
+    </Border>
+    <StackPanel Margin="24" Spacing="20">
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+      </Border>
+      <TextBlock FontSize="14" TextWrapping="Wrap" Text="{Binding Spiegazione}" />
+      <StackPanel>
+        <TextBlock Classes="etichetta" Text="{x:Static r:Testi.MotivoAnnullamento}" />
+        <TextBox Text="{Binding Motivo}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72" MaxLength="500"
+                 AutomationProperties.Name="{x:Static r:Testi.MotivoAnnullamento}" />
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</UserControl>

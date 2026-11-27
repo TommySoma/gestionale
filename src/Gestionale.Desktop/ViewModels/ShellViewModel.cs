@@ -132,6 +132,74 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
         await listino.CaricaAsync();
     }
 
+    [ObservableProperty]
+    public partial bool RapportiAttivo { get; set; }
+
+    [ObservableProperty]
+    public partial bool BolliniAttivo { get; set; }
+
+    [ObservableProperty]
+    public partial bool InviiAttivo { get; set; }
+
+    public bool VedeRapporti => Profilo.Ha("rapporti_controllo.lettura");
+
+    public bool CompilaRapporti => Profilo.Ha("rapporti_controllo.scrittura");
+
+    /// <summary>Un rapporto nuovo senza intervento lo crea solo chi compila su tutti gli impianti.</summary>
+    public bool CreaRapportiLiberi => Profilo.Permessi.Any(p => p.Codice == "rapporti_controllo.scrittura" && p.Ambito == "tutti");
+
+    public bool FirmaRapporti => Profilo.Ha("rapporti_controllo.firma");
+
+    public bool VedeBollini => Profilo.Ha("bollini.lettura");
+
+    public bool GestisceBollini => Profilo.Ha("bollini.scrittura");
+
+    /// <summary>Un invio contiene i rapporti di tutta l'azienda: il Tecnico non lo vede.</summary>
+    public bool VedeInvii => Profilo.Permessi.Any(p => p.Codice == "bollini.lettura" && p.Ambito == "tutti");
+
+    [RelayCommand]
+    public async Task ApriRapportiAsync()
+    {
+        Evidenzia(nameof(RapportiAttivo));
+        var rapporti = new RapportiViewModel(this);
+        Contenuto = rapporti;
+        await rapporti.CaricaAsync();
+    }
+
+    public async Task ApriRapportoAsync(Guid rapportoId)
+    {
+        Evidenzia(nameof(RapportiAttivo));
+        var scheda = new SchedaRapportoViewModel(this, rapportoId);
+        Contenuto = scheda;
+        await scheda.CaricaAsync();
+    }
+
+    [RelayCommand]
+    public async Task ApriBolliniAsync()
+    {
+        Evidenzia(nameof(BolliniAttivo));
+        var bollini = new BolliniViewModel(this);
+        Contenuto = bollini;
+        await bollini.CaricaAsync();
+    }
+
+    [RelayCommand]
+    public async Task ApriInviiAsync()
+    {
+        Evidenzia(nameof(InviiAttivo));
+        var invii = new InviiViewModel(this);
+        Contenuto = invii;
+        await invii.CaricaAsync();
+    }
+
+    public async Task ApriInvioAsync(Guid invioId, string? avviso)
+    {
+        Evidenzia(nameof(InviiAttivo));
+        var scheda = new SchedaInvioViewModel(this, invioId, avviso);
+        Contenuto = scheda;
+        await scheda.CaricaAsync();
+    }
+
     [RelayCommand]
     public async Task ApriDatiAziendaliAsync()
     {
@@ -162,6 +230,9 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
         PreventiviAttivo = area == nameof(PreventiviAttivo);
         ListinoAttivo = area == nameof(ListinoAttivo);
         AziendaAttivo = area == nameof(AziendaAttivo);
+        RapportiAttivo = area == nameof(RapportiAttivo);
+        BolliniAttivo = area == nameof(BolliniAttivo);
+        InviiAttivo = area == nameof(InviiAttivo);
     }
 
     private VociImpianti? _vociImpianti;

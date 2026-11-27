@@ -358,6 +358,108 @@ public sealed class ClientApi : IDisposable
     // --- Preventivi ---------------------------------------------------------
 
     /// <summary>Stato accetta anche "scaduto": gli emessi oltre la validità.</summary>
+    // --- Rapporti di controllo, bollini e invii (M4) -----------------------
+
+    public Task<Risposta<Pagina<RiepilogoRapporto>>> CercaRapportiAsync(
+        string? stato, bool daTrasmettere, Guid? impiantoId, Guid? interventoId, int pagina, int dimensione, CancellationToken ct = default)
+    {
+        var query = $"api/rapporti-controllo?pagina={pagina}&dimensione={dimensione}";
+        if (!string.IsNullOrWhiteSpace(stato))
+        {
+            query += "&stato=" + Uri.EscapeDataString(stato);
+        }
+
+        if (daTrasmettere)
+        {
+            query += "&daTrasmettere=true";
+        }
+
+        if (impiantoId is { } impianto)
+        {
+            query += $"&impianto={impianto}";
+        }
+
+        if (interventoId is { } intervento)
+        {
+            query += $"&intervento={intervento}";
+        }
+
+        return AutenticataAsync<Pagina<RiepilogoRapporto>>(HttpMethod.Get, query, null, ct);
+    }
+
+    public Task<Risposta<RapportoControllo>> RapportoAsync(Guid rapportoId, CancellationToken ct = default) =>
+        AutenticataAsync<RapportoControllo>(HttpMethod.Get, $"api/rapporti-controllo/{rapportoId}", null, ct);
+
+    public Task<Risposta<IReadOnlyList<CampoTracciato>>> TracciatoAsync(string modello, CancellationToken ct = default) =>
+        AutenticataAsync<IReadOnlyList<CampoTracciato>>(HttpMethod.Get, $"api/rapporti-controllo/tracciato/{Uri.EscapeDataString(modello)}", null, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> CreaRapportoAsync(DatiNuovoRapporto dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, "api/rapporti-controllo", dati, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> AggiornaRapportoAsync(Guid rapportoId, DatiBozzaRapporto dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Put, $"api/rapporti-controllo/{rapportoId}", dati, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> AssegnaBollinoAsync(Guid rapportoId, Guid tipoBollinoId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, $"api/rapporti-controllo/{rapportoId}/bollino", new { tipoBollinoId, versione }, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> LiberaBollinoAsync(Guid rapportoId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Delete, $"api/rapporti-controllo/{rapportoId}/bollino?versione={versione}", null, ct);
+
+    /// <summary>Convalida, riapertura o firma: il passaggio è il nome dell'azione nell'API.</summary>
+    public Task<Risposta<EsitoScritturaRapporto>> PassaggioRapportoAsync(Guid rapportoId, string passaggio, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, $"api/rapporti-controllo/{rapportoId}/{passaggio}", new { versione }, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> AnnullaRapportoAsync(Guid rapportoId, int versione, string motivo, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, $"api/rapporti-controllo/{rapportoId}/annullamento", new { versione, motivo }, ct);
+
+    public Task<Risposta<IReadOnlyList<TipoBollino>>> TipiBollinoAsync(CancellationToken ct = default) =>
+        AutenticataAsync<IReadOnlyList<TipoBollino>>(HttpMethod.Get, "api/bollini/tipi", null, ct);
+
+    public Task<Risposta<Pagina<Bollino>>> CercaBolliniAsync(string? stato, string? codice, int pagina, int dimensione, CancellationToken ct = default)
+    {
+        var query = $"api/bollini?pagina={pagina}&dimensione={dimensione}";
+        if (!string.IsNullOrWhiteSpace(stato))
+        {
+            query += "&stato=" + Uri.EscapeDataString(stato);
+        }
+
+        if (!string.IsNullOrWhiteSpace(codice))
+        {
+            query += "&codice=" + Uri.EscapeDataString(codice);
+        }
+
+        return AutenticataAsync<Pagina<Bollino>>(HttpMethod.Get, query, null, ct);
+    }
+
+    public Task<Risposta<EsitoBolliniRegistrati>> RegistraBolliniAsync(DatiAcquistoBollini dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoBolliniRegistrati>(HttpMethod.Post, "api/bollini", dati, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> AnnullaBollinoAsync(Guid bollinoId, int versione, string motivo, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, $"api/bollini/{bollinoId}/annullamento", new { versione, motivo }, ct);
+
+    public Task<Risposta<Pagina<RiepilogoInvio>>> CercaInviiAsync(int pagina, int dimensione, CancellationToken ct = default) =>
+        AutenticataAsync<Pagina<RiepilogoInvio>>(HttpMethod.Get, $"api/invii-catasto?pagina={pagina}&dimensione={dimensione}", null, ct);
+
+    public Task<Risposta<InvioCatasto>> InvioAsync(Guid invioId, CancellationToken ct = default) =>
+        AutenticataAsync<InvioCatasto>(HttpMethod.Get, $"api/invii-catasto/{invioId}", null, ct);
+
+    /// <summary>Il file di import così come è stato preparato: non cambia dopo la creazione.</summary>
+    public Task<Risposta<byte[]>> FileInvioAsync(Guid invioId, CancellationToken ct = default) =>
+        AutenticataAsync<byte[]>(HttpMethod.Get, $"api/invii-catasto/{invioId}/file", null, ct);
+
+    public Task<Risposta<EsitoInvioPreparato>> PreparaInvioAsync(string modello, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoInvioPreparato>(HttpMethod.Post, "api/invii-catasto", new { modello }, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> SegnaInvioCaricatoAsync(Guid invioId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, $"api/invii-catasto/{invioId}/caricamento", new { versione }, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> AnnullaInvioAsync(Guid invioId, int versione, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, $"api/invii-catasto/{invioId}/annullamento", new { versione }, ct);
+
+    public Task<Risposta<EsitoScritturaRapporto>> RegistraEsitiInvioAsync(
+        Guid invioId, int versione, IReadOnlyList<EsitoRigaInvio> esiti, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, $"api/invii-catasto/{invioId}/esiti", new { versione, esiti }, ct);
+
     public Task<Risposta<Pagina<RiepilogoPreventivo>>> CercaPreventiviAsync(
         string? testo, string? stato, Guid? clienteId, int pagina, int dimensione, CancellationToken ct = default)
     {

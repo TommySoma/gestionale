@@ -1350,9 +1350,6 @@
   <data name="PrezzoNonNumerico" xml:space="preserve">
     <value>Il prezzo deve essere un numero, con la virgola o il punto per i centesimi.</value>
   </data>
-  <data name="SalvaBozza" xml:space="preserve">
-    <value>Salva la bozza</value>
-  </data>
   <data name="ScaricaPdf" xml:space="preserve">
     <value>Scarica PDF</value>
   </data>
@@ -1503,9 +1500,6 @@
   <data name="OggiPreventiviInAttesa" xml:space="preserve">
     <value>{0} emessi in attesa di risposta, di cui {1} con la validità scaduta</value>
   </data>
-  <data name="OggiInArrivoM4" xml:space="preserve">
-    <value>Rapporti di controllo da trasmettere e bollini in esaurimento compariranno qui con M4.</value>
-  </data>
   <data name="RicercaGlobaleInArrivo" xml:space="preserve">
     <value>La ricerca in tutto il gestionale arriverà più avanti: per ora cerca dentro ogni elenco.</value>
   </data>
@@ -1577,5 +1571,443 @@
   </data>
   <data name="BozzaRapportoCreata" xml:space="preserve">
     <value>Bozza del rapporto di controllo creata: va completata con le misure, il bollino e la firma.</value>
+  </data>
+  <data name="NavRapporti" xml:space="preserve">
+    <value>Rapporti di controllo</value>
+  </data>
+  <data name="NavBollini" xml:space="preserve">
+    <value>Bollini</value>
+  </data>
+  <data name="NavInvii" xml:space="preserve">
+    <value>Invii al SIERT</value>
+  </data>
+  <data name="RapportiTitolo" xml:space="preserve">
+    <value>Rapporti di controllo</value>
+  </data>
+  <data name="ConteggioRapporti" xml:space="preserve">
+    <value>{0} rapporti</value>
+  </data>
+  <data name="ConteggioUnRapporto" xml:space="preserve">
+    <value>1 rapporto</value>
+  </data>
+  <data name="NessunRapporto" xml:space="preserve">
+    <value>Nessun rapporto con questo filtro. La bozza nasce chiudendo una manutenzione con il controllo di efficienza, oppure dalla scheda dell'impianto.</value>
+  </data>
+  <data name="FiltroConvalidati" xml:space="preserve">
+    <value>Convalidati</value>
+  </data>
+  <data name="FiltroDaTrasmettere" xml:space="preserve">
+    <value>Da trasmettere</value>
+  </data>
+  <data name="FiltroTrasmessi" xml:space="preserve">
+    <value>Trasmessi</value>
+  </data>
+  <data name="FiltroScartati" xml:space="preserve">
+    <value>Scartati</value>
+  </data>
+  <data name="ColDataControllo" xml:space="preserve">
+    <value>Controllo</value>
+  </data>
+  <data name="ColLuogo" xml:space="preserve">
+    <value>Luogo</value>
+  </data>
+  <data name="ColModello" xml:space="preserve">
+    <value>Modello</value>
+  </data>
+  <data name="ColBollino" xml:space="preserve">
+    <value>Bollino</value>
+  </data>
+  <data name="ColTermine" xml:space="preserve">
+    <value>Trasmettere entro</value>
+  </data>
+  <data name="ModelloBreveTipo1" xml:space="preserve">
+    <value>Tipo 1</value>
+  </data>
+  <data name="ModelloBreveTipo2" xml:space="preserve">
+    <value>Tipo 2</value>
+  </data>
+  <data name="ModelloRapporto" xml:space="preserve">
+    <value>Modello di rapporto</value>
+  </data>
+  <data name="StatoRapportoBozza" xml:space="preserve">
+    <value>Bozza</value>
+  </data>
+  <data name="StatoRapportoConvalidato" xml:space="preserve">
+    <value>Convalidato</value>
+  </data>
+  <data name="StatoRapportoFirmato" xml:space="preserve">
+    <value>Firmato</value>
+  </data>
+  <data name="StatoRapportoTrasmesso" xml:space="preserve">
+    <value>Trasmesso</value>
+  </data>
+  <data name="StatoRapportoScartato" xml:space="preserve">
+    <value>Scartato</value>
+  </data>
+  <data name="StatoRapportoAnnullato" xml:space="preserve">
+    <value>Annullato</value>
+  </data>
+  <data name="SenzaBollino" xml:space="preserve">
+    <value>Senza bollino</value>
+  </data>
+  <data name="TitoloRapporto" xml:space="preserve">
+    <value>Rapporto di controllo · {0}</value>
+  </data>
+  <data name="TornaAiRapporti" xml:space="preserve">
+    <value>← Rapporti di controllo</value>
+  </data>
+  <data name="SalvaBozza" xml:space="preserve">
+    <value>Salva la bozza</value>
+  </data>
+  <data name="Convalida" xml:space="preserve">
+    <value>Convalida</value>
+  </data>
+  <data name="Riapri" xml:space="preserve">
+    <value>Riapri</value>
+  </data>
+  <data name="Firma" xml:space="preserve">
+    <value>Firma</value>
+  </data>
+  <data name="ApriImpianto" xml:space="preserve">
+    <value>Apri l'impianto</value>
+  </data>
+  <data name="AnnullaRapporto" xml:space="preserve">
+    <value>Annulla il rapporto</value>
+  </data>
+  <data name="TitoloAnnullaRapporto" xml:space="preserve">
+    <value>Annulla il rapporto di controllo</value>
+  </data>
+  <data name="SpiegazioneAnnullaRapporto" xml:space="preserve">
+    <value>Il rapporto non si cancella: resta annullato con il motivo. Il bollino assegnato torna disponibile solo se il rapporto non era firmato.</value>
+  </data>
+  <data name="ErroriDaCorreggere" xml:space="preserve">
+    <value>Da correggere prima della convalida</value>
+  </data>
+  <data name="AvvisiRapporto" xml:space="preserve">
+    <value>Avvisi: non bloccano, ma il SIERT potrebbe segnalarli</value>
+  </data>
+  <data name="DatiDelControllo" xml:space="preserve">
+    <value>Dati del controllo</value>
+  </data>
+  <data name="Controllo" xml:space="preserve">
+    <value>Controllo</value>
+  </data>
+  <data name="DataControllo" xml:space="preserve">
+    <value>Data del controllo</value>
+  </data>
+  <data name="ConvalidatoIl" xml:space="preserve">
+    <value>Convalidato il</value>
+  </data>
+  <data name="FirmatoIl" xml:space="preserve">
+    <value>Firmato il</value>
+  </data>
+  <data name="CreatoIl" xml:space="preserve">
+    <value>Creato il</value>
+  </data>
+  <data name="BollinoRegionale" xml:space="preserve">
+    <value>Bollino regionale</value>
+  </data>
+  <data name="AssegnaBollino" xml:space="preserve">
+    <value>Assegna il bollino</value>
+  </data>
+  <data name="LiberaBollino" xml:space="preserve">
+    <value>Libera il bollino</value>
+  </data>
+  <data name="DisclaimerRapporto" xml:space="preserve">
+    <value>Il programma aiuta a compilare il rapporto e a controllarlo contro il tracciato SIERT: la firma e la responsabilità di quanto dichiarato restano a chi lo firma.</value>
+  </data>
+  <data name="TermineTrasmissioneValore" xml:space="preserve">
+    <value>Da trasmettere al SIERT entro il {0}.</value>
+  </data>
+  <data name="RapportoSalvato" xml:space="preserve">
+    <value>Bozza salvata.</value>
+  </data>
+  <data name="RapportoConvalidato" xml:space="preserve">
+    <value>Rapporto convalidato: ora si può firmare.</value>
+  </data>
+  <data name="RapportoRiaperto" xml:space="preserve">
+    <value>Rapporto riaperto: torna in bozza.</value>
+  </data>
+  <data name="RapportoFirmato" xml:space="preserve">
+    <value>Rapporto firmato: entrerà nel prossimo invio al SIERT.</value>
+  </data>
+  <data name="BollinoLiberato" xml:space="preserve">
+    <value>Bollino liberato: torna disponibile.</value>
+  </data>
+  <data name="DataControlloMancante" xml:space="preserve">
+    <value>Indica la data del controllo.</value>
+  </data>
+  <data name="NumeroCampoNonValido" xml:space="preserve">
+    <value>Il valore di «{0}» non è un numero valido.</value>
+  </data>
+  <data name="NessunValore" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="SuggerimentoOra" xml:space="preserve">
+    <value>hh:mm</value>
+  </data>
+  <data name="SuggerimentoDecimale" xml:space="preserve">
+    <value>ad esempio 12,5</value>
+  </data>
+  <data name="CodiceSi" xml:space="preserve">
+    <value>Sì</value>
+  </data>
+  <data name="CodiceNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CodiceNc" xml:space="preserve">
+    <value>NC</value>
+  </data>
+  <data name="CodiceNonRichiesto" xml:space="preserve">
+    <value>Non richiesto</value>
+  </data>
+  <data name="CodiceNumerico" xml:space="preserve">
+    <value>Codice {0}</value>
+  </data>
+  <data name="MotivoMancante" xml:space="preserve">
+    <value>Scrivi il motivo.</value>
+  </data>
+  <data name="SpiegazioneAssegnaBollino" xml:space="preserve">
+    <value>Il programma assegna il bollino disponibile acquistato da più tempo, del tipo scelto. Il bollino va rilasciato insieme al rapporto.</value>
+  </data>
+  <data name="NessunTipoBollino" xml:space="preserve">
+    <value>Nessun tipo di bollino in vigore per questo modello di rapporto.</value>
+  </data>
+  <data name="TipoBollino" xml:space="preserve">
+    <value>Tipo di bollino</value>
+  </data>
+  <data name="TipoBollinoConDisponibili" xml:space="preserve">
+    <value>{0} · {1} · {2} disponibili</value>
+  </data>
+  <data name="ScegliTipoBollino" xml:space="preserve">
+    <value>Scegli il tipo di bollino.</value>
+  </data>
+  <data name="NuovoRapporto" xml:space="preserve">
+    <value>Nuovo rapporto di controllo</value>
+  </data>
+  <data name="CreaBozza" xml:space="preserve">
+    <value>Crea la bozza</value>
+  </data>
+  <data name="SpiegazioneNuovoRapporto" xml:space="preserve">
+    <value>La bozza nasce con i dati dell'impianto, del generatore e del responsabile; misure e verifiche si completano nella scheda del rapporto.</value>
+  </data>
+  <data name="BolliniTitolo" xml:space="preserve">
+    <value>Bollini</value>
+  </data>
+  <data name="SpiegazioneBollini" xml:space="preserve">
+    <value>Registro dei bollini acquistati sul portale SIERT. Ogni bollino si assegna a un rapporto prima della firma.</value>
+  </data>
+  <data name="RegistraBollini" xml:space="preserve">
+    <value>Registra bollini</value>
+  </data>
+  <data name="UnBollinoDisponibile" xml:space="preserve">
+    <value>1 disponibile</value>
+  </data>
+  <data name="BolliniDisponibili" xml:space="preserve">
+    <value>{0} disponibili</value>
+  </data>
+  <data name="UnBollinoRegistrato" xml:space="preserve">
+    <value>1 bollino registrato.</value>
+  </data>
+  <data name="BolliniRegistrati" xml:space="preserve">
+    <value>{0} bollini registrati.</value>
+  </data>
+  <data name="FiltroDisponibili" xml:space="preserve">
+    <value>Disponibili</value>
+  </data>
+  <data name="FiltroAssegnati" xml:space="preserve">
+    <value>Assegnati</value>
+  </data>
+  <data name="FiltroUsati" xml:space="preserve">
+    <value>Usati</value>
+  </data>
+  <data name="FiltroAnnullati" xml:space="preserve">
+    <value>Annullati</value>
+  </data>
+  <data name="CercaBollino" xml:space="preserve">
+    <value>Cerca per codice</value>
+  </data>
+  <data name="ColAcquistato" xml:space="preserve">
+    <value>Acquistato il</value>
+  </data>
+  <data name="NessunBollino" xml:space="preserve">
+    <value>Nessun bollino con questo filtro.</value>
+  </data>
+  <data name="StatoBollinoDisponibile" xml:space="preserve">
+    <value>Disponibile</value>
+  </data>
+  <data name="StatoBollinoAssegnato" xml:space="preserve">
+    <value>Assegnato</value>
+  </data>
+  <data name="StatoBollinoUsato" xml:space="preserve">
+    <value>Usato</value>
+  </data>
+  <data name="StatoBollinoAnnullato" xml:space="preserve">
+    <value>Annullato</value>
+  </data>
+  <data name="AnnullaBollino" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="TitoloAnnullaBollino" xml:space="preserve">
+    <value>Annulla il bollino {0}</value>
+  </data>
+  <data name="SpiegazioneAnnullaBollino" xml:space="preserve">
+    <value>Un bollino annullato non si può più assegnare. Si annulla solo un bollino disponibile.</value>
+  </data>
+  <data name="SpiegazioneRegistraBollini" xml:space="preserve">
+    <value>Copia i codici dei bollini acquistati sul portale SIERT, uno per riga: sono numeri di 13 cifre e le prime 4 sono l'anno.</value>
+  </data>
+  <data name="DataAcquisto" xml:space="preserve">
+    <value>Data di acquisto</value>
+  </data>
+  <data name="CodiciBollini" xml:space="preserve">
+    <value>Codici dei bollini</value>
+  </data>
+  <data name="UnCodiceLetto" xml:space="preserve">
+    <value>1 codice letto</value>
+  </data>
+  <data name="CodiciLetti" xml:space="preserve">
+    <value>{0} codici letti</value>
+  </data>
+  <data name="DataAcquistoMancante" xml:space="preserve">
+    <value>Indica la data di acquisto.</value>
+  </data>
+  <data name="CodiciBolliniMancanti" xml:space="preserve">
+    <value>Scrivi almeno un codice.</value>
+  </data>
+  <data name="InviiTitolo" xml:space="preserve">
+    <value>Invii al SIERT</value>
+  </data>
+  <data name="SpiegazioneInvii" xml:space="preserve">
+    <value>Un invio è il file di import massivo con i rapporti firmati, o scartati e corretti, di un modello. Lo carichi tu sul portale SIERT; poi registri qui gli esiti del report.</value>
+  </data>
+  <data name="PreparaInvioTipo1" xml:space="preserve">
+    <value>Prepara invio tipo 1</value>
+  </data>
+  <data name="PreparaInvioTipo2" xml:space="preserve">
+    <value>Prepara invio tipo 2</value>
+  </data>
+  <data name="ColPreparato" xml:space="preserve">
+    <value>Preparato il</value>
+  </data>
+  <data name="ColFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="ColRighe" xml:space="preserve">
+    <value>Righe</value>
+  </data>
+  <data name="NessunInvio" xml:space="preserve">
+    <value>Nessun invio preparato.</value>
+  </data>
+  <data name="StatoInvioPreparato" xml:space="preserve">
+    <value>Preparato</value>
+  </data>
+  <data name="StatoInvioCaricato" xml:space="preserve">
+    <value>Caricato</value>
+  </data>
+  <data name="StatoInvioElaborato" xml:space="preserve">
+    <value>Elaborato</value>
+  </data>
+  <data name="StatoInvioAnnullato" xml:space="preserve">
+    <value>Annullato</value>
+  </data>
+  <data name="InvioPreparato" xml:space="preserve">
+    <value>File preparato con {0} rapporti.</value>
+  </data>
+  <data name="RapportiEsclusi" xml:space="preserve">
+    <value>{0} rapporti esclusi perché hanno errori bloccanti.</value>
+  </data>
+  <data name="TitoloInvio" xml:space="preserve">
+    <value>Invio al SIERT · {0}</value>
+  </data>
+  <data name="TornaAgliInvii" xml:space="preserve">
+    <value>← Invii al SIERT</value>
+  </data>
+  <data name="ScaricaFile" xml:space="preserve">
+    <value>Scarica il file</value>
+  </data>
+  <data name="SegnaCaricato" xml:space="preserve">
+    <value>Segna come caricato</value>
+  </data>
+  <data name="RegistraEsiti" xml:space="preserve">
+    <value>Registra gli esiti</value>
+  </data>
+  <data name="AnnullaInvio" xml:space="preserve">
+    <value>Annulla l'invio</value>
+  </data>
+  <data name="SpiegazioneSchedaInvio" xml:space="preserve">
+    <value>Carica il file sul portale SIERT, nella funzione di import massivo, poi segna l'invio come caricato. Quando il portale produce il report, registra l'esito di ogni riga.</value>
+  </data>
+  <data name="RigheDelFile" xml:space="preserve">
+    <value>Righe del file</value>
+  </data>
+  <data name="PreparatoIl" xml:space="preserve">
+    <value>Preparato il</value>
+  </data>
+  <data name="VersioneTracciato" xml:space="preserve">
+    <value>Versione del tracciato</value>
+  </data>
+  <data name="CaricatoIl" xml:space="preserve">
+    <value>Caricato il</value>
+  </data>
+  <data name="ElaboratoIl" xml:space="preserve">
+    <value>Elaborato il</value>
+  </data>
+  <data name="FileInvioSalvato" xml:space="preserve">
+    <value>File salvato in {0}.</value>
+  </data>
+  <data name="FileDiTesto" xml:space="preserve">
+    <value>File di testo</value>
+  </data>
+  <data name="InvioSegnatoCaricato" xml:space="preserve">
+    <value>Invio segnato come caricato sul portale.</value>
+  </data>
+  <data name="InvioAnnullato" xml:space="preserve">
+    <value>Invio annullato: i rapporti torneranno nel prossimo file.</value>
+  </data>
+  <data name="EsitiRegistrati" xml:space="preserve">
+    <value>Esiti registrati: i rapporti importati sono trasmessi, gli scartati vanno corretti.</value>
+  </data>
+  <data name="EsitoRigaInAttesa" xml:space="preserve">
+    <value>In attesa</value>
+  </data>
+  <data name="EsitoRigaImportato" xml:space="preserve">
+    <value>Importato</value>
+  </data>
+  <data name="EsitoRigaImportatoBozza" xml:space="preserve">
+    <value>Importato in bozza</value>
+  </data>
+  <data name="EsitoRigaScartato" xml:space="preserve">
+    <value>Scartato</value>
+  </data>
+  <data name="TitoloEsitiInvio" xml:space="preserve">
+    <value>Esiti del report · {0}</value>
+  </data>
+  <data name="SpiegazioneEsitiInvio" xml:space="preserve">
+    <value>Riporta l'esito che il report del SIERT indica per ogni riga. Per uno scarto scrivi la causa: il rapporto torna da correggere.</value>
+  </data>
+  <data name="EsitoRiga" xml:space="preserve">
+    <value>Esito</value>
+  </data>
+  <data name="CausaScarto" xml:space="preserve">
+    <value>Causa dello scarto</value>
+  </data>
+  <data name="CausaScartoMancante" xml:space="preserve">
+    <value>Scrivi la causa dello scarto della riga {0}.</value>
+  </data>
+  <data name="NessunRapportoImpianto" xml:space="preserve">
+    <value>Nessun rapporto di controllo per questo impianto.</value>
+  </data>
+  <data name="ApriRapporto" xml:space="preserve">
+    <value>Apri il rapporto</value>
+  </data>
+  <data name="OggiUnRapportoDaTrasmettere" xml:space="preserve">
+    <value>1 rapporto da trasmettere al SIERT.</value>
+  </data>
+  <data name="OggiRapportiDaTrasmettere" xml:space="preserve">
+    <value>{0} rapporti da trasmettere al SIERT.</value>
+  </data>
+  <data name="ApriRapporti" xml:space="preserve">
+    <value>Apri i rapporti</value>
   </data>
 </root>

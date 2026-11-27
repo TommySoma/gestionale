@@ -104,7 +104,16 @@
             </StackPanel>
           </Border>
 
-          <TextBlock Classes="secondario" FontSize="13" TextWrapping="Wrap" Text="{x:Static r:Testi.OggiInArrivoM4}" />
+          <!-- Rapporti di controllo non ancora trasmessi al SIERT -->
+          <Border Classes="scheda" Padding="20,16" IsVisible="{Binding VedeRapporti}">
+            <StackPanel Spacing="8">
+              <DockPanel>
+                <Button DockPanel.Dock="Right" Classes="collegamento" Content="{x:Static r:Testi.ApriRapporti}" Command="{Binding ApriRapportiCommand}" />
+                <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.RapportiTitolo}" VerticalAlignment="Center" />
+              </DockPanel>
+              <TextBlock FontSize="14" TextWrapping="Wrap" Text="{Binding ConteggioRapporti}" />
+            </StackPanel>
+          </Border>
         </StackPanel>
       </Grid>
     </StackPanel>

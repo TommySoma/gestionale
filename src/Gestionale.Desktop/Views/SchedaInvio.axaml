@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.SchedaInvioView"
+             x:DataType="vm:SchedaInvioViewModel">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="20">
+      <StackPanel Spacing="12">
+        <Button Classes="collegamento" HorizontalAlignment="Left" Content="{x:Static r:Testi.TornaAgliInvii}" Command="{Binding IndietroCommand}" />
+        <DockPanel>
+          <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top" MaxWidth="720" HorizontalAlignment="Right">
+            <Button Classes="secondario" Margin="0,0,8,8" Content="{x:Static r:Testi.ScaricaFile}" Click="ScaricaFile_Click" />
+            <Button Classes="primario" Margin="0,0,8,8" Content="{x:Static r:Testi.SegnaCaricato}" Command="{Binding SegnaCaricatoCommand}" IsVisible="{Binding PuoSegnareCaricato}" />
+            <Button Classes="primario" Margin="0,0,8,8" Content="{x:Static r:Testi.RegistraEsiti}" Command="{Binding RegistraEsitiCommand}" IsVisible="{Binding PuoRegistrareEsiti}" />
+            <Button Classes="secondario" Margin="0,0,8,8" Content="{x:Static r:Testi.AnnullaInvio}" Foreground="{DynamicResource Errore}"
+                    Command="{Binding AnnullaCommand}" IsVisible="{Binding PuoAnnullare}" />
+          </WrapPanel>
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Classes="titolo2" Text="{Binding Titolo}" />
+              <Border Classes="distintivo">
+                <TextBlock Text="{Binding Stato}" />
+              </Border>
+            </StackPanel>
+            <TextBlock FontSize="14" Text="{Binding NomeFile}" TextWrapping="Wrap" />
+          </StackPanel>
+        </DockPanel>
+
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+        </Border>
+        <Border Classes="avvisoSuccesso" IsVisible="{Binding HaAvviso}">
+          <TextBlock Text="{Binding Avviso}" TextWrapping="Wrap" />
+        </Border>
+        <TextBlock Classes="secondario" FontSize="13" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneSchedaInvio}" />
+      </StackPanel>
+
+      <Grid ColumnDefinitions="2*,20,*">
+        <Border Grid.Column="0" Classes="scheda">
+          <StackPanel>
+            <TextBlock Classes="titoloSezione" Margin="20,12" Text="{x:Static r:Testi.RigheDelFile}" />
+            <Border Height="1" Background="{DynamicResource Divisore}" />
+            <ItemsControl ItemsSource="{Binding Righe}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:RigaRapportoInvio">
+                  <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="20,10" MinHeight="44"
+                          Command="{Binding $parent[UserControl].((vm:SchedaInvioViewModel)DataContext).ApriRapportoCommand}" CommandParameter="{Binding}">
+                    <Grid ColumnDefinitions="40,2*,1.4*,1.4*">
+                      <TextBlock Grid.Column="0" Classes="secondario" Text="{Binding Numero}" VerticalAlignment="Center" />
+                      <TextBlock Grid.Column="1" Text="{Binding Cliente}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                      <TextBlock Grid.Column="2" Text="{Binding Data}" VerticalAlignment="Center" />
+                      <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Esito}" FontWeight="SemiBold" />
+                        <TextBlock Classes="secondario" FontSize="13" Text="{Binding Causa}" TextWrapping="Wrap"
+                                   IsVisible="{Binding Causa, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                      </StackPanel>
+                    </Grid>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" Classes="scheda" Padding="20" VerticalAlignment="Top">
+          <ItemsControl ItemsSource="{Binding Dati}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:CampoScheda">
+                <StackPanel Margin="0,4">
+                  <TextBlock Classes="secondario" FontSize="12" Text="{Binding Etichetta}" />
+                  <TextBlock FontSize="14" Text="{Binding Valore}" TextWrapping="Wrap" />
+                </StackPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Border>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

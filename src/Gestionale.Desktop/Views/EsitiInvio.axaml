@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.EsitiInvioView"
+             x:DataType="vm:EsitiInvioViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <TextBlock Text="{Binding Titolo}" FontSize="20" FontWeight="Bold" TextWrapping="Wrap" />
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+        <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+        <Button Classes="primario" Content="{x:Static r:Testi.RegistraEsiti}" Command="{Binding SalvaCommand}" IsEnabled="{Binding !InCorso}" />
+      </StackPanel>
+    </Border>
+    <ScrollViewer>
+      <StackPanel Margin="24" Spacing="16">
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+        </Border>
+        <TextBlock FontSize="14" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneEsitiInvio}" />
+        <ItemsControl ItemsSource="{Binding Righe}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:EsitoModificabile">
+              <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="0,10">
+                <Grid ColumnDefinitions="2*,12,1.4*,12,2*">
+                  <TextBlock Grid.Column="0" Text="{Binding Descrizione}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                  <ComboBox Grid.Column="2" ItemsSource="{Binding Esiti}" SelectedItem="{Binding Esito}" HorizontalAlignment="Stretch"
+                            AutomationProperties.Name="{x:Static r:Testi.EsitoRiga}" />
+                  <TextBox Grid.Column="4" Text="{Binding Causa}" MaxLength="500" PlaceholderText="{x:Static r:Testi.CausaScarto}"
+                           AutomationProperties.Name="{x:Static r:Testi.CausaScarto}" />
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

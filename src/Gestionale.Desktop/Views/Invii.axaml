@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.InviiView"
+             x:DataType="vm:InviiViewModel">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="16" Margin="0,0,0,16">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" IsVisible="{Binding GestisceBollini}">
+          <Button Classes="primario" Content="{x:Static r:Testi.PreparaInvioTipo1}" Command="{Binding PreparaTipo1Command}" />
+          <Button Classes="primario" Content="{x:Static r:Testi.PreparaInvioTipo2}" Command="{Binding PreparaTipo2Command}" />
+        </StackPanel>
+        <StackPanel>
+          <TextBlock Classes="titolo2" Text="{x:Static r:Testi.InviiTitolo}" />
+          <TextBlock Classes="secondario" FontSize="14" Margin="0,4,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneInvii}" />
+        </StackPanel>
+      </DockPanel>
+
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+      </Border>
+    </StackPanel>
+
+    <DockPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+        <Button Classes="secondario" Content="{x:Static r:Testi.Precedente}" IsEnabled="{Binding PuoPrecedente}" Command="{Binding PrecedenteCommand}" />
+        <Button Classes="secondario" Content="{x:Static r:Testi.Successiva}" IsEnabled="{Binding PuoSuccessiva}" Command="{Binding SuccessivaCommand}" />
+      </StackPanel>
+      <TextBlock Classes="secondario" FontSize="14" VerticalAlignment="Center" Text="{Binding Intervallo}" />
+    </DockPanel>
+
+    <Border Classes="scheda">
+      <DockPanel>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="1.6*,0.8*,3*,0.6*,Auto" Margin="16,12">
+          <TextBlock Grid.Column="0" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColPreparato}" />
+          <TextBlock Grid.Column="1" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColModello}" />
+          <TextBlock Grid.Column="2" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColFile}" />
+          <TextBlock Grid.Column="3" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColRighe}" />
+          <TextBlock Grid.Column="4" Classes="secondario" FontSize="12" FontWeight="SemiBold" Text="{x:Static r:Testi.ColStato}" Width="110" />
+        </Grid>
+        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource Bordo}" />
+        <Panel>
+          <TextBlock Classes="secondario" FontSize="14" Margin="16,24" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"
+                     IsVisible="{Binding Vuoto}" Text="{x:Static r:Testi.NessunInvio}" />
+          <ListBox ItemsSource="{Binding Righe}" Background="Transparent" AutomationProperties.Name="{x:Static r:Testi.InviiTitolo}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:RigaElencoInvio">
+                <Button Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MinHeight="44"
+                        Command="{Binding $parent[UserControl].((vm:InviiViewModel)DataContext).ApriCommand}" CommandParameter="{Binding}">
+                  <Grid ColumnDefinitions="1.6*,0.8*,3*,0.6*,Auto" Margin="4,0">
+                    <TextBlock Grid.Column="0" Text="{Binding Creato}" FontWeight="SemiBold" Foreground="{DynamicResource Accento}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{Binding Modello}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="2" Text="{Binding NomeFile}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Column="3" Text="{Binding Righe}" VerticalAlignment="Center" />
+                    <Border Grid.Column="4" Classes="distintivo" Width="110" HorizontalAlignment="Left">
+                      <TextBlock Text="{Binding Stato}" HorizontalAlignment="Center" />
+                    </Border>
+                  </Grid>
+                </Button>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Panel>
+      </DockPanel>
+    </Border>
+  </DockPanel>
+</UserControl>

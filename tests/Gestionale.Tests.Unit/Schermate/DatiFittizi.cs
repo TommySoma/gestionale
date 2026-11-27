@@ -1,7 +1,7 @@
 namespace Gestionale.Tests.Unit.Schermate;
 
 /// <summary>Dati inventati, come li restituirebbe l'API: nessun dato reale.</summary>
-internal static class DatiFittizi
+internal static partial class DatiFittizi
 {
     public static readonly Guid Cliente = Guid.Parse("019ab000-0000-7000-8000-000000000001");
     public static readonly Guid SedeFirenze = Guid.Parse("019ab000-0000-7000-8000-000000000002");
@@ -41,6 +41,11 @@ internal static class DatiFittizi
     public static object? Rispondi(HttpRequestMessage richiesta)
     {
         var percorso = richiesta.RequestUri!.AbsolutePath;
+        if (RispondiRcee(richiesta, percorso) is { } rcee)
+        {
+            return rcee;
+        }
+
         if (richiesta.Method == HttpMethod.Post && percorso.EndsWith("/chiusura", StringComparison.Ordinal))
         {
             UltimaChiusura = richiesta.Content!.ReadAsStringAsync().GetAwaiter().GetResult();

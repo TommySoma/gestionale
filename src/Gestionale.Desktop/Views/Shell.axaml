@@ -26,6 +26,12 @@
                   Content="{x:Static r:Testi.NavPreventivi}" Command="{Binding ApriPreventiviCommand}" />
           <Button Classes="voceMenu" Classes.attiva="{Binding ListinoAttivo}" IsVisible="{Binding VedeListino}"
                   Content="{x:Static r:Testi.NavListino}" Command="{Binding ApriListinoCommand}" />
+          <Button Classes="voceMenu" Classes.attiva="{Binding RapportiAttivo}" IsVisible="{Binding VedeRapporti}"
+                  Content="{x:Static r:Testi.NavRapporti}" Command="{Binding ApriRapportiCommand}" />
+          <Button Classes="voceMenu" Classes.attiva="{Binding BolliniAttivo}" IsVisible="{Binding VedeBollini}"
+                  Content="{x:Static r:Testi.NavBollini}" Command="{Binding ApriBolliniCommand}" />
+          <Button Classes="voceMenu" Classes.attiva="{Binding InviiAttivo}" IsVisible="{Binding VedeInvii}"
+                  Content="{x:Static r:Testi.NavInvii}" Command="{Binding ApriInviiCommand}" />
           <Button Classes="voceMenu" Classes.attiva="{Binding AziendaAttivo}" IsVisible="{Binding VedeAzienda}"
                   Content="{x:Static r:Testi.NavDatiAziendali}" Command="{Binding ApriDatiAziendaliCommand}" />
         </StackPanel>
