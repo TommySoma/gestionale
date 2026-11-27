@@ -14,7 +14,9 @@ M0 completata e unita il 22/11/2026. M1 completata e unita il 23/11/2026: autent
 - **Voci di prova:** tipi di impianto, di generatore, combustibili e regole di cadenza hanno solo voci `da_verificare` con valori fittizi, da sostituire con quelli dei testi ufficiali.
 - **Completamento di M3 (PR 23):** pagina Oggi come pagina iniziale (interventi del giorno, scadenze della settimana, preventivi in attesa), preventivi nella scheda cliente, richiamo con appuntamento collegato a un intervento aperto dell'impianto.
 
-Prossimo passo: M4, compliance Toscana. Proposta grafica: https://claude.ai/artifact/VU9RMVAS2a8shTESLADN5v Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
+- **M4, compliance Toscana (in corso dal 26/11/2026):** perimetro RCEE tipo 1 e 2, bollini e file di import massivo SIERT; dichiarazione di conformità e F-Gas in una milestone successiva. Prima PR `m4/schema-rcee`: migrazione 0010 con tracciato SIERT v3.0 come dati (67 colonne), tipi e importi dei bollini verificati, rapporti con validazione, assegnazione del bollino, convalida, firma e annullamento, invii (ADR 0006). Seguono API con file di invio e PDF, poi le schermate.
+
+Prossimo passo: API dei rapporti di controllo e dei bollini, con generazione del file di invio. Proposta grafica: https://claude.ai/artifact/VU9RMVAS2a8shTESLADN5v Chi sviluppa lavora su Windows 11; la verifica su macOS passa dai runner di GitHub Actions.
 
 ## Decisioni già prese (non riaprirle senza un motivo)
 
@@ -66,8 +68,8 @@ Titolare, Amministrativo, Responsabile tecnico, Tecnico, Sola lettura, Amministr
 
 Non inventare campi o regole. Prima di implementare verifica sui testi ufficiali:
 
-- tracciato di invio SIERT (import massivo dei rapporti di controllo) e campi dei rapporti, nella versione corrente;
-- tipi e importi dei bollini regionali;
+- tracciato SIERT: la guida all'import massivo v3.0 e il manuale manutentori Rev. 21 del 14/09/2026 sono verificati (ADR 0006), ma restano da chiarire con il team SIERT il campo 46 mancante, la riga di intestazione, il valore "COMNBUSTIBLE" e la potenza confrontata con la fascia del bollino; il regolamento in vigore è il DPGR 17/R/2023;
+- RCEE tipo 3 e 4, bollino congiunto e generatori modulari: non ancora gestiti;
 - allegati obbligatori della dichiarazione di conformità (DM 37/08);
 - frequenze e soglie dei controlli perdite F-Gas (Reg. UE 2024/573 e DPR 146/2018);
 - non è noto se SIERT o CURIT abbiano API pubbliche: per ora l'invio è assistito (file o dati precompilati).

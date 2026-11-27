@@ -176,7 +176,7 @@ Il software produce e archivia documenti con valore legale, quindi ogni regola e
 | --- | --- | --- |
 | F-Gas (DPR 146/2018, Reg. UE 2024/573) | Registro interventi, comunicazione alla banca dati, controlli perdite con frequenze e soglie da verificare per tipo di apparecchiatura | [Camera di Commercio di Firenze](https://www.fi.camcom.gov.it/sites/default/files/uploads/Fgas_webinar_15.10.2025_CCIAA%20FI%20(1).pdf) |
 | Dichiarazione di conformità (DM 37/08) | Modello, allegati obbligatori, firma del dichiarante e del responsabile tecnico, invio telematico opzionale | [Camera di Commercio di Basilicata](https://www.basilicata.camcom.it/print/1201) |
-| Impianti termici, Toscana (Reg. regionale 25/R/2015, LR 24/2022) | Accatastamento su SIERT, rapporto di controllo con bollino regionale, trasmissione entro 60 giorni, cadenze per tipo di impianto | [SIERT, istruzioni](https://siert.regione.toscana.it/upload/Istruzioni.pdf), [SIERT, cadenze](https://siert.regione.toscana.it/upload/Nota_confronto_2019_2020_revasl.pdf), [LR 24/2022](https://legislazionetecnica.it/node/5191724) |
+| Impianti termici, Toscana (DPGR 6 aprile 2023 n. 17/R, LR 85/2016, LR 24/2022) | Accatastamento su SIERT, rapporto di controllo con bollino regionale, trasmissione entro 60 giorni, import massivo con file txt a tabulazioni (ADR 0006), cadenze per tipo di impianto | [SIERT, import massivo RCEE v3.0](https://siert.regione.toscana.it/upload/Istruzioni.pdf), [SIERT, manuale manutentori Rev. 21](https://siert.regione.toscana.it/documenti/Manuale_manutentori_20260914.pdf), [SIERT, cadenze](https://siert.regione.toscana.it/upload/Nota_confronto_2019_2020_revasl.pdf), [LR 24/2022](https://legislazionetecnica.it/node/5191724) |
 | Impianti termici, Lombardia (CURIT) | Targa, libretto di impianto, dichiarazione di avvenuta manutenzione registrata via web | [CURIT, istruzioni libretto](https://www.curit.it/documents/22402/1670322/Istruzioni+Libretto+di+impianto/25961faf-b01d-4a0d-a881-fd1f03b264db) |
 
 **Privacy (GDPR).** L'impresa cliente è titolare del trattamento dei dati dei propri clienti; il software deve aiutarla a rispettare:
@@ -331,10 +331,14 @@ Realizzato in M3 (migrazione 0008, decisioni del 25/11/2026):
 | Tabella | Contenuto principale | Vincoli e note |
 | --- | --- | --- |
 | `regole_cadenza` | Regione, tipo di impianto, condizioni (potenza, combustibile, gas), periodicità, primo controllo, riferimento normativo | Valide dal e al: sono dati, non codice |
-| `tipi_bollino` | Regione, nome, importo, validità, condizioni di potenza | Importi da verificare sul sito regionale |
-| `bollini` | Codice, tipo, stato (disponibile, assegnato, usato, annullato), acquisto, rapporto assegnato | Codice univoco; un bollino usato ha sempre un rapporto; assegnazione atomica con blocco di riga |
-| `rapporti_controllo` | Impianto, generatore, intervento, modello, data del controllo, esito, dati in JSONB, stato (bozza, validato, firmato, trasmesso, scartato), bollino | Termine di trasmissione calcolato dalla regola regionale (in Toscana 60 giorni); dopo la firma un trigger blocca ogni modifica ai dati |
-| `invii_catasto` | Regione, sistema, tipo di comunicazione, oggetto, file generato, stato, ricevuta, errore, tentativi | Una comunicazione per oggetto e versione: i reinvii non creano doppioni |
+| `modelli_rapporto` | Modello di RCEE (tipo 1 gruppi termici, tipo 2 gruppi frigo), categoria del bollino | In M4 solo i modelli dell'import massivo SIERT (ADR 0006) |
+| `regole_trasmissione` | Regione, giorni per trasmettere, validità | Toscana 60 giorni, dal manuale SIERT Rev. 21 del 14/09/2026 |
+| `tipi_bollino` | Regione, categoria (GT, GF, SC, CG), nome, importo, fascia di potenza o superficie, validità | Quindici tipi toscani verificati sul manuale SIERT Rev. 21; fasce (da, a] che non si sovrappongono |
+| `bollini` | Codice di 13 cifre, tipo, stato (disponibile, assegnato, usato, annullato), data di acquisto | Codice unico per azienda; assegnato e usato solo insieme al rapporto; assegnazione atomica con `SKIP LOCKED` |
+| `rapporti_controllo` | Impianto, generatore, intervento, modello, tecnico, data del controllo, dati in JSONB nella codifica del tracciato, stato (bozza, convalidato, firmato, trasmesso, scartato, annullato), bollino | Termine di trasmissione dalla regola regionale; contenuto modificabile solo in bozza, bollino solo prima della firma; si annulla, non si cancella |
+| `tracciati_campi` | Sistema, versione, modello, posizione, numero della guida, nome, tipo, lunghezza, obbligatorietà, valori ammessi, formato, origine del valore | Tracciato SIERT v3.0 come dati: 67 colonne per modello, il campo 46 manca nella guida |
+| `invii_catasto` | Regione, sistema, tipo, modello, versione del tracciato, nome e contenuto del file, SHA-256, stato (preparato, caricato, elaborato, annullato), ricevuta | Il file inviato non cambia dopo la creazione |
+| `invii_rapporti` | Invio, rapporto, riga, versione del rapporto, esito (in attesa, importato, importato in bozza, scartato), causa | Un rapporto sta in un solo invio vivo: i reinvii non creano doppioni |
 | `dichiarazioni_conformita` | Numero progressivo, impianto, intervento, dichiarante, responsabile tecnico, tipologia, stato, documento PDF | Numerazione per azienda e anno; immutabile dopo la firma |
 | `dico_allegati` | Tipo di allegato, presente sì o no, documento collegato | Elenco degli allegati obbligatori da confermare sul testo del DM 37/08 |
 | `apparecchiature_fgas` | Generatore, gas, GWP, carica in kg, CO₂ equivalente, ermeticamente sigillata, rilevatore di perdite | CO₂ equivalente = carica × GWP / 1000, in tonnellate, colonna calcolata |
@@ -374,8 +378,9 @@ La logica transazionale vive in funzioni, chiamate da Dapper; ognuna ha test pgT
 | Funzione | Cosa fa |
 | --- | --- |
 | `prossimo_numero(azienda, tipo, anno)` | Restituisce il numero successivo in modo atomico e senza buchi |
-| `assegna_bollino(rapporto)` | Sceglie e blocca un bollino disponibile del tipo giusto (`FOR UPDATE SKIP LOCKED`) |
-| `valida_rapporto(rapporto)` | Elenca gli errori che bloccherebbero l'invio: campi mancanti, bollino non coerente, termine superato |
+| `assegna_bollino(rapporto, versione, tipo)` | Assegna il bollino disponibile più vecchio del tipo scelto (`FOR UPDATE SKIP LOCKED`); `libera_bollino` lo restituisce prima della firma |
+| `valida_rapporto(rapporto)` | Errori bloccanti e avvisi secondo il tracciato in vigore: campi mancanti, tipi, valori ammessi, formati, regole condizionate, bollino non coerente, termine superato |
+| `convalida_rapporto`, `riapri_rapporto`, `firma_rapporto`, `annulla_rapporto` | Passaggi di stato del rapporto con concorrenza ottimistica; convalida e firma rifiutano gli errori bloccanti, la firma usa il bollino |
 | `chiudi_intervento(intervento, esito, righe)` | In una transazione: stato, righe, scadenza chiusa, prossima scadenza calcolata, bozza del rapporto se previsto |
 | `ricalcola_scadenze(impianto)` | Applica le regole di cadenza valide per regione, tipo e potenza |
 | `scadenze_in_arrivo(giorni)` | Lista dei richiami da fare; usata anche dal chatbot |
@@ -392,8 +397,7 @@ La logica transazionale vive in funzioni, chiamate da Dapper; ognuna ha test pgT
 
 ### Da validare prima di scrivere le migrazioni
 
-- Campi esatti dei rapporti di controllo e tracciato di invio SIERT nella versione corrente.
-- Tipi e importi dei bollini regionali.
+- Tracciato SIERT: trovato il 26/11/2026 (guida v3.0, ADR 0006); da chiarire con il team SIERT il campo 46 mancante, la riga di intestazione, un valore ammesso con un probabile refuso, la potenza confrontata con la fascia del bollino.
 - Elenco degli allegati obbligatori della dichiarazione di conformità.
 - Dimensione del vettore di embedding del modello scelto.
 - Un solo tecnico per intervento oppure una squadra: per l'MVP il tecnico è uno, con possibile tabella dei collaboratori in seguito.
@@ -420,7 +424,7 @@ L'MVP richiede circa 20 settimane a tempo parziale (da M0 a M6); Fase 2, Fase 3 
 **Criteri di uscita:**
 
 - **M1:** login con secondo fattore e ruoli funzionanti, con test automatici.
-- **M4:** un rapporto di controllo completo, con bollino e file di invio, generato e validato contro la specifica SIERT.
+- **M4:** un rapporto di controllo completo, con bollino e file di invio, generato e validato contro la specifica SIERT. Perimetro deciso il 26/11/2026: RCEE tipo 1 e 2, bollini e file di import; dichiarazione di conformità e registro F-Gas passano a una milestone successiva.
 - **M6:** installazione pulita su Windows e macOS contro un server di prova, ripristino da backup verificato, README e demo pronti.
 
 ## Rischi e decisioni aperte
@@ -429,7 +433,7 @@ Il rischio principale è costruire su regole copiate da documenti datati e senza
 
 | Rischio o decisione | Perché conta | Cosa facciamo |
 | --- | --- | --- |
-| Tracciato di invio SIERT e regole regionali datati | I documenti trovati sono del 2018 e del 2023 | Scaricare le specifiche correnti dal portale e testare con dati fittizi |
+| Tracciato di invio SIERT e regole regionali datati | La guida all'import massivo (v3.0) non è datata; il manuale manutentori è la Rev. 21 del 14/09/2026 | Tracciato caricato come dati con validità (ADR 0006), domande aperte da porre al team SIERT, test con dati fittizi |
 | Nessun utente reale con cui validare | Il dominio potrebbe avere casi che non conosciamo | Modello dati ricavato dai moduli ufficiali; README che dichiara che non è validato sul campo |
 | Ampliamento del perimetro (fatturazione, magazzino) | Sono pozzi senza fondo | Restano fuori ambito, scritto nel piano |
 | Responsabilità sui documenti generati | Hanno valore legale | Disclaimer; firma sempre esterna e a carico dell'utente |
