@@ -25,5 +25,43 @@ services:
       timeout: 5s
       retries: 10
 
+  # Applica le migrazioni come app_owner ed esce: docker compose run --rm migrazioni
+  migrazioni:
+    build:
+      context: ..
+      dockerfile: deploy/api.Dockerfile
+    image: gestionale-api:sviluppo
+    profiles: ["api"]
+    working_dir: /app/migratore
+    entrypoint: ["dotnet", "Gestionale.Migrator.dll"]
+    environment:
+      GESTIONALE_DB_MIGRAZIONI: Host=db;Port=5432;Database=gestionale;Username=app_owner;Password=${APP_OWNER_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # L'API in un container Linux: in sviluppo su Windows evita i blocchi di Smart App
+  # Control sui file appena compilati. Il client desktop la raggiunge su localhost:5225.
+  api:
+    image: gestionale-api:sviluppo
+    profiles: ["api"]
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Database: Host=db;Port=5432;Database=gestionale;Username=app_api;Password=${APP_API_PASSWORD}
+      Autenticazione__ChiaveFirma: ${API_CHIAVE_FIRMA:?Imposta API_CHIAVE_FIRMA in deploy/.env}
+      Autenticazione__ChiaveCifraturaMfa: ${API_CHIAVE_CIFRATURA_MFA:?Imposta API_CHIAVE_CIFRATURA_MFA in deploy/.env}
+      Autenticazione__TokenInstallazione: ${API_TOKEN_INSTALLAZIONE:-}
+    ports:
+      # Anche su ::1: su Windows "localhost" prova prima IPv6 e, senza risposta, attende secondi.
+      - "127.0.0.1:${API_PORTA:-5225}:8080"
+      - "[::1]:${API_PORTA:-5225}:8080"
+    volumes:
+      # Gli stessi documenti dell'API avviata con dotnet run, così non si perdono.
+      - ../src/Gestionale.Api/dati/documenti:/dati/documenti
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   dati_db:

@@ -1,4 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- In sviluppo su Windows il programma parte da dotnet.exe, firmato da Microsoft: Smart App Control blocca
+       il lanciatore .exe che ogni build rigenera senza firma. I rilasci (Release) mantengono il lanciatore. -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug' and $([MSBuild]::IsOSPlatform('Windows'))">
+    <UseAppHost>false</UseAppHost>
+  </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
