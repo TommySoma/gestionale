@@ -159,6 +159,7 @@ public partial class SchedaImpiantoViewModel(ShellViewModel shell, Guid impianto
                 .Where(v => !string.IsNullOrEmpty(v)));
             var dettaglio = string.Join(" · ", new[]
             {
+                g.SiglaCatasto,
                 g.Matricola is null ? null : string.Format(CultureInfo.CurrentCulture, Testi.MatricolaValore, g.Matricola),
                 g.PotenzaKw is null ? null : FormatoImpianti.Potenza(g.PotenzaKw),
                 g.Combustibile,

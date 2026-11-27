@@ -22,7 +22,7 @@ public sealed record Pagina<T>(IReadOnlyList<T> Elementi, int Totale, int Numero
 
 public sealed record RiepilogoCliente(Guid ClienteId, string Tipo, string NomeVisualizzato, string? CodiceFiscale, string? PartitaIva, string? ComunePrincipale, int Versione);
 
-public sealed record Sede(Guid SedeId, string? Descrizione, string Indirizzo, string? Civico, string Cap, string Comune, string Provincia, string? NoteAccesso, int Versione);
+public sealed record Sede(Guid SedeId, string? Descrizione, string Indirizzo, string? Civico, string Cap, string Comune, string Provincia, string? NoteAccesso, int Versione, string? CodiceIstatComune = null);
 
 public sealed record Contatto(Guid ContattoId, string Tipo, string Valore, string? Etichetta, bool Principale, int Versione);
 
@@ -47,9 +47,34 @@ public sealed record FinalitaPrivacy(string Codice, string Nome, string Descrizi
 
 public sealed record DatiCliente(string Tipo, string? Denominazione, string? Nome, string? Cognome, string? CodiceFiscale, string? PartitaIva, string? Pec, string? Note, int? Versione);
 
-public sealed record DatiSede(string? Descrizione, string Indirizzo, string? Civico, string Cap, string Comune, string Provincia, string? NoteAccesso, int? Versione);
+public sealed record DatiSede(string? Descrizione, string Indirizzo, string? Civico, string Cap, string Comune, string Provincia, string? NoteAccesso, int? Versione, string? CodiceIstatComune = null);
 
 public sealed record DatiContatto(string Tipo, string Valore, string? Etichetta, bool Principale, int? Versione);
+
+/// <summary>Dati dell'impresa; la regione si legge soltanto.</summary>
+public sealed record Azienda(
+    Guid AziendaId,
+    string RagioneSociale,
+    string? PartitaIva,
+    string? CodiceFiscale,
+    string? Indirizzo,
+    string? Cap,
+    string? Comune,
+    string? Provincia,
+    string Regione,
+    int? CodiceDittaSiert,
+    int Versione);
+
+public sealed record DatiAzienda(
+    string RagioneSociale,
+    string? PartitaIva,
+    string? CodiceFiscale,
+    string? Indirizzo,
+    string? Cap,
+    string? Comune,
+    string? Provincia,
+    int? CodiceDittaSiert,
+    int Versione);
 
 public sealed record DatiConsenso(string Finalita, bool Concesso, string Fonte, string? Note);
 
@@ -85,7 +110,8 @@ public sealed record Generatore(
     DateOnly? DismessoIl,
     string? Note,
     int Versione,
-    bool MatricolaDuplicata);
+    bool MatricolaDuplicata,
+    string? SiglaCatasto = null);
 
 public sealed record RiferimentoCatasto(Guid RiferimentoCatastoId, string Regione, string Sistema, string Codice, DateOnly? RegistratoIl, int Versione);
 
@@ -149,7 +175,8 @@ public sealed record DatiGeneratore(
     DateOnly? InstallatoIl,
     DateOnly? DismessoIl,
     string? Note,
-    int? Versione);
+    int? Versione,
+    string? SiglaCatasto = null);
 
 public sealed record DatiRiferimentoCatasto(string Regione, string Codice, DateOnly? RegistratoIl, int? Versione);
 

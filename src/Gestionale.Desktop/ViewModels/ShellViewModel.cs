@@ -91,6 +91,9 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     [ObservableProperty]
     public partial bool ListinoAttivo { get; set; }
 
+    [ObservableProperty]
+    public partial bool AziendaAttivo { get; set; }
+
     public bool VedePreventivi => Profilo.Ha("preventivi.lettura");
 
     public bool GestiscePreventivi => Profilo.Ha("preventivi.scrittura");
@@ -98,6 +101,10 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     public bool VedeListino => Profilo.Ha("listino.lettura");
 
     public bool GestisceListino => Profilo.Ha("listino.scrittura");
+
+    public bool VedeAzienda => Profilo.Ha("azienda.lettura");
+
+    public bool GestisceAzienda => Profilo.Ha("azienda.scrittura");
 
     [RelayCommand]
     public async Task ApriPreventiviAsync()
@@ -125,6 +132,15 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
         await listino.CaricaAsync();
     }
 
+    [RelayCommand]
+    public async Task ApriDatiAziendaliAsync()
+    {
+        Evidenzia(nameof(AziendaAttivo));
+        var dati = new DatiAziendaliViewModel(this);
+        Contenuto = dati;
+        await dati.CaricaAsync();
+    }
+
     /// <summary>La pagina iniziale: interventi di oggi, scadenze della settimana, preventivi in attesa.</summary>
     [RelayCommand]
     public async Task ApriOggiAsync()
@@ -145,6 +161,7 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
         ScadenzeAttivo = area == nameof(ScadenzeAttivo);
         PreventiviAttivo = area == nameof(PreventiviAttivo);
         ListinoAttivo = area == nameof(ListinoAttivo);
+        AziendaAttivo = area == nameof(AziendaAttivo);
     }
 
     private VociImpianti? _vociImpianti;

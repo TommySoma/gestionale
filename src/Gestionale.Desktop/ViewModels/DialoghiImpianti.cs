@@ -240,6 +240,7 @@ public partial class EditorGeneratoreViewModel : DialogoViewModel
         Potenza = esistente?.PotenzaKw?.ToString("0.##", CultureInfo.GetCultureInfo("it-IT")) ?? "";
         InstallatoIl = FormatoImpianti.PerSelettore(esistente?.InstallatoIl);
         DismessoIl = FormatoImpianti.PerSelettore(esistente?.DismessoIl);
+        SiglaCatasto = esistente?.SiglaCatasto ?? "";
         Note = esistente?.Note ?? "";
     }
 
@@ -274,6 +275,9 @@ public partial class EditorGeneratoreViewModel : DialogoViewModel
     public partial DateTime? DismessoIl { get; set; }
 
     [ObservableProperty]
+    public partial string SiglaCatasto { get; set; }
+
+    [ObservableProperty]
     public partial string Note { get; set; }
 
     protected override async Task<string?> EseguiAsync()
@@ -290,7 +294,8 @@ public partial class EditorGeneratoreViewModel : DialogoViewModel
 
         var dati = new DatiGeneratore(
             tipo, Vuoto(Marca), Vuoto(Modello), Vuoto(Matricola), potenza, Combustibile.Id,
-            FormatoImpianti.DaSelettore(InstallatoIl), FormatoImpianti.DaSelettore(DismessoIl), Vuoto(Note), _esistente?.Versione);
+            FormatoImpianti.DaSelettore(InstallatoIl), FormatoImpianti.DaSelettore(DismessoIl), Vuoto(Note), _esistente?.Versione,
+            Vuoto(SiglaCatasto)?.ToUpperInvariant());
 
         var risposta = _esistente is null
             ? await Shell.Api.CreaGeneratoreAsync(_impiantoId, dati)

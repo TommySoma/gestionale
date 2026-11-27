@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.DatiAziendaliView"
+             x:DataType="vm:DatiAziendaliViewModel">
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="20" MaxWidth="760" HorizontalAlignment="Left">
+      <StackPanel>
+        <TextBlock Classes="titolo2" Text="{x:Static r:Testi.DatiAziendaliTitolo}" />
+        <TextBlock Classes="secondario" FontSize="14" Margin="0,4,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.DatiAziendaliSpiegazione}" />
+      </StackPanel>
+
+      <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+        <TextBlock Text="{Binding Errore}" />
+      </Border>
+      <Border Classes="avvisoSuccesso" IsVisible="{Binding Salvati}">
+        <TextBlock Text="{x:Static r:Testi.DatiAziendaliSalvati}" />
+      </Border>
+      <Border Classes="avvisoAttenzione" IsVisible="{Binding SenzaCodiceDitta}">
+        <TextBlock TextWrapping="Wrap" Text="{x:Static r:Testi.CodiceDittaMancante}" />
+      </Border>
+
+      <Border Classes="scheda" Padding="20">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.Impresa}" />
+          <StackPanel>
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.RagioneSociale}" />
+            <TextBox Text="{Binding RagioneSociale}" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.RagioneSociale}" />
+          </StackPanel>
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Grid.Column="0">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.PartitaIva}" />
+              <TextBox Text="{Binding PartitaIva}" MaxLength="11" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.PartitaIva}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.CodiceFiscale}" />
+              <TextBox Text="{Binding CodiceFiscale}" MaxLength="16" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.CodiceFiscale}" />
+            </StackPanel>
+          </Grid>
+          <StackPanel>
+            <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Indirizzo}" />
+            <TextBox Text="{Binding Indirizzo}" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.Indirizzo}" />
+          </StackPanel>
+          <Grid ColumnDefinitions="*,16,2*,16,*">
+            <StackPanel Grid.Column="0">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Cap}" />
+              <TextBox Text="{Binding Cap}" MaxLength="5" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.Cap}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Comune}" />
+              <TextBox Text="{Binding Comune}" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.Comune}" />
+            </StackPanel>
+            <StackPanel Grid.Column="4">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Provincia}" />
+              <TextBox Text="{Binding Provincia}" MaxLength="2" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.Provincia}" />
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <Border Classes="scheda" Padding="20">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.CatastoImpianti}" />
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Grid.Column="0">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.Regione}" />
+              <TextBox Text="{Binding Regione}" IsReadOnly="True" AutomationProperties.Name="{x:Static r:Testi.Regione}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.CodiceDittaSiert}" />
+              <TextBox Text="{Binding CodiceDitta}" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.CodiceDittaSiert}" />
+            </StackPanel>
+          </Grid>
+          <TextBlock Classes="secondario" FontSize="13" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneCodiceDitta}" />
+        </StackPanel>
+      </Border>
+
+      <Button Classes="primario" HorizontalAlignment="Right" Content="{x:Static r:Testi.Salva}"
+              IsVisible="{Binding PuoModificare}" IsEnabled="{Binding !InCorso}" Command="{Binding SalvaCommand}" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

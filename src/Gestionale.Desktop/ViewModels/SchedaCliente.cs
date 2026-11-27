@@ -9,7 +9,7 @@ namespace Gestionale.Desktop.ViewModels;
 
 public sealed record RigaImpiantoSede(Guid Id, string Tipo, string Dettaglio, bool Dismesso);
 
-public sealed record RigaSede(Guid Id, int Versione, string Indirizzo, string? Note, IReadOnlyList<RigaImpiantoSede> Impianti)
+public sealed record RigaSede(Guid Id, int Versione, string Indirizzo, string? Note, IReadOnlyList<RigaImpiantoSede> Impianti, Sede Dati)
 {
     public bool SenzaImpianti => Impianti.Count == 0;
 }
@@ -119,7 +119,7 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
                 .Where(i => i.SedeId == s.SedeId)
                 .Select(i => new RigaImpiantoSede(i.ImpiantoId, i.TipoImpianto, DettaglioImpianto(i), i.Stato == "dismesso"))
                 .ToList();
-            Sedi.Add(new RigaSede(s.SedeId, s.Versione, indirizzo, note, impiantiSede));
+            Sedi.Add(new RigaSede(s.SedeId, s.Versione, indirizzo, note, impiantiSede, s));
         }
 
         Contatti.Clear();
@@ -251,6 +251,10 @@ public partial class SchedaClienteViewModel(ShellViewModel shell, Guid clienteId
     [RelayCommand]
     private void RegistraConsenso() =>
         shell.MostraDialogo(new EditorConsensoViewModel(shell, clienteId, _finalita, () => _ = CaricaAsync()));
+
+    [RelayCommand]
+    private void ModificaSede(RigaSede sede) =>
+        shell.MostraDialogo(new EditorSedeViewModel(shell, clienteId, () => _ = CaricaAsync(), sede.Dati));
 
     [RelayCommand]
     private async Task EliminaSedeAsync(RigaSede sede)

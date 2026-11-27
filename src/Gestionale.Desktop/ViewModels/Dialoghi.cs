@@ -149,37 +149,67 @@ public partial class EditorClienteViewModel : DialogoViewModel
     protected override void DopoIlSalvataggio() => _salvato(_id);
 }
 
-public partial class EditorSedeViewModel(ShellViewModel shell, Guid clienteId, Action salvata) : DialogoViewModel(shell)
+/// <summary>Nuova sede, oppure modifica di una esistente (ad esempio per aggiungere il codice ISTAT).</summary>
+public partial class EditorSedeViewModel : DialogoViewModel
 {
-    [ObservableProperty]
-    public partial string Descrizione { get; set; } = "";
+    private readonly Guid _clienteId;
+    private readonly Sede? _esistente;
+    private readonly Action _salvata;
+
+    public EditorSedeViewModel(ShellViewModel shell, Guid clienteId, Action salvata, Sede? esistente = null) : base(shell)
+    {
+        _clienteId = clienteId;
+        _esistente = esistente;
+        _salvata = salvata;
+
+        Descrizione = esistente?.Descrizione ?? "";
+        Indirizzo = esistente?.Indirizzo ?? "";
+        Civico = esistente?.Civico ?? "";
+        Cap = esistente?.Cap ?? "";
+        Comune = esistente?.Comune ?? "";
+        Provincia = esistente?.Provincia ?? "";
+        CodiceIstat = esistente?.CodiceIstatComune ?? "";
+        NoteAccesso = esistente?.NoteAccesso ?? "";
+    }
+
+    public string Titolo => _esistente is null ? Testi.TitoloNuovaSede : Testi.TitoloModificaSede;
 
     [ObservableProperty]
-    public partial string Indirizzo { get; set; } = "";
+    public partial string Descrizione { get; set; }
 
     [ObservableProperty]
-    public partial string Civico { get; set; } = "";
+    public partial string Indirizzo { get; set; }
 
     [ObservableProperty]
-    public partial string Cap { get; set; } = "";
+    public partial string Civico { get; set; }
 
     [ObservableProperty]
-    public partial string Comune { get; set; } = "";
+    public partial string Cap { get; set; }
 
     [ObservableProperty]
-    public partial string Provincia { get; set; } = "";
+    public partial string Comune { get; set; }
 
     [ObservableProperty]
-    public partial string NoteAccesso { get; set; } = "";
+    public partial string Provincia { get; set; }
+
+    [ObservableProperty]
+    public partial string CodiceIstat { get; set; }
+
+    [ObservableProperty]
+    public partial string NoteAccesso { get; set; }
 
     protected override async Task<string?> EseguiAsync()
     {
-        var risposta = await Shell.Api.CreaSedeAsync(clienteId, new DatiSede(
-            Vuoto(Descrizione), Indirizzo.Trim(), Vuoto(Civico), Cap.Trim(), Comune.Trim(), Provincia.Trim(), Vuoto(NoteAccesso), null));
+        var dati = new DatiSede(
+            Vuoto(Descrizione), Indirizzo.Trim(), Vuoto(Civico), Cap.Trim(), Comune.Trim(), Provincia.Trim(), Vuoto(NoteAccesso),
+            _esistente?.Versione, Vuoto(CodiceIstat));
+        var risposta = _esistente is null
+            ? await Shell.Api.CreaSedeAsync(_clienteId, dati)
+            : await Shell.Api.AggiornaSedeAsync(_clienteId, _esistente.SedeId, dati);
         return risposta.Riuscita ? null : risposta.Messaggio;
     }
 
-    protected override void DopoIlSalvataggio() => salvata();
+    protected override void DopoIlSalvataggio() => _salvata();
 }
 
 public partial class EditorContattoViewModel : DialogoViewModel
