@@ -218,15 +218,21 @@ public partial class RigaModificabile : ObservableObject
 public partial class ChiusuraInterventoViewModel : DialogoViewModel
 {
     private readonly Intervento _intervento;
-    private readonly Action _salvato;
+    private readonly Action<Guid?> _salvato;
+    private Guid? _rapportoId;
 
-    public ChiusuraInterventoViewModel(ShellViewModel shell, Intervento intervento, Action salvato) : base(shell)
+    // generatori: quelli attivi dell'impianto, per la bozza del rapporto; vuoto se chi chiude non compila rapporti.
+    public ChiusuraInterventoViewModel(ShellViewModel shell, Intervento intervento, Action<Guid?> salvato, IReadOnlyList<Generatore>? generatori = null)
+        : base(shell)
     {
         ArgumentNullException.ThrowIfNull(intervento);
 
         _intervento = intervento;
         _salvato = salvato;
         Esito = Esiti[0];
+        Generatori = [.. (generatori ?? []).Select(g => new OpzioneGeneratore(g.GeneratoreId, NomeGeneratore(g)))];
+        Generatore = Generatori.FirstOrDefault(g => g.Id == intervento.GeneratoreId) ?? (Generatori.Count == 1 ? Generatori[0] : null);
+        Modello = Modelli[0];
         Righe.CollectionChanged += (_, e) =>
         {
             foreach (var r in e.NewItems?.OfType<RigaModificabile>() ?? [])
@@ -255,7 +261,28 @@ public partial class ChiusuraInterventoViewModel : DialogoViewModel
     public bool PuoSegnareControllo => _intervento.Tipo == "manutenzione";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(MostraBozza))]
     public partial bool ControlloEfficienza { get; set; }
+
+    /// <summary>La bozza del rapporto si propone a chi compila i rapporti, se l'impianto ha generatori.</summary>
+    public bool PuoCreareBozza => PuoSegnareControllo && Generatori.Count > 0;
+
+    public bool MostraBozza => PuoCreareBozza && ControlloEfficienza;
+
+    public IReadOnlyList<Opzione> Modelli { get; } =
+    [
+        new("", Testi.NessunaBozzaRapporto),
+        new("tipo_1", Testi.ModelloRapportoTipo1),
+        new("tipo_2", Testi.ModelloRapportoTipo2),
+    ];
+
+    [ObservableProperty]
+    public partial Opzione Modello { get; set; }
+
+    public IReadOnlyList<OpzioneGeneratore> Generatori { get; }
+
+    [ObservableProperty]
+    public partial OpzioneGeneratore? Generatore { get; set; }
 
     [ObservableProperty]
     public partial string Totale { get; set; } = FormatoInterventi.Importo(0);
@@ -293,13 +320,26 @@ public partial class ChiusuraInterventoViewModel : DialogoViewModel
                 riga.Manodopera ? "h" : riga.Unita.Trim(), quantita.Value, prezzo, sconto, iva));
         }
 
+        var modello = MostraBozza && Modello.Codice.Length > 0 ? Modello.Codice : null;
+        if (modello is not null && Generatore is null)
+        {
+            return Testi.ScegliGeneratoreRapporto;
+        }
+
         var risposta = await Shell.Api.ChiudiInterventoAsync(
             _intervento.InterventoId,
-            new DatiChiusura(_intervento.Versione, Esito.Codice, string.IsNullOrWhiteSpace(Note) ? null : Note.Trim(), righe, PuoSegnareControllo && ControlloEfficienza));
+            new DatiChiusura(
+                _intervento.Versione, Esito.Codice, string.IsNullOrWhiteSpace(Note) ? null : Note.Trim(), righe, PuoSegnareControllo && ControlloEfficienza,
+                modello, modello is null ? null : Generatore?.Id));
+        _rapportoId = risposta.Valore?.RapportoId;
         return risposta.Riuscita ? null : risposta.Messaggio;
     }
 
-    protected override void DopoIlSalvataggio() => _salvato();
+    protected override void DopoIlSalvataggio() => _salvato(_rapportoId);
+
+    private static string NomeGeneratore(Generatore g) =>
+        string.Join(" · ", new[] { g.SiglaCatasto, g.TipoGeneratore, string.Join(" ", new[] { g.Marca, g.Modello }.Where(v => v is not null)) }
+            .Where(v => !string.IsNullOrEmpty(v)));
 
     private void RigaCambiata(object? sender, PropertyChangedEventArgs e) => AggiornaTotale();
 
@@ -330,4 +370,9 @@ public partial class AnnullamentoInterventoViewModel(ShellViewModel shell, Inter
     }
 
     protected override void DopoIlSalvataggio() => salvato();
+}
+
+public sealed record OpzioneGeneratore(Guid Id, string Nome)
+{
+    public override string ToString() => Nome;
 }

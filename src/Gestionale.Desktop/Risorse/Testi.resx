@@ -1554,4 +1554,28 @@
   <data name="SiglaCatasto" xml:space="preserve">
     <value>Sigla del catasto</value>
   </data>
+  <data name="NessunaBozzaRapporto" xml:space="preserve">
+    <value>Nessuna bozza</value>
+  </data>
+  <data name="ModelloRapportoTipo1" xml:space="preserve">
+    <value>RCEE tipo 1 - gruppi termici</value>
+  </data>
+  <data name="ModelloRapportoTipo2" xml:space="preserve">
+    <value>RCEE tipo 2 - gruppi frigo</value>
+  </data>
+  <data name="BozzaRapportoModello" xml:space="preserve">
+    <value>Bozza del rapporto di controllo</value>
+  </data>
+  <data name="BozzaRapportoGeneratore" xml:space="preserve">
+    <value>Generatore controllato</value>
+  </data>
+  <data name="SpiegazioneBozzaRapporto" xml:space="preserve">
+    <value>Con un modello scelto, la chiusura crea la bozza del rapporto con i dati dell'impianto, del generatore e del tecnico. Il modello dipende dal generatore controllato: sceglilo tu.</value>
+  </data>
+  <data name="ScegliGeneratoreRapporto" xml:space="preserve">
+    <value>Scegli il generatore controllato per la bozza del rapporto.</value>
+  </data>
+  <data name="BozzaRapportoCreata" xml:space="preserve">
+    <value>Bozza del rapporto di controllo creata: va completata con le misure, il bollino e la firma.</value>
+  </data>
 </root>

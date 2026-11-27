@@ -37,6 +37,17 @@
         <StackPanel Spacing="4" IsVisible="{Binding PuoSegnareControllo}">
           <CheckBox IsChecked="{Binding ControlloEfficienza}" Content="{x:Static r:Testi.EseguitoControlloEfficienza}" />
           <TextBlock Classes="secondario" FontSize="13" Margin="28,0,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneControlloEfficienza}" />
+          <Grid ColumnDefinitions="*,16,*" Margin="28,8,0,0" IsVisible="{Binding MostraBozza}">
+            <StackPanel Grid.Column="0">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.BozzaRapportoModello}" />
+              <ComboBox ItemsSource="{Binding Modelli}" SelectedItem="{Binding Modello}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.BozzaRapportoModello}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.BozzaRapportoGeneratore}" />
+              <ComboBox ItemsSource="{Binding Generatori}" SelectedItem="{Binding Generatore}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static r:Testi.BozzaRapportoGeneratore}" />
+            </StackPanel>
+          </Grid>
+          <TextBlock Classes="secondario" FontSize="13" Margin="28,4,0,0" TextWrapping="Wrap" IsVisible="{Binding MostraBozza}" Text="{x:Static r:Testi.SpiegazioneBozzaRapporto}" />
         </StackPanel>
 
         <StackPanel>
