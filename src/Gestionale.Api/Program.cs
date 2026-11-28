@@ -27,6 +27,7 @@ EndpointScadenze.Mappa(api);
 EndpointCommerciale.Mappa(api);
 EndpointRapporti.Mappa(api);
 EndpointImportazione.Mappa(api);
+EndpointPromemoria.Mappa(api);
 
 app.Run();
 

@@ -705,4 +705,43 @@
   <data name="ClienteSenzaCodici" xml:space="preserve">
     <value>cliente senza codice fiscale né partita IVA: si crea nuovo anche se esiste già con lo stesso nome</value>
   </data>
+  <data name="HostPostaNonValido" xml:space="preserve">
+    <value>indica il server di posta, senza spazi (ad esempio smtp.example.com)</value>
+  </data>
+  <data name="PortaPostaNonValida" xml:space="preserve">
+    <value>la porta va da 1 a 65535 (di solito 587 con STARTTLS, 465 con SSL)</value>
+  </data>
+  <data name="SicurezzaPostaNonValida" xml:space="preserve">
+    <value>la sicurezza è nessuna, starttls o ssl</value>
+  </data>
+  <data name="MittentePostaNonValido" xml:space="preserve">
+    <value>l'email del mittente non è valida</value>
+  </data>
+  <data name="PasswordSenzaUtente" xml:space="preserve">
+    <value>una password richiede anche l'utente</value>
+  </data>
+  <data name="NotaTroppoLunga" xml:space="preserve">
+    <value>la nota supera i 1.000 caratteri</value>
+  </data>
+  <data name="NessunaScadenzaScelta" xml:space="preserve">
+    <value>scegli almeno una scadenza</value>
+  </data>
+  <data name="TroppeScadenzeScelte" xml:space="preserve">
+    <value>al massimo 200 scadenze per invio</value>
+  </data>
+  <data name="PostaNonConfigurata" xml:space="preserve">
+    <value>la posta in uscita non è configurata: il Titolare la imposta nei dati aziendali</value>
+  </data>
+  <data name="SenzaEmail" xml:space="preserve">
+    <value>il cliente non ha un indirizzo email</value>
+  </data>
+  <data name="SenzaConsenso" xml:space="preserve">
+    <value>il cliente non ha il consenso ai promemoria delle scadenze</value>
+  </data>
+  <data name="PromemoriaVietati" xml:space="preserve">
+    <value>I promemoria ai clienti li invia chi gestisce le scadenze di tutta l'azienda.</value>
+  </data>
+  <data name="ProvaPostaFallita" xml:space="preserve">
+    <value>Il server di posta non ha accettato l'invio di prova: {0}</value>
+  </data>
 </root>

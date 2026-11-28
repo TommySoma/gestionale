@@ -7,6 +7,7 @@
     <PackageReference Include="Dapper" />
     <PackageReference Include="Konscious.Security.Cryptography.Argon2" />
     <PackageReference Include="Otp.NET" />
+    <PackageReference Include="MailKit" />
     <PackageReference Include="SkiaSharp" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" />
   </ItemGroup>
