@@ -357,7 +357,19 @@ public sealed class ClientApi : IDisposable
 
     // --- Preventivi ---------------------------------------------------------
 
-    /// <summary>Stato accetta anche "scaduto": gli emessi oltre la validità.</summary>
+    // --- Importazione da CSV (M4b) -----------------------------------------
+
+    /// <summary>Fa tutto il lavoro dell'importazione e lo annulla: dice cosa succederà.</summary>
+    public Task<Risposta<EsitoImportazione>> AnteprimaImportazioneAsync(ModuloFile file, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoImportazione>(HttpMethod.Post, "api/importazioni/anteprima", file, ct);
+
+    /// <summary>Scrive i dati solo se il file non ha errori: tutto o niente.</summary>
+    public Task<Risposta<EsitoImportazione>> ImportaAsync(ModuloFile file, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoImportazione>(HttpMethod.Post, "api/importazioni", file, ct);
+
+    public Task<Risposta<byte[]>> ModelloImportazioneAsync(CancellationToken ct = default) =>
+        AutenticataAsync<byte[]>(HttpMethod.Get, "api/importazioni/modello", null, ct);
+
     // --- Rapporti di controllo, bollini e invii (M4) -----------------------
 
     public Task<Risposta<Pagina<RiepilogoRapporto>>> CercaRapportiAsync(
@@ -460,6 +472,7 @@ public sealed class ClientApi : IDisposable
         Guid invioId, int versione, IReadOnlyList<EsitoRigaInvio> esiti, CancellationToken ct = default) =>
         AutenticataAsync<EsitoScritturaRapporto>(HttpMethod.Post, $"api/invii-catasto/{invioId}/esiti", new { versione, esiti }, ct);
 
+    /// <summary>Stato accetta anche "scaduto": gli emessi oltre la validità.</summary>
     public Task<Risposta<Pagina<RiepilogoPreventivo>>> CercaPreventiviAsync(
         string? testo, string? stato, Guid? clienteId, int pagina, int dimensione, CancellationToken ct = default)
     {

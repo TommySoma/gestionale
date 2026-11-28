@@ -41,6 +41,11 @@ internal static partial class DatiFittizi
     public static object? Rispondi(HttpRequestMessage richiesta)
     {
         var percorso = richiesta.RequestUri!.AbsolutePath;
+        if (richiesta.Method == HttpMethod.Post && percorso == "/api/importazioni/anteprima")
+        {
+            return AnteprimaImportazione();
+        }
+
         if (RispondiRcee(richiesta, percorso) is { } rcee)
         {
             return rcee;

@@ -157,6 +157,16 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     /// <summary>Un invio contiene i rapporti di tutta l'azienda: il Tecnico non lo vede.</summary>
     public bool VedeInvii => Profilo.Permessi.Any(p => p.Codice == "bollini.lettura" && p.Ambito == "tutti");
 
+    /// <summary>L'importazione scrive clienti e impianti di tutta l'azienda: serve scriverli su tutti.</summary>
+    public bool ImportaDati => Profilo.Permessi.Any(p => p.Codice == "clienti.scrittura" && p.Ambito == "tutti")
+        && Profilo.Permessi.Any(p => p.Codice == "impianti.scrittura" && p.Ambito == "tutti");
+
+    public void ApriImportazione()
+    {
+        Evidenzia(nameof(ClientiAttivo));
+        Contenuto = new ImportazioneViewModel(this);
+    }
+
     [RelayCommand]
     public async Task ApriRapportiAsync()
     {

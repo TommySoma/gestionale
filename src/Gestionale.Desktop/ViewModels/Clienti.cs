@@ -30,6 +30,11 @@ public partial class ClientiViewModel(ShellViewModel shell) : ViewModelBase
 
     public bool PuoCreare => shell.ModificaClienti;
 
+    public bool PuoImportare => shell.ImportaDati;
+
+    [RelayCommand]
+    private void Importa() => shell.ApriImportazione();
+
     [ObservableProperty]
     public partial string Testo { get; set; } = "";
 

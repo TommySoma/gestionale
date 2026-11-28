@@ -7,6 +7,8 @@
   <DockPanel Margin="24">
     <StackPanel DockPanel.Dock="Top" Spacing="16" Margin="0,0,0,16">
       <DockPanel>
+        <Button DockPanel.Dock="Right" Classes="secondario" VerticalAlignment="Bottom" Margin="8,0,0,0" IsVisible="{Binding PuoImportare}"
+                Content="{x:Static r:Testi.ImportaDaCsv}" Command="{Binding ImportaCommand}" />
         <Button DockPanel.Dock="Right" Classes="primario" VerticalAlignment="Bottom" IsVisible="{Binding PuoCreare}" Command="{Binding NuovoCommand}">
           <StackPanel Orientation="Horizontal" Spacing="8">
             <Path Classes="icona" Data="{StaticResource IconaPiu}" Stroke="{DynamicResource TestoSuAccento}" Width="16" Height="16" StrokeThickness="2" />

@@ -142,6 +142,18 @@ Ogni modifica e cancellazione richiede la `versione` letta: se nel frattempo un 
 
 **Anonimizzazione (GDPR).** Quando un cliente chiede la cancellazione dei propri dati, il Titolare lo anonimizza con `POST /api/clienti/{id}/anonimizzazione?versione=N`: nominativo, codici fiscali, PEC, note e contatti spariscono per sempre; restano gli indirizzi delle sedi (servono ai documenti degli impianti) e lo storico dei consensi senza note. Non si annulla. Scelte e limiti nell'[ADR 0004](docs/adr/0004-anonimizzazione-clienti.md).
 
+## Importazione da CSV
+
+Clienti, sedi e impianti già presenti in un foglio Excel si importano da un file CSV, con una riga per impianto (ADR 0007). Il file di esempio con tutte le colonne si scarica dall'API (`GET /api/importazioni/modello`) o dal client, nella pagina Clienti.
+
+- **Formato:** prima riga di intestazione, separatore punto e virgola, virgola o tabulazione, codifica UTF-8 oppure quella di Excel in italiano. I numeri si scrivono con la virgola, le date come gg/mm/aaaa.
+- **Colonne obbligatorie:** `indirizzo`, `cap`, `comune`, `provincia`. Le altre sono facoltative, e i nomi si riconoscono anche con spazi o maiuscole (ad esempio "Ragione sociale", "Partita IVA").
+- **Una riga, tre livelli:** cliente e sede si scrivono sempre; l'impianto solo se c'è il `tipo_impianto`, con il primo generatore se c'è il `tipo_generatore`. Tipi e combustibili si indicano con il codice o il nome della voce.
+- **Doppioni:** un cliente già presente con lo stesso codice fiscale o partita IVA si usa senza modificarlo; una sede si riconosce da indirizzo, civico e CAP. Un impianto con un PDR attivo o un codice catasto già presenti si salta, con un avviso.
+- **Tutto o niente:** `POST /api/importazioni/anteprima` fa tutto il lavoro e lo annulla, mostrando conteggi, errori e avvisi riga per riga; `POST /api/importazioni` scrive solo se il file non ha errori. Il file arriva multipart nel campo `file`, fino a 5 MB e 5.000 righe.
+- **Permessi:** serve poter scrivere clienti e impianti su tutta l'azienda (Titolare, Amministrativo).
+- **Consensi:** i clienti importati non hanno consensi privacy, che vanno registrati a parte.
+
 ## Client desktop
 
 ```
@@ -152,7 +164,7 @@ Alla prima apertura indica l'indirizzo del server (ad esempio `http://localhost:
 
 - **Accesso:** email e password, poi il codice dell'app di autenticazione. Titolare e Amministratore di sistema configurano il secondo fattore al primo accesso (codice QR, chiave manuale, codici di recupero).
 - **Sessione:** il token di accesso resta in memoria e si rinnova da solo; il token di rinnovo sta solo nel portachiavi del sistema (Windows Credential Manager, portachiavi di macOS), così riaprendo l'app nella stessa giornata non serve accedere di nuovo. Le preferenze non segrete (server, ultima email, tema) sono in `impostazioni.json` nella cartella dei dati dell'utente.
-- **Anagrafiche:** elenco con ricerca, filtri e pagine; scheda con sedi, contatti e consensi; creazione e modifica con i messaggi d'errore dell'API; anonimizzazione per il Titolare, con una parola da scrivere per confermare.
+- **Anagrafiche:** elenco con ricerca, filtri e pagine; scheda con sedi, contatti e consensi; creazione e modifica con i messaggi d'errore dell'API; anonimizzazione per il Titolare, con una parola da scrivere per confermare. Importazione da CSV con anteprima, dalla pagina Clienti.
 - **Impianti, interventi e scadenze:** scheda dell'impianto con generatori, catasto, documenti, interventi, scadenze e rapporti; calendario settimanale per tecnico; chiusura dell'intervento con righe, esito e, per una manutenzione, controllo di efficienza e bozza del rapporto.
 - **Preventivi e listino:** elenco con filtri, editor con le voci del listino, PDF, conversione in intervento.
 - **Rapporti di controllo:** elenco con il termine di trasmissione, scheda con il modulo del tracciato SIERT, errori sotto ogni campo, bollino, convalida, firma e annullamento.

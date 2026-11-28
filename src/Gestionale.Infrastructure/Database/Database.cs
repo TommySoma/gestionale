@@ -43,6 +43,43 @@ public sealed class Database(NpgsqlDataSource sorgente)
         return risultato;
     }
 
+    /// <summary>
+    /// Come <see cref="EseguiAsync{T}(Guid?, Guid?, Func{NpgsqlConnection, NpgsqlTransaction, Task{T}}, CancellationToken)"/>,
+    /// ma conferma la transazione solo se <paramref name="conferma"/> lo dice guardando il risultato:
+    /// altrimenti la annulla. Serve alle anteprime, che fanno il lavoro vero e poi lo tolgono.
+    /// </summary>
+    public async Task<T> EseguiAsync<T>(
+        Guid? aziendaId,
+        Guid? utenteId,
+        Func<NpgsqlConnection, NpgsqlTransaction, Task<T>> lavoro,
+        Func<T, bool> conferma,
+        CancellationToken ct)
+    {
+        ArgumentNullException.ThrowIfNull(lavoro);
+        ArgumentNullException.ThrowIfNull(conferma);
+
+        await using var connessione = await sorgente.OpenConnectionAsync(ct);
+        await using var transazione = await connessione.BeginTransactionAsync(ct);
+
+        await connessione.ExecuteAsync(new CommandDefinition(
+            "SELECT set_config('app.azienda_id', @azienda, true), set_config('app.utente_id', @utente, true)",
+            new { azienda = aziendaId?.ToString() ?? "", utente = utenteId?.ToString() ?? "" },
+            transazione,
+            cancellationToken: ct));
+
+        var risultato = await lavoro(connessione, transazione);
+        if (conferma(risultato))
+        {
+            await transazione.CommitAsync(ct);
+        }
+        else
+        {
+            await transazione.RollbackAsync(ct);
+        }
+
+        return risultato;
+    }
+
     /// <summary>Indirizzi IP come tipo inet di PostgreSQL.</summary>
     private sealed class GestoreIndirizzoIp : SqlMapper.TypeHandler<IPAddress>
     {

@@ -556,3 +556,19 @@ public sealed record InvioCatasto(RiepilogoInvio Invio, IReadOnlyList<RigaInvio>
 public sealed record EsitoInvioPreparato(Guid Id, int Versione, int Righe, IReadOnlyList<Guid> Esclusi);
 
 public sealed record EsitoRigaInvio(Guid RapportoControlloId, string Esito, string? Causa);
+
+// --- Importazione da CSV (M4b) ------------------------------------------
+
+public sealed record SegnalazioneImportazione(int Riga, string Codice, string Messaggio);
+
+public sealed record EsitoImportazione(
+    bool Importata,
+    int Righe,
+    int ClientiNuovi,
+    int ClientiEsistenti,
+    int SediNuove,
+    int ImpiantiNuovi,
+    int ImpiantiSaltati,
+    int Generatori,
+    IReadOnlyList<SegnalazioneImportazione> Errori,
+    IReadOnlyList<SegnalazioneImportazione> Avvisi);
