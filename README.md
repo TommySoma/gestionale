@@ -165,6 +165,17 @@ I promemoria delle scadenze partono a mano (ADR 0007). Nella lista Scadenze si s
 - **API:** `GET/PUT /api/azienda/posta`, `POST /api/azienda/posta/prova`, `POST /api/promemoria/anteprima` e `POST /api/promemoria` con `{ scadenze, nota }`. Invia chi gestisce le scadenze di tutta l'azienda.
 - **In sviluppo:** `avvia.ps1` avvia anche Mailpit, un finto server di posta che non spedisce nulla. Nei dati aziendali usa server `posta`, porta `1025`, sicurezza "nessuna", e leggi le email su `http://localhost:8025`.
 
+## Registro F-Gas
+
+Apparecchiature con gas fluorurati, controlli delle perdite e comunicazioni alla Banca dati FGAS (ADR 0008, Reg. UE 2024/573 e DPR 146/2018). Per ora solo dall'API: le schermate arrivano nella prossima PR.
+
+- **Apparecchiatura:** gas e carica di un generatore (`PUT /api/impianti/{id}/generatori/{generatoreId}/fgas`), con ermetica ed etichettata, edificio residenziale, sistema di rilevamento, codice univoco e fattura. Il database calcola la CO2 equivalente e se, e ogni quanto, va controllata: soglie, frequenze ed esenzioni sono dati con la loro fonte.
+- **Gas:** quelli puri con il GWP del regolamento, verificati; le miscele comuni (R410A, R407C, R404A) con il GWP calcolato dalla composizione, che resta da verificare sulla norma ISO 817.
+- **Controllo delle perdite:** è un tipo di scadenza dell'impianto, con la data più vicina tra le sue apparecchiature soggette. Dopo una riparazione va rifatto entro un mese.
+- **Registro:** `POST /api/fgas/operazioni` per installazione, controllo delle perdite, manutenzione, riparazione, recupero e smantellamento, con gas aggiunto e recuperato e riciclaggio. Ogni operazione appartiene a un intervento e porta i certificati del tecnico e dell'impresa in corso a quella data.
+- **Certificati:** `GET/POST/PUT/DELETE /api/fgas/certificazioni`, gestiti dal Titolare. Un tecnico senza certificato in corso non si assegna a manutenzioni, riparazioni o installazioni di un impianto con apparecchiature F-Gas, e non registra operazioni.
+- **Banca dati FGAS:** `GET /api/fgas/comunicazioni` dà, per ogni operazione da comunicare, i dati dell'art. 16 del DPR 146/2018 e il termine dei 30 giorni. Dopo l'inserimento sul portale, `POST /api/fgas/operazioni/{id}/comunicazione` la segna come comunicata, e da allora non si modifica più.
+
 ## Client desktop
 
 ```

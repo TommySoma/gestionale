@@ -36,3 +36,4 @@ Importazione e promemoria vengono prima perché non dipendono da regole normativ
 
 - **Importazione** (PR 34, 27/11/2026): un file con una riga per impianto; i clienti già presenti si usano senza modificarli; tutto o niente. L'anteprima fa l'importazione vera in una transazione e la annulla.
 - **Promemoria email** (28/11/2026, migrazione 0014). Scelte dell'utente: invio a mano dalla lista delle scadenze con anteprima; testo fisso con una nota facoltativa; Mailpit (MIT) nel compose per le prove in sviluppo. I parametri stanno in `sec.parametri_posta` (non in un generico `parametri_azienda`), con la password cifrata dall'API come i segreti TOTP. L'invio usa MailKit (MIT). Ogni email partita diventa un richiamo con esito `promemoria_inviato`, solo per email. L'invio automatico resta possibile in seguito.
+- **Registro F-Gas** (28/11/2026, migrazione 0015): decisioni e fonti nell'ADR 0008. Prima il server con l'API, poi le schermate.
