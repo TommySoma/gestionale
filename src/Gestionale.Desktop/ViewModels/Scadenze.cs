@@ -72,6 +72,7 @@ public static class FormatoScadenze
         "da_richiamare" => Testi.EsitoDaRichiamare,
         "appuntamento" => Testi.EsitoAppuntamento,
         "rifiutato" => Testi.EsitoRifiutato,
+        "promemoria_inviato" => Testi.EsitoPromemoriaInviato,
         _ => esito,
     };
 
@@ -120,6 +121,9 @@ public sealed record RigaScadenza(
 
     public bool HaUltimoRichiamo => UltimoRichiamo is not null;
 
+    /// <summary>Scelta per il promemoria email.</summary>
+    public SelezioneRiga Selezione { get; } = new();
+
     public static RigaScadenza Da(ScadenzaInArrivo s) => new(
         s,
         s.Cliente,
@@ -145,6 +149,23 @@ public partial class ScadenzeViewModel(ShellViewModel shell) : ViewModelBase
     public ObservableCollection<RigaScadenza> Righe { get; } = [];
 
     public bool GestisceScadenze => shell.GestisceScadenze;
+
+    public bool PuoInviarePromemoria => shell.InviaPromemoria;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TestoInviaPromemoria))]
+    [NotifyCanExecuteChangedFor(nameof(InviaPromemoriaCommand))]
+    public partial int Scelte { get; set; }
+
+    public string TestoInviaPromemoria => Scelte == 0
+        ? Testi.InviaPromemoria
+        : string.Format(CultureInfo.CurrentCulture, Testi.InviaPromemoriaScelte, Scelte);
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HaAvviso))]
+    public partial string? Avviso { get; set; }
+
+    public bool HaAvviso => !string.IsNullOrEmpty(Avviso);
 
     [ObservableProperty]
     public partial int Giorni { get; set; } = 30;
@@ -220,9 +241,12 @@ public partial class ScadenzeViewModel(ShellViewModel shell) : ViewModelBase
             }
 
             Righe.Clear();
+            Scelte = 0;
             foreach (var s in pagina.Elementi)
             {
-                Righe.Add(RigaScadenza.Da(s));
+                var riga = RigaScadenza.Da(s);
+                riga.Selezione.PropertyChanged += (_, _) => Scelte = Righe.Count(r => r.Selezione.Scelta);
+                Righe.Add(riga);
             }
 
             Totale = pagina.Totale;
@@ -284,6 +308,25 @@ public partial class ScadenzeViewModel(ShellViewModel shell) : ViewModelBase
 
     [RelayCommand]
     private Task ApriAsync(RigaScadenza riga) => shell.ApriImpiantoAsync(riga.Dati.ImpiantoId);
+
+    /// <summary>Anteprima e invio dei promemoria email per le scadenze scelte; il risultato resta in un avviso.</summary>
+    [RelayCommand(CanExecute = nameof(HaScelte))]
+    private async Task InviaPromemoriaAsync()
+    {
+        var scelte = Righe.Where(r => r.Selezione.Scelta).Select(r => r.Dati.ScadenzaId).ToList();
+        var dialogo = new PromemoriaViewModel(shell, scelte, risultati =>
+        {
+            var inviati = risultati.Count(r => r.Inviato);
+            var falliti = risultati.Where(r => r.Errore is not null).ToList();
+            Avviso = string.Format(CultureInfo.CurrentCulture, Testi.PromemoriaInviati, inviati)
+                + (falliti.Count > 0 ? " " + string.Format(CultureInfo.CurrentCulture, Testi.PromemoriaNonInviati, falliti.Count, falliti[0].Errore) : "");
+            _ = CaricaAsync();
+        });
+        shell.MostraDialogo(dialogo);
+        await dialogo.CaricaAsync();
+    }
+
+    private bool HaScelte() => Scelte > 0;
 
     [RelayCommand]
     private void RegistraRichiamo(RigaScadenza riga) =>
