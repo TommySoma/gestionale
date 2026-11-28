@@ -240,4 +240,7 @@
   <data name="ProvaPostaCorpo" xml:space="preserve">
     <value>Questa è un'email di prova inviata dal gestionale: la posta in uscita funziona.</value>
   </data>
+  <data name="PromemoriaControlloPerdite" xml:space="preserve">
+    <value>il controllo delle perdite di gas fluorurati</value>
+  </data>
 </root>

@@ -28,6 +28,7 @@ EndpointCommerciale.Mappa(api);
 EndpointRapporti.Mappa(api);
 EndpointImportazione.Mappa(api);
 EndpointPromemoria.Mappa(api);
+EndpointFgas.Mappa(api);
 
 app.Run();
 
