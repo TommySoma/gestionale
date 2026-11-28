@@ -41,6 +41,17 @@ internal static partial class DatiFittizi
     public static object? Rispondi(HttpRequestMessage richiesta)
     {
         var percorso = richiesta.RequestUri!.AbsolutePath;
+        if (richiesta.Method == HttpMethod.Post && percorso is "/api/promemoria/anteprima" or "/api/promemoria")
+        {
+            UltimaScritturaRcee = richiesta.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
+            return AnteprimaPromemoria(percorso == "/api/promemoria");
+        }
+
+        if (percorso == "/api/azienda/posta" && richiesta.Method == HttpMethod.Get)
+        {
+            return new { host = "posta", porta = 1025, sicurezza = "nessuna", utente = (string?)null, conPassword = false, mittenteEmail = "promemoria@prova.example", mittenteNome = "Termoidraulica Prova", versione = 1 };
+        }
+
         if (richiesta.Method == HttpMethod.Post && percorso == "/api/importazioni/anteprima")
         {
             return AnteprimaImportazione();

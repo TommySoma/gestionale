@@ -161,6 +161,9 @@ public partial class ShellViewModel(ClientApi api, Profilo profilo, INavigazione
     public bool ImportaDati => Profilo.Permessi.Any(p => p.Codice == "clienti.scrittura" && p.Ambito == "tutti")
         && Profilo.Permessi.Any(p => p.Codice == "impianti.scrittura" && p.Ambito == "tutti");
 
+    /// <summary>I promemoria ai clienti li invia chi gestisce le scadenze di tutta l'azienda.</summary>
+    public bool InviaPromemoria => Profilo.Permessi.Any(p => p.Codice == "scadenze.scrittura" && p.Ambito == "tutti");
+
     public void ApriImportazione()
     {
         Evidenzia(nameof(ClientiAttivo));

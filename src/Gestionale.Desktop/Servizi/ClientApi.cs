@@ -357,6 +357,25 @@ public sealed class ClientApi : IDisposable
 
     // --- Preventivi ---------------------------------------------------------
 
+    // --- Promemoria email (M4b) --------------------------------------------
+
+    /// <summary>Null se la posta in uscita non è ancora configurata.</summary>
+    public Task<Risposta<ParametriPosta>> ParametriPostaAsync(CancellationToken ct = default) =>
+        AutenticataAsync<ParametriPosta>(HttpMethod.Get, "api/azienda/posta", null, ct);
+
+    public Task<Risposta<EsitoVersione>> SalvaPostaAsync(DatiPosta dati, CancellationToken ct = default) =>
+        AutenticataAsync<EsitoVersione>(HttpMethod.Put, "api/azienda/posta", dati, ct);
+
+    /// <summary>Un'email di prova all'utente collegato.</summary>
+    public Task<Risposta<object>> ProvaPostaAsync(CancellationToken ct = default) =>
+        AutenticataAsync<object>(HttpMethod.Post, "api/azienda/posta/prova", new { }, ct);
+
+    public Task<Risposta<IReadOnlyList<Promemoria>>> AnteprimaPromemoriaAsync(IReadOnlyList<Guid> scadenze, string? nota, CancellationToken ct = default) =>
+        AutenticataAsync<IReadOnlyList<Promemoria>>(HttpMethod.Post, "api/promemoria/anteprima", new { scadenze, nota }, ct);
+
+    public Task<Risposta<IReadOnlyList<Promemoria>>> InviaPromemoriaAsync(IReadOnlyList<Guid> scadenze, string? nota, CancellationToken ct = default) =>
+        AutenticataAsync<IReadOnlyList<Promemoria>>(HttpMethod.Post, "api/promemoria", new { scadenze, nota }, ct);
+
     // --- Importazione da CSV (M4b) -----------------------------------------
 
     /// <summary>Fa tutto il lavoro dell'importazione e lo annulla: dice cosa succederà.</summary>

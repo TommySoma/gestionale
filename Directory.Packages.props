@@ -26,6 +26,9 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.15" />
   </ItemGroup>
 
+  <ItemGroup Label="Posta (MailKit e MimeKit: MIT)">
+    <PackageVersion Include="MailKit" Version="4.18.2" />
+  </ItemGroup>
   <ItemGroup Label="Documenti (SkiaSharp: MIT)">
     <!-- PDF dei documenti generati dall'API (ADR 0005). Stessa versione usata da Avalonia. -->
     <PackageVersion Include="SkiaSharp" Version="3.119.4" />

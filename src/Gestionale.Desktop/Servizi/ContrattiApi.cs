@@ -572,3 +572,15 @@ public sealed record EsitoImportazione(
     int Generatori,
     IReadOnlyList<SegnalazioneImportazione> Errori,
     IReadOnlyList<SegnalazioneImportazione> Avvisi);
+
+// --- Promemoria email (M4b) ---------------------------------------------
+
+public sealed record ParametriPosta(string Host, int Porta, string Sicurezza, string? Utente, bool ConPassword, string MittenteEmail, string? MittenteNome, int Versione);
+
+/// <summary>Password null o vuota: resta quella salvata.</summary>
+public sealed record DatiPosta(string Host, int? Porta, string Sicurezza, string? Utente, string? Password, string MittenteEmail, string? MittenteNome, int? Versione);
+
+public sealed record EsitoVersione(int Versione);
+
+public sealed record Promemoria(
+    Guid ScadenzaId, string Cliente, string? Email, string? Esclusione, string? Motivo, string? Oggetto, string? Testo, bool Inviato, string? Errore);

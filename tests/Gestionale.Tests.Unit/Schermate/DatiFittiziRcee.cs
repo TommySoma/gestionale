@@ -196,3 +196,23 @@ internal static partial class DatiFittizi
         avvisi = new[] { new { riga = 4, codice = "ImpiantoGiaPresentePdr", messaggio = "impianto già presente con questo PDR: la riga lo salta: PDR-PROVA" } },
     };
 }
+
+/// <summary>Anteprima fittizia dei promemoria: uno parte, uno no perché manca il consenso.</summary>
+internal static partial class DatiFittizi
+{
+    private static object[] AnteprimaPromemoria(bool inviati) =>
+    [
+        new
+        {
+            scadenzaId = Guid.Parse("019ab000-0000-7000-8000-0000000000f0"), cliente = "Giulia Rossi (prova)", email = "giulia.rossi@example.com",
+            esclusione = (string?)null, motivo = (string?)null, oggetto = "La manutenzione dell'impianto entro il 13 gennaio 2027",
+            testo = "Gentile Giulia Rossi (prova),\r\n\r\nle ricordiamo che per il suo impianto di caldaia...", inviato = inviati, errore = (string?)null,
+        },
+        new
+        {
+            scadenzaId = Guid.Parse("019ab000-0000-7000-8000-0000000000f1"), cliente = "Paolo Verdi (prova)", email = "paolo.verdi@example.com",
+            esclusione = "SenzaConsenso", motivo = "il cliente non ha il consenso ai promemoria delle scadenze", oggetto = (string?)null,
+            testo = (string?)null, inviato = false, errore = (string?)null,
+        },
+    ];
+}

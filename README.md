@@ -154,6 +154,17 @@ Clienti, sedi e impianti già presenti in un foglio Excel si importano da un fil
 - **Permessi:** serve poter scrivere clienti e impianti su tutta l'azienda (Titolare, Amministrativo).
 - **Consensi:** i clienti importati non hanno consensi privacy, che vanno registrati a parte.
 
+## Promemoria email
+
+I promemoria delle scadenze partono a mano (ADR 0007). Nella lista Scadenze si scelgono le righe, l'anteprima mostra chi riceve l'email e chi no, e l'invio parte solo con una conferma.
+
+- **Destinatari:** il responsabile dell'impianto, altrimenti il proprietario, altrimenti il titolare della sede. Serve un'email del cliente e il consenso "promemoria delle scadenze" in corso; senza, la riga resta esclusa e l'anteprima dice perché.
+- **Testo:** fisso, nei file di traduzione dei documenti. Dice cosa scade, per quale impianto e quando, con la firma dell'impresa e il motivo per cui il cliente riceve l'email. Si può aggiungere una nota, uguale per tutte le email dell'invio.
+- **Traccia:** ogni email partita diventa un richiamo per email con esito "promemoria inviato", e la scadenza passa "in attesa".
+- **Server di posta:** lo configura il Titolare nei dati aziendali (server SMTP, porta, STARTTLS o SSL, utente, password, mittente), con un'email di prova all'utente collegato. La password è cifrata dall'API e non si rilegge mai.
+- **API:** `GET/PUT /api/azienda/posta`, `POST /api/azienda/posta/prova`, `POST /api/promemoria/anteprima` e `POST /api/promemoria` con `{ scadenze, nota }`. Invia chi gestisce le scadenze di tutta l'azienda.
+- **In sviluppo:** `avvia.ps1` avvia anche Mailpit, un finto server di posta che non spedisce nulla. Nei dati aziendali usa server `posta`, porta `1025`, sicurezza "nessuna", e leggi le email su `http://localhost:8025`.
+
 ## Client desktop
 
 ```

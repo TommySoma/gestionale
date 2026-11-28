@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Gestionale.Desktop.ViewModels"
+             xmlns:r="using:Gestionale.Desktop.Risorse"
+             x:Class="Gestionale.Desktop.Views.PromemoriaView"
+             x:DataType="vm:PromemoriaViewModel">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="24,20">
+      <StackPanel Spacing="4">
+        <TextBlock Text="{x:Static r:Testi.TitoloPromemoria}" FontSize="20" FontWeight="Bold" />
+        <TextBlock Classes="secondario" FontSize="14" Text="{Binding Riepilogo}" />
+      </StackPanel>
+    </Border>
+    <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Divisore}" BorderThickness="0,1,0,0" Padding="24,16">
+      <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+        <Button Classes="secondario" IsCancel="True" Content="{x:Static r:Testi.Annulla}" Command="{Binding AnnullaCommand}" />
+        <Button Classes="primario" Content="{x:Static r:Testi.InviaPromemoria}" Command="{Binding SalvaCommand}"
+                IsEnabled="{Binding !InCorso}" IsVisible="{Binding !NessunoDaInviare}" />
+      </StackPanel>
+    </Border>
+    <ScrollViewer>
+      <StackPanel Margin="24" Spacing="16">
+        <Border Classes="avvisoErrore" IsVisible="{Binding HaErrore}">
+          <TextBlock Text="{Binding Errore}" TextWrapping="Wrap" />
+        </Border>
+        <ItemsControl ItemsSource="{Binding Righe}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:RigaPromemoria">
+              <Border BorderBrush="{DynamicResource Divisore}" BorderThickness="0,0,0,1" Padding="0,8">
+                <Grid ColumnDefinitions="2*,2*,3*">
+                  <TextBlock Grid.Column="0" FontWeight="SemiBold" Text="{Binding Cliente}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Grid.Column="1" Text="{Binding Destinatario}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Grid.Column="2" Text="{Binding Stato}" TextWrapping="Wrap" Foreground="{DynamicResource Errore}" IsVisible="{Binding Escluso}" />
+                  <TextBlock Grid.Column="2" Text="{Binding Stato}" TextWrapping="Wrap" IsVisible="{Binding !Escluso}" />
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <StackPanel IsVisible="{Binding !NessunoDaInviare}">
+          <TextBlock Classes="etichetta">
+            <Run Text="{x:Static r:Testi.NotaPromemoria}" />
+            <Run Text="{x:Static r:Testi.Facoltativo}" FontWeight="Normal" Foreground="{DynamicResource TestoSecondario}" />
+          </TextBlock>
+          <TextBox Text="{Binding Nota}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="64" MaxLength="1000"
+                   AutomationProperties.Name="{x:Static r:Testi.NotaPromemoria}" />
+          <TextBlock Classes="secondario" FontSize="13" Margin="0,4,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazioneNotaPromemoria}" />
+        </StackPanel>
+        <StackPanel Spacing="6" IsVisible="{Binding Esempio, Converter={x:Static ObjectConverters.IsNotNull}}">
+          <TextBlock Classes="etichetta" Text="{x:Static r:Testi.EsempioEmail}" />
+          <Border Classes="scheda" Padding="16">
+            <TextBlock FontSize="13" TextWrapping="Wrap" Text="{Binding Esempio}" />
+          </Border>
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

@@ -81,6 +81,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Migrazioni non applicate.' }
 
 # 5. API su http://localhost:5225, in background.
 Write-Host 'Avvio l''API...'
+docker compose -f $compose --profile api up -d posta
 docker compose -f $compose --profile api up -d --force-recreate api
 if ($LASTEXITCODE -ne 0) { throw 'API non avviata: controlla il messaggio qui sopra.' }
 
@@ -100,3 +101,4 @@ Write-Host "API pronta su $server."
 Write-Host 'Al primo uso:        .\scripts\sviluppo\primo-avvio.ps1'
 Write-Host 'Poi il client:       dotnet run --project src\Gestionale.Desktop'
 Write-Host 'Log dell''API:        docker compose -f deploy\docker-compose.yml --profile api logs -f api'
+Write-Host 'Email di prova:      http://localhost:8025 (server posta, porta 1025, sicurezza nessuna)'

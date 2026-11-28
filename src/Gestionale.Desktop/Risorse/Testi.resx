@@ -2079,4 +2079,103 @@
   <data name="FileCsv" xml:space="preserve">
     <value>File CSV</value>
   </data>
+  <data name="EsempioEmail" xml:space="preserve">
+    <value>Esempio dell'email</value>
+  </data>
+  <data name="EsitoPromemoriaInviato" xml:space="preserve">
+    <value>Promemoria inviato per email</value>
+  </data>
+  <data name="InviaPromemoria" xml:space="preserve">
+    <value>Invia promemoria</value>
+  </data>
+  <data name="InviaPromemoriaScelte" xml:space="preserve">
+    <value>Invia promemoria ({0})</value>
+  </data>
+  <data name="MittenteEmail" xml:space="preserve">
+    <value>Email del mittente</value>
+  </data>
+  <data name="MittenteNome" xml:space="preserve">
+    <value>Nome del mittente</value>
+  </data>
+  <data name="NessunPromemoriaDaInviare" xml:space="preserve">
+    <value>Nessuna delle scadenze scelte può ricevere il promemoria.</value>
+  </data>
+  <data name="NessunaEmail" xml:space="preserve">
+    <value>Nessuna email</value>
+  </data>
+  <data name="NotaPromemoria" xml:space="preserve">
+    <value>Nota da aggiungere</value>
+  </data>
+  <data name="PasswordNonSalvata" xml:space="preserve">
+    <value>Nessuna password salvata</value>
+  </data>
+  <data name="PasswordSalvata" xml:space="preserve">
+    <value>Password salvata: lasciala vuota per non cambiarla</value>
+  </data>
+  <data name="PasswordPosta" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PortaNonNumerica" xml:space="preserve">
+    <value>La porta è un numero, ad esempio 587.</value>
+  </data>
+  <data name="PortaPosta" xml:space="preserve">
+    <value>Porta</value>
+  </data>
+  <data name="PostaInUscita" xml:space="preserve">
+    <value>Posta in uscita</value>
+  </data>
+  <data name="PostaSalvata" xml:space="preserve">
+    <value>Parametri di posta salvati.</value>
+  </data>
+  <data name="PromemoriaInviati" xml:space="preserve">
+    <value>Promemoria inviati: {0}.</value>
+  </data>
+  <data name="PromemoriaNonInviati" xml:space="preserve">
+    <value>{0} non inviati: {1}</value>
+  </data>
+  <data name="ProvaPosta" xml:space="preserve">
+    <value>Invia una prova</value>
+  </data>
+  <data name="ProvaPostaInviata" xml:space="preserve">
+    <value>Email di prova inviata a {0}.</value>
+  </data>
+  <data name="RiceveIlPromemoria" xml:space="preserve">
+    <value>Riceverà il promemoria</value>
+  </data>
+  <data name="RiepilogoPromemoria" xml:space="preserve">
+    <value>{0} riceveranno il promemoria, {1} no</value>
+  </data>
+  <data name="SalvaPosta" xml:space="preserve">
+    <value>Salva la posta</value>
+  </data>
+  <data name="ScegliPerPromemoria" xml:space="preserve">
+    <value>Scegli per il promemoria email</value>
+  </data>
+  <data name="ServerPosta" xml:space="preserve">
+    <value>Server SMTP</value>
+  </data>
+  <data name="SicurezzaNessuna" xml:space="preserve">
+    <value>Nessuna (solo per prove locali)</value>
+  </data>
+  <data name="SicurezzaPosta" xml:space="preserve">
+    <value>Sicurezza</value>
+  </data>
+  <data name="SicurezzaSsl" xml:space="preserve">
+    <value>SSL/TLS</value>
+  </data>
+  <data name="SicurezzaStartTls" xml:space="preserve">
+    <value>STARTTLS</value>
+  </data>
+  <data name="SpiegazioneNotaPromemoria" xml:space="preserve">
+    <value>La nota va in tutte le email di questo invio, ad esempio i giorni in cui siete disponibili.</value>
+  </data>
+  <data name="SpiegazionePosta" xml:space="preserve">
+    <value>Il server che invia i promemoria delle scadenze ai clienti. La password resta cifrata sul server; per la prova arriva un'email all'utente collegato.</value>
+  </data>
+  <data name="TitoloPromemoria" xml:space="preserve">
+    <value>Promemoria email delle scadenze</value>
+  </data>
+  <data name="UtentePosta" xml:space="preserve">
+    <value>Utente</value>
+  </data>
 </root>

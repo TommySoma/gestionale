@@ -78,6 +78,61 @@
 
       <Button Classes="primario" HorizontalAlignment="Right" Content="{x:Static r:Testi.Salva}"
               IsVisible="{Binding PuoModificare}" IsEnabled="{Binding !InCorso}" Command="{Binding SalvaCommand}" />
+
+      <!-- Posta in uscita: il server che invia i promemoria ai clienti -->
+      <Border Classes="scheda" Padding="20">
+        <StackPanel Spacing="16">
+          <StackPanel>
+            <TextBlock Classes="titoloSezione" Text="{x:Static r:Testi.PostaInUscita}" />
+            <TextBlock Classes="secondario" FontSize="13" Margin="0,4,0,0" TextWrapping="Wrap" Text="{x:Static r:Testi.SpiegazionePosta}" />
+          </StackPanel>
+          <Border Classes="avvisoErrore" IsVisible="{Binding HaErrorePosta}">
+            <TextBlock Text="{Binding ErrorePosta}" TextWrapping="Wrap" />
+          </Border>
+          <Border Classes="avvisoSuccesso" IsVisible="{Binding HaAvvisoPosta}">
+            <TextBlock Text="{Binding AvvisoPosta}" TextWrapping="Wrap" />
+          </Border>
+          <Grid ColumnDefinitions="3*,16,*,16,1.4*">
+            <StackPanel Grid.Column="0">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.ServerPosta}" />
+              <TextBox Text="{Binding HostPosta}" PlaceholderText="smtp.example.com" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.ServerPosta}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.PortaPosta}" />
+              <TextBox Text="{Binding PortaPosta}" MaxLength="5" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.PortaPosta}" />
+            </StackPanel>
+            <StackPanel Grid.Column="4">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.SicurezzaPosta}" />
+              <ComboBox ItemsSource="{Binding Sicurezze}" SelectedItem="{Binding SicurezzaPosta}" HorizontalAlignment="Stretch" IsEnabled="{Binding PuoModificare}"
+                        AutomationProperties.Name="{x:Static r:Testi.SicurezzaPosta}" />
+            </StackPanel>
+          </Grid>
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Grid.Column="0">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.UtentePosta}" />
+              <TextBox Text="{Binding UtentePosta}" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.UtentePosta}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" IsVisible="{Binding PuoModificare}">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.PasswordPosta}" />
+              <TextBox Text="{Binding PasswordPosta}" PasswordChar="•" PlaceholderText="{Binding SuggerimentoPassword}" AutomationProperties.Name="{x:Static r:Testi.PasswordPosta}" />
+            </StackPanel>
+          </Grid>
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Grid.Column="0">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.MittenteEmail}" />
+              <TextBox Text="{Binding MittenteEmail}" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.MittenteEmail}" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Classes="etichetta" Text="{x:Static r:Testi.MittenteNome}" />
+              <TextBox Text="{Binding MittenteNome}" IsReadOnly="{Binding SolaLettura}" AutomationProperties.Name="{x:Static r:Testi.MittenteNome}" />
+            </StackPanel>
+          </Grid>
+          <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right" IsVisible="{Binding PuoModificare}">
+            <Button Classes="secondario" Content="{x:Static r:Testi.ProvaPosta}" Command="{Binding ProvaPostaCommand}" IsEnabled="{Binding PostaConfigurata}" />
+            <Button Classes="primario" Content="{x:Static r:Testi.SalvaPosta}" Command="{Binding SalvaPostaCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
     </StackPanel>
   </ScrollViewer>
 </UserControl>

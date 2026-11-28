@@ -204,4 +204,40 @@
   <data name="FirmaAccettazione" xml:space="preserve">
     <value>Per accettazione: data e firma del cliente</value>
   </data>
+  <data name="PromemoriaManutenzione" xml:space="preserve">
+    <value>la manutenzione</value>
+  </data>
+  <data name="PromemoriaControlloEfficienza" xml:space="preserve">
+    <value>il controllo di efficienza energetica</value>
+  </data>
+  <data name="PromemoriaOggetto" xml:space="preserve">
+    <value>{0} dell'impianto entro il {1}</value>
+  </data>
+  <data name="PromemoriaInScadenza" xml:space="preserve">
+    <value>{0} è in scadenza entro il {1}</value>
+  </data>
+  <data name="PromemoriaScaduta" xml:space="preserve">
+    <value>{0} era in scadenza il {1} e risulta ancora da fare</value>
+  </data>
+  <data name="PromemoriaSaluto" xml:space="preserve">
+    <value>Gentile {0},</value>
+  </data>
+  <data name="PromemoriaCorpo" xml:space="preserve">
+    <value>le ricordiamo che per il suo impianto di {0} in {1}, {2}, {3}.</value>
+  </data>
+  <data name="PromemoriaAppuntamento" xml:space="preserve">
+    <value>Per fissare un appuntamento può rispondere a questa email.</value>
+  </data>
+  <data name="PromemoriaCongedo" xml:space="preserve">
+    <value>Cordiali saluti,</value>
+  </data>
+  <data name="PromemoriaConsenso" xml:space="preserve">
+    <value>Riceve questa email perché ha acconsentito a ricevere i promemoria delle scadenze. Se non desidera più riceverli, ce lo comunichi rispondendo a questo messaggio.</value>
+  </data>
+  <data name="ProvaPostaOggetto" xml:space="preserve">
+    <value>Prova della posta in uscita</value>
+  </data>
+  <data name="ProvaPostaCorpo" xml:space="preserve">
+    <value>Questa è un'email di prova inviata dal gestionale: la posta in uscita funziona.</value>
+  </data>
 </root>
