@@ -744,4 +744,76 @@
   <data name="ProvaPostaFallita" xml:space="preserve">
     <value>Il server di posta non ha accettato l'invio di prova: {0}</value>
   </data>
+  <data name="DatiFgasNonValidi" xml:space="preserve">
+    <value>Dati F-Gas non validi: {0}</value>
+  </data>
+  <data name="FgasNonTrovato" xml:space="preserve">
+    <value>Impianto, generatore, operazione o certificato non trovato.</value>
+  </data>
+  <data name="FgasSoloUfficio" xml:space="preserve">
+    <value>Questa operazione sul registro F-Gas spetta all'ufficio, su tutta l'azienda.</value>
+  </data>
+  <data name="OperazioneFgasChiusa" xml:space="preserve">
+    <value>L'operazione è già comunicata alla Banca dati FGAS o annullata: non si modifica più.</value>
+  </data>
+  <data name="GasNonValido" xml:space="preserve">
+    <value>scegli un gas in vigore</value>
+  </data>
+  <data name="CaricaNonValida" xml:space="preserve">
+    <value>la carica è in chilogrammi, maggiore di zero</value>
+  </data>
+  <data name="CaricaInstallazioneNonValida" xml:space="preserve">
+    <value>la quantità aggiunta all'installazione non è valida</value>
+  </data>
+  <data name="TipoOperazioneNonValido" xml:space="preserve">
+    <value>il tipo di operazione è installazione, controllo delle perdite, manutenzione, riparazione, recupero o smantellamento</value>
+  </data>
+  <data name="DataOperazioneMancante" xml:space="preserve">
+    <value>indica la data dell'operazione</value>
+  </data>
+  <data name="DataOperazioneFutura" xml:space="preserve">
+    <value>la data dell'operazione non può essere futura</value>
+  </data>
+  <data name="EsitoControlloMancante" xml:space="preserve">
+    <value>per un controllo delle perdite indica se è stata rilevata una perdita</value>
+  </data>
+  <data name="EsitoControlloNonPrevisto" xml:space="preserve">
+    <value>l'esito vale solo per un controllo delle perdite</value>
+  </data>
+  <data name="QuantitaGasNonValida" xml:space="preserve">
+    <value>le quantità di gas aggiunto e recuperato sono in chilogrammi, zero o più</value>
+  </data>
+  <data name="ImpiantoRiciclaggioMancante" xml:space="preserve">
+    <value>per un gas riciclato o rigenerato indica la quantità aggiunta e l'impianto di riciclaggio</value>
+  </data>
+  <data name="MisureSmaltimentoMancanti" xml:space="preserve">
+    <value>per uno smantellamento descrivi le misure di recupero e smaltimento del gas</value>
+  </data>
+  <data name="DataComunicazioneNonValida" xml:space="preserve">
+    <value>la data della comunicazione non può essere futura</value>
+  </data>
+  <data name="TipoCertificatoNonValido" xml:space="preserve">
+    <value>il tipo di certificato non è valido</value>
+  </data>
+  <data name="NumeroCertificatoMancante" xml:space="preserve">
+    <value>indica il numero del certificato</value>
+  </data>
+  <data name="DateCertificatoNonValide" xml:space="preserve">
+    <value>la scadenza del certificato non può precedere il rilascio</value>
+  </data>
+  <data name="TecnicoSenzaCertificato" xml:space="preserve">
+    <value>il tecnico non ha un certificato F-Gas in corso alla data dell'operazione</value>
+  </data>
+  <data name="InterventoNonDellImpianto" xml:space="preserve">
+    <value>l'intervento non è dell'impianto dell'apparecchiatura</value>
+  </data>
+  <data name="ApparecchiaturaConOperazioni" xml:space="preserve">
+    <value>l'apparecchiatura ha operazioni nel registro, che si conserva: non si toglie</value>
+  </data>
+  <data name="TecnicoSenzaCertificatoFgas" xml:space="preserve">
+    <value>l'impianto ha apparecchiature F-Gas e il tecnico non ha un certificato F-Gas in corso a quella data</value>
+  </data>
+  <data name="MotivoAnnullamentoFgasMancante" xml:space="preserve">
+    <value>scrivi il motivo dell'annullamento (al massimo 500 caratteri)</value>
+  </data>
 </root>

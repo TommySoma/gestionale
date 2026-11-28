@@ -26,6 +26,7 @@ public enum ErroreIntervento
     BozzaSenzaControllo,
     ModelloBozzaNonValido,
     GeneratoreBozzaNonValido,
+    TecnicoSenzaCertificatoFgas,
 }
 
 /// <summary>Stati interni, come nel vincolo ck_interventi_stato. Completato e annullato sono finali.</summary>

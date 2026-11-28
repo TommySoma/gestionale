@@ -18,6 +18,7 @@ namespace Gestionale.Infrastructure.Interventi;
 public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInterventi
 {
     private const string ViolazioneEsclusione = "23P01";
+    private const string SenzaCertificatoFgas = "GF001";
 
     private const string NomeTecnico = "u.nome || ' ' || u.cognome";
 
@@ -419,6 +420,11 @@ public sealed class RepositoryInterventi(Database.Database db) : IRepositoryInte
         {
             // La transazione è già annullata: l'eccezione è uscita prima del COMMIT.
             return new EsitoIntervento.TecnicoOccupato();
+        }
+        catch (PostgresException e) when (e.SqlState == SenzaCertificatoFgas)
+        {
+            // Impianto con apparecchiature F-Gas e tecnico senza certificato in corso (migrazione 0015, ADR 0008).
+            return new EsitoIntervento.NonValida([ErroreIntervento.TecnicoSenzaCertificatoFgas]);
         }
     }
 

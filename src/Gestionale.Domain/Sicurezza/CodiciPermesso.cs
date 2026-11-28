@@ -28,6 +28,8 @@ public static class CodiciPermesso
     public const string BolliniScrittura = "bollini.scrittura";
     public const string AziendaLettura = "azienda.lettura";
     public const string AziendaScrittura = "azienda.scrittura";
+    public const string FgasLettura = "fgas.lettura";
+    public const string FgasScrittura = "fgas.scrittura";
 }
 
 /// <summary>Estensione di un permesso: su tutto o solo sulle attività assegnate all'utente.</summary>

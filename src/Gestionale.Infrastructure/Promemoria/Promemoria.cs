@@ -188,7 +188,12 @@ public sealed class ComponitorePromemoria : IComponitorePromemoria
         ArgumentNullException.ThrowIfNull(impresa);
 
         var data = dati.DataScadenza.ToString("d MMMM yyyy", s_italiano);
-        var cosa = dati.Tipo == "controllo_efficienza" ? TestiDocumenti.PromemoriaControlloEfficienza : TestiDocumenti.PromemoriaManutenzione;
+        var cosa = dati.Tipo switch
+        {
+            "controllo_efficienza" => TestiDocumenti.PromemoriaControlloEfficienza,
+            "controllo_perdite" => TestiDocumenti.PromemoriaControlloPerdite,
+            _ => TestiDocumenti.PromemoriaManutenzione,
+        };
         var oggetto = string.Format(s_italiano, TestiDocumenti.PromemoriaOggetto, Maiuscola(cosa), data);
         var quando = string.Format(s_italiano, dati.DataScadenza < oggi ? TestiDocumenti.PromemoriaScaduta : TestiDocumenti.PromemoriaInScadenza, cosa, data);
 
