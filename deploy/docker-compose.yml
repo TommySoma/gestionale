@@ -63,5 +63,17 @@ services:
       db:
         condition: service_healthy
 
+  # Solo per lo sviluppo: un finto server di posta (Mailpit, MIT) che raccoglie le email
+  # senza spedirle. Nei dati aziendali: server "posta", porta 1025, sicurezza nessuna.
+  # Le email si leggono su http://localhost:8025.
+  posta:
+    # Versione verificata su Docker Hub il 28/11/2026.
+    image: axllent/mailpit:v1.33.1
+    profiles: ["api"]
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8025:8025"
+      - "127.0.0.1:1025:1025"
+
 volumes:
   dati_db:
