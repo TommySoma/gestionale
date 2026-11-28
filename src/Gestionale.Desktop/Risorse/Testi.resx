@@ -2178,4 +2178,7 @@
   <data name="UtentePosta" xml:space="preserve">
     <value>Utente</value>
   </data>
+  <data name="TipoScadenzaControlloPerdite" xml:space="preserve">
+    <value>Controllo delle perdite F-Gas</value>
+  </data>
 </root>

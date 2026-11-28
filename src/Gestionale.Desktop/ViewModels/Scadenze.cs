@@ -27,6 +27,7 @@ public static class FormatoScadenze
     {
         "manutenzione" => Testi.TipoScadenzaManutenzione,
         "controllo_efficienza" => Testi.TipoScadenzaControllo,
+        "controllo_perdite" => Testi.TipoScadenzaControlloPerdite,
         _ => tipo,
     };
 
